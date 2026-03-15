@@ -1,0 +1,40 @@
+<html><head><title> 042 titre navigateur page accueil</title><meta http-equiv="Content-type" content="text/html;charset=utf-8" /><link rel="stylesheet" href="/media/style.css" media="all"></head><body class="markdown-body">
+<a href="./">accueil</a><input type="radio" id="men" name="menu" value="site" class="cache" checked><label for="men">Menu du site</label><input type="radio" id="tdm" name="menu" value="page" class="cache" ><label for="tdm">Menu de la page</label><input type="radio" id="rien" name="menu" value="fermer" class="cache"><label for="rien">(FERMER MENU)</label>
+<div class="menu"><ul class="postCategorie"><span>BUG</span>
+<li><a href="BUG-040-nom-categorie-dans-lien-post.html"> 040 nom categorie dans lien post</a></li>
+<li><a href="BUG-041-hyperlien-md-non-transforme.html"> 041 hyperlien md non transforme</a></li>
+<li><a href="BUG-042-titre-navigateur-page-accueil.html"> 042 titre navigateur page accueil</a></li>
+<li><a href="BUG-043-devoir-cliquer-sur-menu.html"> 043 devoir cliquer sur menu</a></li>
+<li><a href="BUG-044-le -menu-prend-trop-de-place.html"> 044 le  menu prend trop de place</a></li>
+<li><a href="BUG-045-posts-sans-dates.html"> 045 posts sans dates</a></li>
+</ul>
+<ul class="postCategorie"><span>PROJET</span>
+<li><a href="PROJET-etude-opportunite.html"> etude opportunite</a></li>
+<li><a href="PROJET-fonctionnalites.html"> fonctionnalites</a></li>
+<li><a href="PROJET-un-produit-par-version.html"> un produit par version</a></li>
+<li><a href="PROJET-versioning.html"> versioning</a></li>
+<li><a href="PROJET-versions-editeur.html"> versions editeur</a></li>
+<li><a href="PROJET-visions-des-produits.html"> visions des produits</a></li>
+</ul>
+</div>
+<div class="toc">
+<ul>
+<li><a href="#bug-042-le-titre-de-la-derniere-page-listee-en-plan-de-site-est-le-titre-navigateur-de-la-page-daccueil">BUG-042 le titre de la derniere page listée en plan de site est le titre navigateur de la page d'accueil</a></li>
+</ul>
+</div>
+
+<h2 id="bug-042-le-titre-de-la-derniere-page-listee-en-plan-de-site-est-le-titre-navigateur-de-la-page-daccueil">BUG-042 le titre de la derniere page listée en plan de site est le titre navigateur de la page d'accueil</h2>
+<ul>
+<li>statuts : ferme_260315_() / ouvert_260315_()</li>
+<li>contexte : l'accueil est géré à part par une page txt qui est traitée par une fonction personnalisé</li>
+<li>événement : à l'arrivée sur site ou au retoiur à l'accueil par lien de menu, le titre de navigateur est celui du dernier post listé en plan de site</li>
+<li>impact : cosmétique</li>
+<li>fréquence : forte</li>
+<li>détection : moyenne, qui regarde le titre en url à pmart les moteurs de recherche ?</li>
+<li>contournement : aucun</li>
+<li>arbitrage : la page d'accueil donne l'impression première et est donc assez importante</li>
+<li>correctif : utiliser le titre de l'application déjà mis en fichier de configuration</li>
+<li>rex : non testé avec attention, pose la question des doiublons de code entre 2 fonctions de generation de fichier</li>
+<li>cause racine : confiance</li>
+</ul>
+</body></html>

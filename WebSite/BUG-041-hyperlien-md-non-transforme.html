@@ -1,0 +1,40 @@
+<html><head><title> 041 hyperlien md non transforme</title><meta http-equiv="Content-type" content="text/html;charset=utf-8" /><link rel="stylesheet" href="/media/style.css" media="all"></head><body class="markdown-body">
+<a href="./">accueil</a><input type="radio" id="men" name="menu" value="site" class="cache" checked><label for="men">Menu du site</label><input type="radio" id="tdm" name="menu" value="page" class="cache" ><label for="tdm">Menu de la page</label><input type="radio" id="rien" name="menu" value="fermer" class="cache"><label for="rien">(FERMER MENU)</label>
+<div class="menu"><ul class="postCategorie"><span>BUG</span>
+<li><a href="BUG-040-nom-categorie-dans-lien-post.html"> 040 nom categorie dans lien post</a></li>
+<li><a href="BUG-041-hyperlien-md-non-transforme.html"> 041 hyperlien md non transforme</a></li>
+<li><a href="BUG-042-titre-navigateur-page-accueil.html"> 042 titre navigateur page accueil</a></li>
+<li><a href="BUG-043-devoir-cliquer-sur-menu.html"> 043 devoir cliquer sur menu</a></li>
+<li><a href="BUG-044-le -menu-prend-trop-de-place.html"> 044 le  menu prend trop de place</a></li>
+<li><a href="BUG-045-posts-sans-dates.html"> 045 posts sans dates</a></li>
+</ul>
+<ul class="postCategorie"><span>PROJET</span>
+<li><a href="PROJET-etude-opportunite.html"> etude opportunite</a></li>
+<li><a href="PROJET-fonctionnalites.html"> fonctionnalites</a></li>
+<li><a href="PROJET-un-produit-par-version.html"> un produit par version</a></li>
+<li><a href="PROJET-versioning.html"> versioning</a></li>
+<li><a href="PROJET-versions-editeur.html"> versions editeur</a></li>
+<li><a href="PROJET-visions-des-produits.html"> visions des produits</a></li>
+</ul>
+</div>
+<div class="toc">
+<ul>
+<li><a href="#bug-041-un-hyperlien-en-extension-md-nest-pas-traduit-en-extension-html-lors-de-la-transformation-md-html">BUG-041 un hyperlien en extension md n’est pas traduit en extension html lors de la transformation md html</a></li>
+</ul>
+</div>
+
+<h2 id="bug-041-un-hyperlien-en-extension-md-nest-pas-traduit-en-extension-html-lors-de-la-transformation-md-html">BUG-041 un hyperlien en extension md n’est pas traduit en extension html lors de la transformation md html</h2>
+<ul>
+<li>statuts : ouvert_260314_()</li>
+<li>contexte : puisque le md est traduit en html, on s’attend à ce que la transformation soit complète. Il s’agit d’une librairie externe.</li>
+<li>événement : au clic sur le lien en extension .md, on aboutit à une erreur 404</li>
+<li>impact : bloquant ( l’action ne peut aboutir)</li>
+<li>fréquence : faible, les liens entre fichiers ne sont pas constants par contenu</li>
+<li>détection : moyenne, l’utilisateur doit cliquer sur le lien pour savoir qu’il est brisé</li>
+<li>contournement : l’utilisateur saisit par anticipation l’extension .html dans son fichier .md</li>
+<li>arbitrage : la version de l’application veut imposer le moins de contraintes possibles lors de la création du .md, donc le correctif est nécessaire</li>
+<li>correctif : détecter la présence d’un hyperlien (au plus tôt en md et non en html ?) en .md et changer l’extension en .html</li>
+<li>rex : trop grande confiance accordée à une dépendance</li>
+<li>cause racine : confiance</li>
+</ul>
+</body></html>
