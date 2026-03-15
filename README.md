@@ -44,6 +44,5 @@ pip install -r requirements.txt
     # Ne fermer ou arrêter la console que pour arrêter le serveur
 
     CTRL + C
-
     ```
 1. Pour publier ailleurs le site statique, dans ce premier niveau de la version STANDARD, l'utilisateur est libre de ses actions.
