@@ -1,0 +1,55 @@
+<html><head><title> versioning</title><meta http-equiv="Content-type" content="text/html;charset=utf-8" /><link rel="stylesheet" href="/media/style.css" media="all"></head><body class="markdown-body">
+<a href="./">accueil</a><input type="radio" id="men" name="menu" value="site" class="cache" checked><label for="men">Menu du site</label><input type="radio" id="tdm" name="menu" value="page" class="cache" ><label for="tdm">Menu de la page</label><input type="radio" id="rien" name="menu" value="fermer" class="cache"><label for="rien">(FERMER MENU)</label>
+<div class="menu"><ul class="postCategorie"><span>BUG</span>
+<li><a href="BUG-040-nom-categorie-dans-lien-post.html"> 040 nom categorie dans lien post</a></li>
+<li><a href="BUG-041-hyperlien-md-non-transforme.html"> 041 hyperlien md non transforme</a></li>
+<li><a href="BUG-042-titre-navigateur-page-accueil.html"> 042 titre navigateur page accueil</a></li>
+<li><a href="BUG-043-devoir-cliquer-sur-menu.html"> 043 devoir cliquer sur menu</a></li>
+<li><a href="BUG-044-le -menu-prend-trop-de-place.html"> 044 le  menu prend trop de place</a></li>
+<li><a href="BUG-045-posts-sans-dates.html"> 045 posts sans dates</a></li>
+</ul>
+<ul class="postCategorie"><span>PROJET</span>
+<li><a href="PROJET-etude-opportunite.html"> etude opportunite</a></li>
+<li><a href="PROJET-fonctionnalites.html"> fonctionnalites</a></li>
+<li><a href="PROJET-un-produit-par-version.html"> un produit par version</a></li>
+<li><a href="PROJET-versioning.html"> versioning</a></li>
+<li><a href="PROJET-versions-editeur.html"> versions editeur</a></li>
+<li><a href="PROJET-visions-des-produits.html"> visions des produits</a></li>
+</ul>
+</div>
+<div class="toc">
+<ul>
+<li><a href="#versionning-logiciel">Versionning logiciel</a><ul>
+<li><a href="#gestionnaire-de-code-source">Gestionnaire de code source</a></li>
+<li><a href="#structure-de-fichiers">Structure de fichiers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="versionning-logiciel">Versionning logiciel</h1>
+<p>Pour maintenir le cycle de vie de plusieurs versions d'un même produit en parallèle, il faut être organisé.</p>
+<h2 id="gestionnaire-de-code-source">Gestionnaire de code source</h2>
+<p>Ces niveaux de produit peuvent se matérialiser par des préfixes de tags de version :</p>
+<ul>
+<li>ST-</li>
+<li>PR-</li>
+<li>OP-</li>
+</ul>
+<p>Ces versions appliqueront le système <a href="https://semver.org/lang/fr/">SEM</a> : MAJEURE.MINEURE.CORRECTIF.
+ Le préfixe cité plus haut sera apposé. <br />
+ A noter que la recomandation est de ne pas gérer les préfixes de zéro 9 vers 10 et non 09 vers 10 (ce qui peut gêner le classement alphabétique)</p>
+<h2 id="structure-de-fichiers">Structure de fichiers</h2>
+<p>Chaque version du produit pourra être maintenue conjointement par un système de fichiers du type :</p>
+<ul>
+<li>Code :<ul>
+<li>workflow : squelette de l'application, ensemble ordonné des traitements, tel un plan batch.</li>
+<li>common : code source partagé par toutes les versions</li>
+<li>interface : méthodes utilisées par tous, en format plus ou moins dégradé jusqu'à être à vide.</li>
+<li>standard : fonctions propres à cette version</li>
+<li>premium : fonctions propres à cette version</li>
+<li>optimum : fonctions propres à cette version</li>
+</ul>
+</li>
+</ul>
+</body></html>

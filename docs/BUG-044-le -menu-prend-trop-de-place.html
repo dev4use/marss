@@ -1,0 +1,40 @@
+<html><head><title> 044 le  menu prend trop de place</title><meta http-equiv="Content-type" content="text/html;charset=utf-8" /><link rel="stylesheet" href="/media/style.css" media="all"></head><body class="markdown-body">
+<a href="./">accueil</a><input type="radio" id="men" name="menu" value="site" class="cache" checked><label for="men">Menu du site</label><input type="radio" id="tdm" name="menu" value="page" class="cache" ><label for="tdm">Menu de la page</label><input type="radio" id="rien" name="menu" value="fermer" class="cache"><label for="rien">(FERMER MENU)</label>
+<div class="menu"><ul class="postCategorie"><span>BUG</span>
+<li><a href="BUG-040-nom-categorie-dans-lien-post.html"> 040 nom categorie dans lien post</a></li>
+<li><a href="BUG-041-hyperlien-md-non-transforme.html"> 041 hyperlien md non transforme</a></li>
+<li><a href="BUG-042-titre-navigateur-page-accueil.html"> 042 titre navigateur page accueil</a></li>
+<li><a href="BUG-043-devoir-cliquer-sur-menu.html"> 043 devoir cliquer sur menu</a></li>
+<li><a href="BUG-044-le -menu-prend-trop-de-place.html"> 044 le  menu prend trop de place</a></li>
+<li><a href="BUG-045-posts-sans-dates.html"> 045 posts sans dates</a></li>
+</ul>
+<ul class="postCategorie"><span>PROJET</span>
+<li><a href="PROJET-etude-opportunite.html"> etude opportunite</a></li>
+<li><a href="PROJET-fonctionnalites.html"> fonctionnalites</a></li>
+<li><a href="PROJET-un-produit-par-version.html"> un produit par version</a></li>
+<li><a href="PROJET-versioning.html"> versioning</a></li>
+<li><a href="PROJET-versions-editeur.html"> versions editeur</a></li>
+<li><a href="PROJET-visions-des-produits.html"> visions des produits</a></li>
+</ul>
+</div>
+<div class="toc">
+<ul>
+<li><a href="#bug-044-le-menu-plan-de-site-peut-prendre-trop-de-place">BUG-044 le menu plan de site peut prendre trop de place</a></li>
+</ul>
+</div>
+
+<h2 id="bug-044-le-menu-plan-de-site-peut-prendre-trop-de-place">BUG-044 le menu plan de site peut prendre trop de place</h2>
+<ul>
+<li>statuts : ouvert_260315_()</li>
+<li>contexte : le menu reste tout le temps déplié</li>
+<li>événement : sur un post, le menu déplié à la verticale va très vite prendre tout l'écran</li>
+<li>impact : majeur (captitalise l'attention)</li>
+<li>fréquence : forte, sur chaque page</li>
+<li>détection : forte, cela se voit dès qu'on clique pour faire apparaître le menu</li>
+<li>contournement : l'utilisateur n'a qu'à pas cliquer, il n'est dérangé que temporairement et "volontairement"</li>
+<li>arbitrage : c'est aussi une question d'image de marque que d'afficher un contenu accessible assez vaste</li>
+<li>correctif : AM-001 aligner le menu à l'horizontale, avec séparateur et avec moins de hauteur, tout cela en CSS</li>
+<li>rex : simplicité, épure parfois trop importante</li>
+<li>cause racine : ergonomie</li>
+</ul>
+</body></html>

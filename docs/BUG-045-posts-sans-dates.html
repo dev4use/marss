@@ -1,0 +1,40 @@
+<html><head><title> 045 posts sans dates</title><meta http-equiv="Content-type" content="text/html;charset=utf-8" /><link rel="stylesheet" href="/media/style.css" media="all"></head><body class="markdown-body">
+<a href="./">accueil</a><input type="radio" id="men" name="menu" value="site" class="cache" checked><label for="men">Menu du site</label><input type="radio" id="tdm" name="menu" value="page" class="cache" ><label for="tdm">Menu de la page</label><input type="radio" id="rien" name="menu" value="fermer" class="cache"><label for="rien">(FERMER MENU)</label>
+<div class="menu"><ul class="postCategorie"><span>BUG</span>
+<li><a href="BUG-040-nom-categorie-dans-lien-post.html"> 040 nom categorie dans lien post</a></li>
+<li><a href="BUG-041-hyperlien-md-non-transforme.html"> 041 hyperlien md non transforme</a></li>
+<li><a href="BUG-042-titre-navigateur-page-accueil.html"> 042 titre navigateur page accueil</a></li>
+<li><a href="BUG-043-devoir-cliquer-sur-menu.html"> 043 devoir cliquer sur menu</a></li>
+<li><a href="BUG-044-le -menu-prend-trop-de-place.html"> 044 le  menu prend trop de place</a></li>
+<li><a href="BUG-045-posts-sans-dates.html"> 045 posts sans dates</a></li>
+</ul>
+<ul class="postCategorie"><span>PROJET</span>
+<li><a href="PROJET-etude-opportunite.html"> etude opportunite</a></li>
+<li><a href="PROJET-fonctionnalites.html"> fonctionnalites</a></li>
+<li><a href="PROJET-un-produit-par-version.html"> un produit par version</a></li>
+<li><a href="PROJET-versioning.html"> versioning</a></li>
+<li><a href="PROJET-versions-editeur.html"> versions editeur</a></li>
+<li><a href="PROJET-visions-des-produits.html"> visions des produits</a></li>
+</ul>
+</div>
+<div class="toc">
+<ul>
+<li><a href="#bug-045-les-posts-nont-pas-de-date">BUG-045 les posts n'ont pas de date</a></li>
+</ul>
+</div>
+
+<h2 id="bug-045-les-posts-nont-pas-de-date">BUG-045 les posts n'ont pas de date</h2>
+<ul>
+<li>statuts : ouvert_260315_()</li>
+<li>contexte : contrairement aux blogs classiques, les billets sont sans date</li>
+<li>événement : visualiser un billet seul et noter l'absence de date</li>
+<li>impact : mineur (très peu d'intérêt)</li>
+<li>fréquence : forte, sur chaque page</li>
+<li>détection : moyenne, encore faut-il y faire attention</li>
+<li>contournement : aucun, ou on a reperé que le billet n'était pas présent avant</li>
+<li>arbitrage : ce n'est pas une anomalie mais la question est légitime, un repère temporel est utile pour indiquer le degré de fraîcheur de l'information</li>
+<li>correctif : FCT-001 dans cette version, gérer les dates de création et modification des fichiers md et les véhiculer en référentiel pour affichage, et par configuration activer ou non cet affichage voir cet ordre de tri</li>
+<li>rex : simplicité, épure parfois trop importante</li>
+<li>cause racine : ergonomie</li>
+</ul>
+</body></html>
