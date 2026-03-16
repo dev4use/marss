@@ -1,0 +1,11 @@
+host: 0.0.0.0
+port: 8001
+inputPath: "/home/user/Documents/marss/Content/"
+outputPath: "/home/user/Documents/marss/WebSite/"  # slash obligatoire : TODO: robustesse
+openBrowser: True
+inputExtension: .md
+outputExtension: .html
+home: "/home/user/Documents/marss/Theme/index.txt"
+style: "/home/user/Documents/marss/Theme/style.css"
+projet: "MAR-kdown-S-imple-web-S-ite"
+menuVisible: "site" # site|page|vide ou autre AM-002

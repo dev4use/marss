@@ -1,0 +1,6 @@
+marss.code-workspace
+.vscode
+.venv
+Sandbox/
+**.pyc
+**/__pycache__/

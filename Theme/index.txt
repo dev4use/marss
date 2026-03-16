@@ -1,0 +1,17 @@
+# Dev4use
+
+Et si pour une fois je faisais des outils à utiliser...  
+Parce que le dev n'est parfois qu'un prétexte à essayer quelque chose.  
+Et une fois que c'est fait, on passe à autre chose.  
+Je ne parle pas que pour moi, j'ai connu des devs passionnés qui savaient orienter le patron vers des technos qu'ils voulaient essayer...  
+
+Ce site statique en markdown est donc généré par MARSS (l'outil) ( ≖‿ ≖ ).    
+Et ce site évoque principalement le développement réalisé sur MARSS.  
+Le traditionnel [README du projet MARSS](https://github.com/dev4use/marss) vous en dira plus.  
+
+*Note aux utilisateurs :*  
+Vous pouvez indiquer votre propre page d'accueil dans la configuration du logiciel.    
+Cette page doit être en ".txt" afin de ne pas s'ajouter au plan de site.   
+
+## Voici le plan de site
+
