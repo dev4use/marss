@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     md_text = marss.lireLeMarkdown('home')
     title =  conf['projet']  # BUG-042
-    html = marss.ajouterEtTransformerEnHtml(md_text+menuHtml, title, menuHtml, True)
+    html = marss.ajouterEtTransformerEnHtml(md_text+"<div class='plan'>"+menuHtml+"</div>", title, menuHtml, True)
     # ci dessus, par True, forcer desactivation menu en accueil
     marss.creerFichierHtml("index.html", html, False)
 
