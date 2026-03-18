@@ -16,7 +16,7 @@ Cela peut être fait en peu de lignes de code (du moins au départ), et beaucoup
 
 Pré-requis :
 - python sur l'environnement de travail (voire un environnement virtuel python),
-- un installateur de paquet ou gestionnaire de dépendance tel pip,
+- un installateur de paquet ou gestionnaire de dépendance tel que pip,
 - console de commande shell (plutot de type linux, comme git bach dans windows).
 
 Depuis la racine du projet, en ligne de commande :
@@ -45,4 +45,6 @@ pip install -r requirements.txt
 
     CTRL + C
     ```
-1. Pour publier ailleurs le site statique, dans ce premier niveau de la version STANDARD, l'utilisateur est libre de ses actions.
+1. Pour publier ailleurs le site statique, dans ce premier niveau de la version STANDARD,  
+l'utilisateur est libre de ses actions.
+1. Pour avoir un aperçu du résultat, [consulter la démonstration en ligne](https://dev4use.github.io/)
