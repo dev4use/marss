@@ -1021,3 +1021,6 @@
 .postCategorie li {
   display: inline-block;
 }
+a.active{
+  color:rgba(66, 62, 62, 0.327);
+}

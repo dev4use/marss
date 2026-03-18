@@ -22,7 +22,7 @@ if __name__ == "__main__":
     mdFiles = marss.listerFichiersExtensionRepertoire()
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
     menuListe = marss.creerLiensMenu(referentiel)
-    menuHtml = marss.afficherMenu(menuListe)
+    # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active WIP ; ousEtesIci
 
     marss.supprimerFichiersDuRepertoireHtml()
     marss.recreerDossierMediaDeplacerStyle()  # BUG-
@@ -39,12 +39,14 @@ if __name__ == "__main__":
         filePath = element[3]
         md_text = marss.lireLeMarkdown(filePath)
         md_text = marss.remplacerExtensionDansContenu(md_text, pattern, changer)
-        html = marss.ajouterEtTransformerEnHtml(md_text, title, menuHtml)
+        menuHtml = marss.afficherMenu(menuListe, fileName)
+        html = marss.ajouterEtTransformerEnHtml(md_text, title, menuHtml, "post")
         marss.creerFichierHtml(fileName, html)
 
     md_text = marss.lireLeMarkdown('home')
     title =  conf['projet']  # BUG-042
-    html = marss.ajouterEtTransformerEnHtml(md_text+"<div class='plan'>"+menuHtml+"</div>", title, menuHtml, True)
+    menuHtml = marss.afficherMenu(menuListe, "index.html") 
+    html = marss.ajouterEtTransformerEnHtml(md_text+"<div class='plan'>"+menuHtml+"</div>", title, menuHtml, "home", True)
     # ci dessus, par True, forcer desactivation menu en accueil
     marss.creerFichierHtml("index.html", html, False)
 

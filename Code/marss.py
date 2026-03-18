@@ -157,7 +157,7 @@ def creerLiensMenu(referentiel):
     return result
 
 
-def afficherMenu(liens):
+def afficherMenu(liens, vousEtesIci):  # FIX-023 
     """ menu html de plan de site
     Tracabilite: test_afficherMenu
     """
@@ -167,7 +167,10 @@ def afficherMenu(liens):
         menu += '<ul class="postCategorie"><span>'+k+'</span>\n'
         for e in v:
             #  print("url : "+e['url']+" et label "+e['label'])
-            menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
+            if vousEtesIci == e['url']:
+                menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
+            else:
+                menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
         #  print(k+" : ul de fin de rubrique")
         menu += '</ul>\n'
     return menu
@@ -226,10 +229,11 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     return resultat
 
 
-def ajouterEtTransformerEnHtml(md_text, title, menu, menuVisible=False):
+def ajouterEtTransformerEnHtml(md_text, title, menu, typeDePage, menuVisible=False): 
     """ sortie html enrichie
     en plus du contenu, ajout du titre et des menus page et site
     """
+    # FIX-023 - typeDePage apportera support pour multiple template
     # AM-002 + pouvoir forcer desactiver (comme en accueil)
     global conf
     if menuVisible:
@@ -254,7 +258,10 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, menuVisible=False):
     html += '<link rel="stylesheet" href="/media/style.css" media="all">'
     html += '</head><body class="markdown-body">\n'  # EVOL-css-markdown
 
-    html += '<a href="./">accueil</a>'  # AM-001
+    if typeDePage == "home":
+        html += '<a href="./" class="active">accueil</a>'  # AM-001 
+    else:
+        html += '<a href="./">accueil</a>'
 
     html += '<input type="radio" id="men" name="menu"'
     html += f' value="site" class="cache" {statusSite}>'  # AM-002 
@@ -274,7 +281,7 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, menuVisible=False):
     return html
 
 
-def creerFichierHtml(fileName, html, post=True, ):  # AM-
+def creerFichierHtml(fileName, html, post=True):  # AM-
     """ ecriture des fichiers html
     REMANIER filename est fourni par autre source
     ENLEVER inputExtension, outputExtension
