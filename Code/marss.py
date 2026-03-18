@@ -84,7 +84,7 @@ def creerReferentielPagesLiens(mdFiles):
     """ Referentiel propre :
     objectif : eviter des nettoyages rendondants effectues par fonction
     solution : zip des listes : (category, label, page, url)
-    note : + nettoyage si path windows pose problème ?
+    note : + nettoyage si path windows pose probleme ?
     """
     global conf
     inExt = conf['inputExtension']
@@ -209,7 +209,7 @@ def lireLeMarkdown(file):
 def remplacerExtensionDansContenu(content, pattern, changer):
     """ remplacer une extension trouvee dans un pattern
     - remplacer par exemple l'hyperlien markdown [](.md) par .html
-    - retourner le cxongte          nbu avec le remplacement effectue
+    - retourner le contenu avec le remplacement effectue
     """
     # liste a remplacer
     aRemplacer = re.findall(pattern, content)
