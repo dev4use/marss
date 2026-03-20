@@ -9,3 +9,4 @@ home: "/home/user/Documents/marss/Theme/index.txt"
 style: "/home/user/Documents/marss/Theme/style.css"
 projet: "MAR-kdown-S-imple-web-S-ite"
 menuVisible: "site" # site|page|vide ou autre AM-002
+footerLiens: "FOOTER"  # prefixe du md et html
