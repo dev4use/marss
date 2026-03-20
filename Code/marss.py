@@ -161,18 +161,44 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
     """ menu html de plan de site
     Tracabilite: test_afficherMenu
     """
+    global conf
+    inFooter = conf['footerLiens']
     menu = ''
     for k, v in liens.items():
-        #  print(k+" : ul de début de rubrique")
-        menu += '<ul class="postCategorie"><span>'+k+'</span>\n'
-        for e in v:
-            #  print("url : "+e['url']+" et label "+e['label'])
-            if vousEtesIci == e['url']:
-                menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
-            else:
-                menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
-        #  print(k+" : ul de fin de rubrique")
-        menu += '</ul>\n'
+        if k != inFooter:  # EVOL footer
+            #  print(k+" : ul de début de rubrique")
+            menu += '<ul class="postCategorie"><span>'+k+'</span>\n'
+            for e in v:
+                #  print("url : "+e['url']+" et label "+e['label'])
+                if vousEtesIci == e['url']:
+                    menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
+                else:
+                    menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
+            #  print(k+" : ul de fin de rubrique")
+            menu += '</ul>\n'
+    return menu
+
+
+def afficherLiensFooter(liens, vousEtesIci):
+    """ liste à plat de liens légaux et autres
+    Beaucoup (trop ?) de duplication de code
+    peu être null
+    """
+    global conf
+    inFooter = conf['footerLiens']
+    menu = ''
+    for k, v in liens.items():
+        if k == inFooter:  # EVOL footer
+            #  print(k+" : ul de début de rubrique")
+            menu += '<ul class="postFooter">\n'
+            for e in v:
+                #  print("url : "+e['url']+" et label "+e['label'])
+                if vousEtesIci == e['url']:
+                    menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
+                else:
+                    menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
+            #  print(k+" : ul de fin de rubrique")
+            menu += '</ul>\n'
     return menu
 
 
@@ -229,7 +255,7 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     return resultat
 
 
-def ajouterEtTransformerEnHtml(md_text, title, menu, typeDePage, menuVisible=False): 
+def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False): 
     """ sortie html enrichie
     en plus du contenu, ajout du titre et des menus page et site
     """
@@ -256,12 +282,12 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, typeDePage, menuVisible=Fal
     html += '<meta http-equiv="Content-type" content="text/html;'
     html += 'charset=utf-8" />'
     html += '<link rel="stylesheet" href="/media/style.css" media="all">'
-    html += '</head><body class="markdown-body">\n'  # EVOL-css-markdown
+    html += '</head><body class="markdown-body">\n'  # EVOL-css-markdown class="markdown-body"
 
     if typeDePage == "home":
-        html += '<a href="./" class="active">accueil</a>'  # AM-001 
+        html += '<a href="./" class="active">accueil</a>'  # AM-001  header
     else:
-        html += '<a href="./">accueil</a>'
+        html += '<a href="./">accueil</a>'  # header
 
     html += '<input type="radio" id="men" name="menu"'
     html += f' value="site" class="cache" {statusSite}>'  # AM-002 
@@ -273,10 +299,13 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, typeDePage, menuVisible=Fal
 
     html += '<input type="radio" id="rien" name="menu"'
     html += ' value="fermer" class="cache">'
-    html += '<label for="rien">(FERMER MENU)</label>\n'
+    html += '<label for="rien">(FERMER MENU)</label>\n' # header
 
-    html += '<div class="menu">'+menu+'</div>\n'
-    html += md.toc+'\n'+content+'\n'
+    html += '<div class="menu">'+menu+'</div></header>\n'  # nav
+    html += md.toc+'\n<article>'+content+'</article>\n'
+    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss</a></p>'
+    # html += ' #  BOF fonction imbriquee
+    html += footer + '</div>'  # TODO: liens FOOTER conf
     html += '</body></html>'  # FIX-0004
     return html
 
