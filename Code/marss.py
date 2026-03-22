@@ -182,7 +182,7 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
 def afficherLiensFooter(liens, vousEtesIci):
     """ liste à plat de liens légaux et autres
     Beaucoup (trop ?) de duplication de code
-    peu être null
+    peut être null, sans lien
     """
     global conf
     inFooter = conf['footerLiens']
@@ -262,6 +262,7 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     # FIX-023 - typeDePage apportera support pour multiple template
     # AM-002 + pouvoir forcer desactiver (comme en accueil)
     global conf
+    version = conf['version']
     if menuVisible:
         menuVisible = ""
     else:
@@ -303,7 +304,7 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
 
     html += '<div class="menu">'+menu+'</div></header>\n'  # nav
     html += md.toc+'\n<article>'+content+'</article>\n'
-    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss</a></p>'
+    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss '+version+'</a> </p>'
     # html += ' #  BOF fonction imbriquee
     html += footer + '</div>'  # TODO: liens FOOTER conf
     html += '</body></html>'  # FIX-0004

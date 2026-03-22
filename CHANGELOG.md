@@ -2,6 +2,26 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-0.2.0 - 2026-03-22
+
+Version plus conforme d'un  point de vue légal et ergonomique.
+
+### Ajouts
+
+1. **légalité** : footer avec les mentions légales ou d'autres pages repérées par un préfixe choisi en configuration
+1. légalité : la licence OpenSource est dans le dépôt de code source
+1. **navigation** : le lien de la page en cours se distingue des autres liens 
+1. **code** : le numéro de version de l'applicatif est en footer et géré par configuration
+
+### Correctifs
+
+1. **design** : menus site et page plus aérés, moins collés au header du site
+
+### Bugs
+
+1. Voir le BUG-048 sur le site de démonstration : tilde markdown de texte barré non supporté
+1. Voir le BUG-049 sur le site de démonstration : liste numérotée de niveau 2 en chiffres romains (préférence pour chiffres arabes)
+
 ## ST-0.1.0 - 2026-03-17
 
 Version intiale de l'applicatif.
@@ -28,9 +48,4 @@ Version intiale de l'applicatif.
 1. site : site lancé par un serveur de debug sur le navigateur par défaut
 
 
-### Changements
-
-### Correctifs
-
-### Supression
 
