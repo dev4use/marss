@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>marss API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>marss</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="marss.recupererCmdLine"><code class="name flex">
+<span>def <span class="ident">recupererCmdLine</span></span>(<span>myConf=None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def recupererCmdLine(myConf=None):  # sys.argv[1:]
+    &#34;&#34;&#34; recuperer arguments console
+    - configuration yaml
+    - serveur en fond, stop, down -&gt; goto with exit
+    &#34;&#34;&#34;
+    parser = argparse.ArgumentParser()
+    parser.add_argument(&#34;-V&#34;, &#34;--version&#34;, help=&#34;version&#34;, action=&#34;store_true&#34;)
+    parser.add_argument(&#34;-C&#34;, &#34;--configuration&#34;, help=&#34;path de configuration&#34;)
+    args = parser.parse_args()
+
+    if args.version:
+        print(&#34;MARSS : gardez vos idées sur terre&#34;)  # en plus de __version__
+    if args.configuration:  # FIX long args
+        print(&#34;emplacement specifique de la configuration : &#34;+args.configuration)
+        if os.path.isfile(args.configuration) is True:
+            print(&#34;configuration bien trouvee&#34;)
+            myConf = args.configuration  # CONF en argument
+        else:
+            print(&#34;--- configuration non trouvee ---&#34;)
+            exit(1)
+    return myConf</code></pre>
+</details>
+<div class="desc"><p>recuperer arguments console
+- configuration yaml
+- serveur en fond, stop, down -&gt; goto with exit</p></div>
+</dd>
+<dt id="marss.recupererTouteLaConf"><code class="name flex">
+<span>def <span class="ident">recupererTouteLaConf</span></span>(<span>myConf)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def recupererTouteLaConf(myConf):
+    &#34;&#34;&#34; point de depart de tout
+    permet de tout deporter pour portabilite
+    mis en global pour la lib : contrainte de taille method(arg) pour PEP8
+    &#34;&#34;&#34;
+    extension = str(myConf).lower().endswith((&#39;.yml&#39;, &#39;.yaml&#39;))
+    fichier = Path(myConf).is_file()
+    # contenu = isinstance(myConf, dict)
+    # if Path(myConf).is_file(): INITIAL
+    if extension and fichier: #  and contenu
+        # print(&#39;OK&#39;)
+        #exit(0)
+        with open(myConf) as f:
+            try:
+                global conf
+                conf = yaml.load(f, Loader=yaml.FullLoader) #  PYTEST yaml.scanner.ScannerError
+                return conf
+            except Exception as e:
+                print(&#39;erreur fichier mal formate&#39;)  # KO avant au load ! (texte, variable)
+                print(e)
+                exit(2)
+    else:
+        print(&#39;erreur fichier de configuration&#39;)
+        exit(1) # couvert par test fichier non trouve</code></pre>
+</details>
+<div class="desc"><p>point de depart de tout
+permet de tout deporter pour portabilite
+mis en global pour la lib : contrainte de taille method(arg) pour PEP8</p></div>
+</dd>
+<dt id="marss.listerFichiersExtensionRepertoire"><code class="name flex">
+<span>def <span class="ident">listerFichiersExtensionRepertoire</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def listerFichiersExtensionRepertoire():
+    &#34;&#34;&#34; recuperer la liste des fichiers .md
+    aurait pu etre moins generique
+    nom plus metier : recupererListeMarkup
+    &#34;&#34;&#34;
+    global conf
+    inPath = conf[&#39;inputPath&#39;]
+    inExt = conf[&#39;inputExtension&#39;]
+    myList = sorted(Path(inPath).glob(&#39;**/*&#39;+inExt))  # FIX-0005
+    return myList</code></pre>
+</details>
+<div class="desc"><p>recuperer la liste des fichiers .md
+aurait pu etre moins generique
+nom plus metier : recupererListeMarkup</p></div>
+</dd>
+<dt id="marss.creerReferentielPagesLiens"><code class="name flex">
+<span>def <span class="ident">creerReferentielPagesLiens</span></span>(<span>mdFiles)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def creerReferentielPagesLiens(mdFiles):
+    &#34;&#34;&#34; Referentiel propre :
+    objectif : eviter des nettoyages rendondants effectues par fonction
+    solution : zip des listes : (category, label, page, url)
+    note : + nettoyage si path windows pose probleme ?
+    &#34;&#34;&#34;
+    global conf
+    inExt = conf[&#39;inputExtension&#39;]
+    outExt = conf[&#39;outputExtension&#39;]
+    category = []
+    label = []
+    page = []
+    url = mdFiles
+    global compteur
+    compteur = 1
+
+    for f in mdFiles:
+        if platform.system() == &#34;Windows&#34;:
+            unFichierMd = str(str(f).split(&#39;\\&#39;)[-1])
+        else:
+            unFichierMd = str(str(f).split(&#39;/&#39;)[-1])  # FIX-008
+
+        categorie = &#34;&#34;
+        # FIX-020 : 3e position mis en 2e et ajout de &#34;categorie&#34;
+        pattern = re.compile(&#34;-&#34;)  # fichiers sans prefixe
+        if pattern.search(str(unFichierMd)):
+            unPrefixe = str(str(unFichierMd).split(&#39;-&#39;)[0])  # FIX-0007
+            # TODO: categorie seulement si aussi uppercase
+            category.append(unPrefixe)
+            categorie = unPrefixe  # FIX-020
+        else:
+            print(&#34;--- WARNING : fichier &#34;+str(f)+&#34; sans prefixe ---&#34;)
+            # exit()
+            category.append(&#39;HOME&#39;)
+            # TODO: sur de vouloir cat par defaut ?
+            categorie = &#39;HOME&#39;  # FIX-020
+
+        unLabel = str(unFichierMd).replace(&#34;_&#34;, &#34; &#34;).replace(&#34;-&#34;, &#34; &#34;)  # - sep
+        unLabel = unLabel.replace(inExt, &#34;&#34;)  # - extension
+        unLabel = unLabel.replace(categorie, &#34;&#34;)  # FIX-020
+        unLabel = unLabel.strip() # FIX-BUG-050 enlever espace devant
+
+        if unLabel in label:  # FIX-0006
+            DOUBLON = True
+            compteur += 1
+            print(&#34;--- WARNING : fichier &#34;+str(f)+&#34; avec doublon de nom ---&#34;)
+            label.append(unLabel + &#34; &#34; + str(compteur))
+        else:
+            DOUBLON = False
+            label.append(unLabel)
+
+        if DOUBLON is True:  # FIX-0006
+            outExt = &#34;_&#34; + str(compteur) + &#34;&#34; + outExt
+
+        unFichierHtml = str(unFichierMd).replace(inExt, outExt)
+        page.append(unFichierHtml)
+    referentiel = zip(category, label, page, url)
+    referentiel = sorted(referentiel, key=itemgetter(0))
+    return referentiel</code></pre>
+</details>
+<div class="desc"><p>Referentiel propre :
+objectif : eviter des nettoyages rendondants effectues par fonction
+solution : zip des listes : (category, label, page, url)
+note : + nettoyage si path windows pose probleme ?</p></div>
+</dd>
+<dt id="marss.creerLiensMenu"><code class="name flex">
+<span>def <span class="ident">creerLiensMenu</span></span>(<span>referentiel)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def creerLiensMenu(referentiel):
+    &#34;&#34;&#34; sortie de liste de dict par group
+    result[&#39;BUG&#39;] = [{&#39;label&#39;:&#39;BUG 0001 le win..&#39;,&#39;url&#39;:&#39;winpath.html&#39;}]
+    dépendance : pas de conf
+    &#34;&#34;&#34;
+    result = {}
+    for key, group in groupby(referentiel, lambda x: x[0]):
+        liens = []
+        for element in group:  # sur d&#39;y etre
+            descriptif = {}
+            descriptif[&#39;label&#39;] = element[1]
+            # TODO: enlever 1er mot en uppercase ici ou avant
+            descriptif[&#39;url&#39;] = element[2]
+            liens.append(descriptif)  # element[1]
+        result[key] = liens  # &#39;test&#39;
+    return result</code></pre>
+</details>
+<div class="desc"><p>sortie de liste de dict par group
+result['BUG'] = [{'label':'BUG 0001 le win..','url':'winpath.html'}]
+dépendance : pas de conf</p></div>
+</dd>
+<dt id="marss.afficherMenu"><code class="name flex">
+<span>def <span class="ident">afficherMenu</span></span>(<span>liens, vousEtesIci)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherMenu(liens, vousEtesIci):  # FIX-023 
+    &#34;&#34;&#34; menu html de plan de site
+    Tracabilite: test_afficherMenu
+    &#34;&#34;&#34;
+    global conf
+    inFooter = conf[&#39;footerLiens&#39;]
+    menu = &#39;&#39;
+    for k, v in liens.items():
+        if k != inFooter:  # EVOL footer
+            #  print(k+&#34; : ul de début de rubrique&#34;)
+            menu += &#39;&lt;ul class=&#34;postCategorie&#34; id=&#39;+k+&#39;&gt;&lt;span title=&#39;+k+&#39;&gt;&#39;+k+&#39;&lt;/span&gt;\n&#39;  # new = title
+            for e in v:
+                #  print(&#34;url : &#34;+e[&#39;url&#39;]+&#34; et label &#34;+e[&#39;label&#39;])
+                if vousEtesIci == e[&#39;url&#39;]:
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34; class=&#34;active&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+                else:
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+            #  print(k+&#34; : ul de fin de rubrique&#34;)
+            menu += &#39;&lt;/ul&gt;\n&#39;
+    return menu</code></pre>
+</details>
+<div class="desc"><p>menu html de plan de site
+Tracabilite: test_afficherMenu</p></div>
+</dd>
+<dt id="marss.afficherLiensFooter"><code class="name flex">
+<span>def <span class="ident">afficherLiensFooter</span></span>(<span>liens, vousEtesIci)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherLiensFooter(liens, vousEtesIci):
+    &#34;&#34;&#34; liste à plat de liens légaux et autres
+    Beaucoup (trop ?) de duplication de code
+    peut être null, sans lien
+    &#34;&#34;&#34;
+    global conf
+    inFooter = conf[&#39;footerLiens&#39;]
+    menu = &#39;&#39;
+    for k, v in liens.items():
+        if k == inFooter:  # EVOL footer
+            #  print(k+&#34; : ul de début de rubrique&#34;)
+            menu += &#39;&lt;ul class=&#34;postFooter&#34;&gt;\n&#39;
+            for e in v:
+                #  print(&#34;url : &#34;+e[&#39;url&#39;]+&#34; et label &#34;+e[&#39;label&#39;])
+                if vousEtesIci == e[&#39;url&#39;]:
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34; class=&#34;active&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+                else:
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+            #  print(k+&#34; : ul de fin de rubrique&#34;)
+            menu += &#39;&lt;/ul&gt;\n&#39;
+    return menu</code></pre>
+</details>
+<div class="desc"><p>liste à plat de liens légaux et autres
+Beaucoup (trop ?) de duplication de code
+peut être null, sans lien</p></div>
+</dd>
+<dt id="marss.lireLeMarkdown"><code class="name flex">
+<span>def <span class="ident">lireLeMarkdown</span></span>(<span>file)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lireLeMarkdown(file):
+    &#34;&#34;&#34; recuperation du contenu .md
+    besoin du path reel vers md :
+    garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
+    OU se fier au referentiel enrichi
+    &#34;&#34;&#34;
+    if file == &#39;home&#39;:
+        global conf
+        file = conf[&#39;home&#39;]
+    f = open(file, &#34;r&#34;)
+    md_text = f.read()  # BUG-orangelabs-02
+    return md_text</code></pre>
+</details>
+<div class="desc"><p>recuperation du contenu .md
+besoin du path reel vers md :
+garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
+OU se fier au referentiel enrichi</p></div>
+</dd>
+<dt id="marss.remplacerExtensionDansContenu"><code class="name flex">
+<span>def <span class="ident">remplacerExtensionDansContenu</span></span>(<span>content, pattern, changer)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remplacerExtensionDansContenu(content, pattern, changer):
+    &#34;&#34;&#34; remplacer une extension trouvee dans un pattern
+    - remplacer par exemple l&#39;hyperlien markdown [](.md) par .html
+    - retourner le contenu avec le remplacement effectue
+    &#34;&#34;&#34;
+    # liste a remplacer
+    aRemplacer = re.findall(pattern, content)
+    # liste remplacee
+    enRemplacement = list()
+    for el in aRemplacer:
+        el = el.replace(changer[&#39;old&#39;],changer[&#39;new&#39;])
+        list.append(enRemplacement, el)
+    # dictionnaire avec cle/valeur de type aRemplacer/enRemplacement
+    aFaire = dict(zip(aRemplacer, enRemplacement))
+    # application du traitement
+    resultat = reduce(lambda a, kv: a.replace(*kv), aFaire.items(), content)
+
+    return resultat</code></pre>
+</details>
+<div class="desc"><p>remplacer une extension trouvee dans un pattern
+- remplacer par exemple l'hyperlien markdown <a href=".md"></a> par .html
+- retourner le contenu avec le remplacement effectue</p></div>
+</dd>
+<dt id="marss.ajouterEtTransformerEnHtml"><code class="name flex">
+<span>def <span class="ident">ajouterEtTransformerEnHtml</span></span>(<span>md_text, title, menu, footer, typeDePage, menuVisible=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False): 
+    &#34;&#34;&#34; sortie html enrichie
+    en plus du contenu, ajout du titre et des menus page et site
+    &#34;&#34;&#34;
+    # FIX-023 - typeDePage apportera support pour multiple template
+    # AM-002 + pouvoir forcer desactiver (comme en accueil)
+    global conf
+    version = conf[&#39;version&#39;]
+    if menuVisible:
+        menuVisible = &#34;&#34;
+    else:
+        menuVisible = conf[&#39;menuVisible&#39;]
+    statusSite = &#34;&#34;
+    statusPage = &#34;&#34;
+    if menuVisible == &#34;site&#34;:
+        statusSite = &#34;checked&#34;
+    elif menuVisible == &#34;page&#34;:
+        statusPage = &#34;checked&#34;
+    else:
+        pass;
+ 
+    # pourrait être réalisé à part, et ici, assemblage
+    md = markdown.Markdown(extensions=[&#39;toc&#39;,&#39;fenced_code&#39;])  # Majuscule obligee FIX-0012
+    content = md.convert(md_text)
+    toc = md.toc # anticipation externalisation
+ 
+    html = &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;&#39;+title+&#39;&lt;/title&gt;&#39;
+    html += &#39;&lt;meta http-equiv=&#34;Content-type&#34; content=&#34;text/html;&#39;
+    html += &#39;charset=utf-8&#34; /&gt;&#39;
+    html += &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;/media/style.css&#34; media=&#34;all&#34;&gt;&#39;
+    html += &#39;&lt;/head&gt;&lt;body class=&#34;markdown-body&#34;&gt;\n&#39;  # EVOL-css-markdown class=&#34;markdown-body&#34;
+
+    if typeDePage == &#34;home&#34;:
+        html += &#39;&lt;a href=&#34;./&#34; class=&#34;active&#34;&gt;accueil&lt;/a&gt;&#39;  # AM-001  header
+    else:
+        html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt;&#39;  # header
+
+    html += &#39;&lt;input type=&#34;radio&#34; id=&#34;men&#34; name=&#34;menu&#34;&#39;
+    html += f&#39; value=&#34;site&#34; class=&#34;cache&#34; {statusSite}&gt;&#39;  # AM-002 
+    html += &#39;&lt;label for=&#34;men&#34;&gt;Menu du site&lt;/label&gt;&#39;
+
+    html += &#39;&lt;input type=&#34;radio&#34; id=&#34;tdm&#34; name=&#34;menu&#34;&#39;
+    html += f&#39; value=&#34;page&#34; class=&#34;cache&#34; {statusPage}&gt;&#39;  # AM-002 
+    html += &#39;&lt;label for=&#34;tdm&#34;&gt;Menu de la page&lt;/label&gt;&#39;
+
+    html += &#39;&lt;input type=&#34;radio&#34; id=&#34;rien&#34; name=&#34;menu&#34;&#39;
+    html += &#39; value=&#34;fermer&#34; class=&#34;cache&#34;&gt;&#39;
+    html += &#39;&lt;label for=&#34;rien&#34;&gt;(FERMER MENU)&lt;/label&gt;\n&#39; # header
+
+    html += &#39;&lt;div class=&#34;menu&#34;&gt;&#39;+menu+&#39;&lt;/div&gt;&lt;/header&gt;\n&#39;  # nav
+    html += toc+&#39;\n&lt;article&gt;&#39;+content+&#39;&lt;/article&gt;\n&#39;
+    html += &#39;&lt;footer&gt;&lt;/footer&gt;&lt;div id=&#34;finish&#34;&gt;&lt;p class=&#34;infos&#34;&gt;généré depuis &lt;a href=&#34;https://github.com/dev4use/marss&#34; class=&#34;trademark&#34;&gt;Marss &#39;+version+&#39;&lt;/a&gt; &lt;/p&gt;&#39;
+    # html += &#39; #  BOF fonction imbriquee
+    html += footer + &#39;&lt;/div&gt;&#39;  # TODO: liens FOOTER conf
+    html += &#39;&lt;/body&gt;&lt;/html&gt;&#39;  # FIX-0004
+    return html</code></pre>
+</details>
+<div class="desc"><p>sortie html enrichie
+en plus du contenu, ajout du titre et des menus page et site</p></div>
+</dd>
+<dt id="marss.creerFichierHtml"><code class="name flex">
+<span>def <span class="ident">creerFichierHtml</span></span>(<span>fileName, html, post=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def creerFichierHtml(fileName, html, post=True):  # AM-
+    &#34;&#34;&#34; ecriture des fichiers html
+    REMANIER filename est fourni par autre source
+    ENLEVER inputExtension, outputExtension
+    &#34;&#34;&#34;
+    global conf
+    outPath = conf[&#39;outputPath&#39;]
+    inExt = conf[&#39;inputExtension&#39;]  # inutile en generation index
+    outExt = conf[&#39;outputExtension&#39;] # inutile en generation index
+    fOutput = outPath + str(fileName)  # FIX Linux
+    if post:
+        fOutput = fOutput.replace(inExt, outExt) # pas en generation index
+    print(&#39;creation de &#39;+fOutput)  # pour info en console
+    z = open(fOutput, &#34;w&#34;)
+    z.write(html)
+    z.close()</code></pre>
+</details>
+<div class="desc"><p>ecriture des fichiers html
+REMANIER filename est fourni par autre source
+ENLEVER inputExtension, outputExtension</p></div>
+</dd>
+<dt id="marss.supprimerFichiersDuRepertoireHtml"><code class="name flex">
+<span>def <span class="ident">supprimerFichiersDuRepertoireHtml</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def supprimerFichiersDuRepertoireHtml():
+    &#34;&#34;&#34; nettoyage du site statique
+    RISQUE: avoir tout supprime sans pouvoir rien recreer
+    verifier faisabilite de la creation avant
+    &#34;&#34;&#34;
+    global conf
+    outPath = conf[&#39;outputPath&#39;]
+    files = glob.glob(outPath+&#39;*&#39;)  # pour eviter /media/
+    for f in files:
+        if path.isfile(f):
+            print(&#39;suppression de &#39;+f)
+            os.remove(f)
+    shutil.rmtree(os.path.join(outPath, &#39;media&#39;), ignore_errors=True)</code></pre>
+</details>
+<div class="desc"><p>nettoyage du site statique
+RISQUE: avoir tout supprime sans pouvoir rien recreer
+verifier faisabilite de la creation avant</p></div>
+</dd>
+<dt id="marss.recreerDossierMediaDeplacerStyle"><code class="name flex">
+<span>def <span class="ident">recreerDossierMediaDeplacerStyle</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def recreerDossierMediaDeplacerStyle():
+    &#34;&#34;&#34;&#34; recuperation de la feuille de style
+    &#34;&#34;&#34;
+    global conf
+    outPath = conf[&#39;outputPath&#39;]
+    fichierCss = conf[&#39;style&#39;]  # TODO pouvoir en parser plusieurs ?
+    os.mkdir(outPath + &#39;media&#39;)  # FIX Linux
+    shutil.copy(fichierCss, outPath + &#39;media/style.css&#39;)  # TODO pas en dur</code></pre>
+</details>
+<div class="desc"><p>" recuperation de la feuille de style</p></div>
+</dd>
+<dt id="marss.lancerServeurDebug"><code class="name flex">
+<span>def <span class="ident">lancerServeurDebug</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lancerServeurDebug():
+    global conf
+    outPath = conf[&#39;outputPath&#39;]
+    # host = conf[&#39;host&#39;]
+    port = conf[&#39;port&#39;]
+    browser = conf[&#39;openBrowser&#39;]
+    server_address = (&#34;&#34;, port)
+    url = f&#34;127.0.0.1:{port}&#34;
+
+    server = http.server.HTTPServer
+    handler = http.server.CGIHTTPRequestHandler
+
+    web_dir = outPath
+    os.chdir(web_dir)
+    handler.cgi_directories = [&#34;./&#34;]
+    print(&#34;Serveur actif sur le port :&#34;, port)
+
+    httpd = server(server_address, handler)
+    if browser:        
+        webbrowser.open(url)
+    httpd.serve_forever()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="marss.recupererCmdLine" href="#marss.recupererCmdLine">recupererCmdLine</a></code></li>
+<li><code><a title="marss.recupererTouteLaConf" href="#marss.recupererTouteLaConf">recupererTouteLaConf</a></code></li>
+<li><code><a title="marss.listerFichiersExtensionRepertoire" href="#marss.listerFichiersExtensionRepertoire">listerFichiersExtensionRepertoire</a></code></li>
+<li><code><a title="marss.creerReferentielPagesLiens" href="#marss.creerReferentielPagesLiens">creerReferentielPagesLiens</a></code></li>
+<li><code><a title="marss.creerLiensMenu" href="#marss.creerLiensMenu">creerLiensMenu</a></code></li>
+<li><code><a title="marss.afficherMenu" href="#marss.afficherMenu">afficherMenu</a></code></li>
+<li><code><a title="marss.afficherLiensFooter" href="#marss.afficherLiensFooter">afficherLiensFooter</a></code></li>
+<li><code><a title="marss.lireLeMarkdown" href="#marss.lireLeMarkdown">lireLeMarkdown</a></code></li>
+<li><code><a title="marss.remplacerExtensionDansContenu" href="#marss.remplacerExtensionDansContenu">remplacerExtensionDansContenu</a></code></li>
+<li><code><a title="marss.ajouterEtTransformerEnHtml" href="#marss.ajouterEtTransformerEnHtml">ajouterEtTransformerEnHtml</a></code></li>
+<li><code><a title="marss.creerFichierHtml" href="#marss.creerFichierHtml">creerFichierHtml</a></code></li>
+<li><code><a title="marss.supprimerFichiersDuRepertoireHtml" href="#marss.supprimerFichiersDuRepertoireHtml">supprimerFichiersDuRepertoireHtml</a></code></li>
+<li><code><a title="marss.recreerDossierMediaDeplacerStyle" href="#marss.recreerDossierMediaDeplacerStyle">recreerDossierMediaDeplacerStyle</a></code></li>
+<li><code><a title="marss.lancerServeurDebug" href="#marss.lancerServeurDebug">lancerServeurDebug</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

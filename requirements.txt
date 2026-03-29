@@ -6,3 +6,7 @@ pytest
 pyest-bdd
 pytest-bdd-report
 beautifulsoup4
+# qualité
+pdoc3
+pygount
+flake8

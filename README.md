@@ -48,3 +48,35 @@ pip install -r requirements.txt
 1. Pour publier ailleurs le site statique, dans ce premier niveau de la version STANDARD,  
 l'utilisateur est libre de ses actions.
 1. Pour avoir un aperçu du résultat, [consulter la démonstration en ligne](https://dev4use.github.io/)
+
+## Comment vérifier la qualité de l'application
+
+Pour vérifier la qualité de l'application, certains tests qualité sont lancés et les résultats sont dans [la documentation](Doc).  
+
+- Taille du code et proportions de commentaires.
+- Rapport de violation des normes de codage.
+- Documentation du code source.
+
+Pour lancer les analyses et rapports :
+
+```
+# A la racine du repository
+
+pdoc --config sort_identifiers=False --force --html --output-dir Doc/ Code/marss.py \
+& pdoc --config sort_identifiers=False --force --output-dir=Doc/ Code/marss.py \
+& pygount Code/marss.py --format=json | python -m json.tool > Doc/code-marss-$(date '+%Y%m%d').json \
+& flake8 --max-line-length=121 --max-doc-length=99 --format=pylint --ignore=E24,W503 --statistics --output-file=Doc/qualite-marss-$(date '+%Y%m%d').txt Code/
+```
+
+## Comment tester l'application
+
+L'application utilise le format de description BDD pour les tests.  
+Il est ainsi possible de voir et comprendre le comportement du système.  
+Pour lancer les tests :
+
+```
+# A la racine du repository
+
+python -m pytest Tests
+```
+
