@@ -17,6 +17,7 @@ from functools import reduce
 import shutil
 import argparse
 import platform
+import pprint  # for debug only
 
 
 def recupererCmdLine(myConf=None):  # sys.argv[1:]
@@ -62,10 +63,10 @@ def recupererTouteLaConf(myConf):
             except Exception as e:
                 print('erreur fichier mal formate')  # KO avant au load ! (texte, variable)
                 print(e)
-                exit(1)
+                exit(2)
     else:
         print('erreur fichier de configuration')
-        exit(1)
+        exit(1) # couvert par test fichier non trouve
 
 
 def listerFichiersExtensionRepertoire():
@@ -120,6 +121,7 @@ def creerReferentielPagesLiens(mdFiles):
         unLabel = str(unFichierMd).replace("_", " ").replace("-", " ")  # - sep
         unLabel = unLabel.replace(inExt, "")  # - extension
         unLabel = unLabel.replace(categorie, "")  # FIX-020
+        unLabel = unLabel.strip() # FIX-BUG-050 enlever espace devant
 
         if unLabel in label:  # FIX-0006
             DOUBLON = True
@@ -143,6 +145,7 @@ def creerReferentielPagesLiens(mdFiles):
 def creerLiensMenu(referentiel):
     """ sortie de liste de dict par group
     result['BUG'] = [{'label':'BUG 0001 le win..','url':'winpath.html'}]
+    dépendance : pas de conf
     """
     result = {}
     for key, group in groupby(referentiel, lambda x: x[0]):
@@ -167,7 +170,7 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
     for k, v in liens.items():
         if k != inFooter:  # EVOL footer
             #  print(k+" : ul de début de rubrique")
-            menu += '<ul class="postCategorie"><span>'+k+'</span>\n'
+            menu += '<ul class="postCategorie" id='+k+'><span title='+k+'>'+k+'</span>\n'  # new = title
             for e in v:
                 #  print("url : "+e['url']+" et label "+e['label'])
                 if vousEtesIci == e['url']:
@@ -201,25 +204,8 @@ def afficherLiensFooter(liens, vousEtesIci):
             menu += '</ul>\n'
     return menu
 
-
-def recupererNomDeFichier(file):
-    """ fichier sans path
-    DEJA fait par referentiel : creerReferentielPagesLiens
-    """
-    fileName = str(str(file).split('\\')[-1])
-    return fileName
-
-
-def recupererTitreDeFichier(fileName):
-    """ label et titre de fichier
-    DEJA fait par referentiel : creerReferentielPagesLiens
-    """
-    global conf
-    inExt = conf['inputExtension']
-    fileName = str(fileName).replace("_", " ").replace("-", " ")  # - sep
-    fileName = fileName.replace(inExt, "")  # - ext
-    return fileName
-
+# recupererNomDeFichier(file)
+# recupererTitreDeFichier(fileName)
 
 def lireLeMarkdown(file):
     """ recuperation du contenu .md
@@ -276,8 +262,10 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     else:
         pass;
  
+    # pourrait être réalisé à part, et ici, assemblage
     md = markdown.Markdown(extensions=['toc','fenced_code'])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
+    toc = md.toc # anticipation externalisation
  
     html = '<html><head><title>'+title+'</title>'
     html += '<meta http-equiv="Content-type" content="text/html;'
@@ -303,7 +291,7 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     html += '<label for="rien">(FERMER MENU)</label>\n' # header
 
     html += '<div class="menu">'+menu+'</div></header>\n'  # nav
-    html += md.toc+'\n<article>'+content+'</article>\n'
+    html += toc+'\n<article>'+content+'</article>\n'
     html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss '+version+'</a> </p>'
     # html += ' #  BOF fonction imbriquee
     html += footer + '</div>'  # TODO: liens FOOTER conf

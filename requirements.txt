@@ -1,3 +1,8 @@
 pyaml
 markdown
 markdown-toc
+# test
+pytest
+pyest-bdd
+pytest-bdd-report
+beautifulsoup4

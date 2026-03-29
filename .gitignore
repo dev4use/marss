@@ -4,3 +4,6 @@ marss.code-workspace
 Sandbox/
 **.pyc
 **/__pycache__/
+**/.pytest_cache
+Content/
+WebSite/

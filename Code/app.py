@@ -4,7 +4,7 @@
 
 import os
 import marss
-from pathlib import Path # Debug
+from pathlib import Path
 
 if __name__ == "__main__":
 
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     mdFiles = marss.listerFichiersExtensionRepertoire()
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
     menuListe = marss.creerLiensMenu(referentiel)
-    # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active WIP ; ousEtesIci
+    # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active VousEtesIci
 
     marss.supprimerFichiersDuRepertoireHtml()
     marss.recreerDossierMediaDeplacerStyle()  # BUG-
