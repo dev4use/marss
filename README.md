@@ -72,6 +72,7 @@ pdoc --config sort_identifiers=False --force --html --output-dir Doc/ Code/marss
 
 L'application utilise le format de description BDD pour les tests.  
 Il est ainsi possible de voir et comprendre le comportement du système.  
+Le comportement du système est retracé à travers [les features en BDD](Tests/Features/).  
 Pour lancer les tests :
 
 ```

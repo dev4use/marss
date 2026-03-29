@@ -2,6 +2,19 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+### Ajouts
+
+1. **légalité** : dossier de test automatique
+1. **code** : contrôles de la taille du code avec pygount
+1. code : contrôles des normes de codage avec flake8
+1. code : génération de la documentation de code avec pdoc3
+1. **test** : tests automatiques en BDD Gherkin avec pytest-bdd
+1. test : test du contenu html avec BeautifulSoup bs4
+
+### Suppressions
+
+1. code : retrait de code mort dans marss.py
+
 ## ST-0.2.0 - 2026-03-22
 
 Version plus conforme d'un  point de vue légal et ergonomique.
