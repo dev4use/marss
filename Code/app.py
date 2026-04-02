@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# version : LIGT : listing html en listing de repertoire
+"""version : STANDARD
+lanceur du programme
+logique apparente dedans, avec boucle par fichier
+"""
 
 import os
 import marss
-from pathlib import Path
 
 if __name__ == "__main__":
-
-    # print("execution du programme marss version "+marss.__version__)
-    # FIX linux : a reprendre lorsque passera en package
 
     myConf = marss.recupererCmdLine()  # sys.argv[1:]
     if myConf is None:  # CONF fixe
@@ -45,10 +44,10 @@ if __name__ == "__main__":
         marss.creerFichierHtml(fileName, html)
 
     md_text = marss.lireLeMarkdown('home')
-    title =  conf['projet']  # BUG-042
-    menuHtml = marss.afficherMenu(menuListe, "index.html") 
+    title = conf['projet']  # BUG-042
+    menuHtml = marss.afficherMenu(menuListe, "index.html")
     footer = marss.afficherLiensFooter(menuListe, "index.html")
-    html = marss.ajouterEtTransformerEnHtml(md_text+"<div class='plan'>"+menuHtml+"</div>", title, menuHtml, footer, "home", True)
+    html = marss.ajouterEtTransformerEnHtml(md_text + "<div class='plan'>" + menuHtml + "</div>", title, menuHtml, footer, "home", True)
     # ci dessus, par True, forcer desactivation menu en accueil
     marss.creerFichierHtml("index.html", html, False)
 

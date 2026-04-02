@@ -17,11 +17,10 @@ from functools import reduce
 import shutil
 import argparse
 import platform
-import pprint  # for debug only
 
 
 def recupererCmdLine(myConf=None):  # sys.argv[1:]
-    """ recuperer arguments console
+    """recuperer arguments console
     - configuration yaml
     - serveur en fond, stop, down -> goto with exit
     """
@@ -33,7 +32,7 @@ def recupererCmdLine(myConf=None):  # sys.argv[1:]
     if args.version:
         print("MARSS : gardez vos idées sur terre")  # en plus de __version__
     if args.configuration:  # FIX long args
-        print("emplacement specifique de la configuration : "+args.configuration)
+        print("emplacement specifique de la configuration : " + args.configuration)
         if os.path.isfile(args.configuration) is True:
             print("configuration bien trouvee")
             myConf = args.configuration  # CONF en argument
@@ -44,21 +43,17 @@ def recupererCmdLine(myConf=None):  # sys.argv[1:]
 
 
 def recupererTouteLaConf(myConf):
-    """ point de depart de tout
+    """point de depart de tout
     permet de tout deporter pour portabilite
     mis en global pour la lib : contrainte de taille method(arg) pour PEP8
     """
     extension = str(myConf).lower().endswith(('.yml', '.yaml'))
     fichier = Path(myConf).is_file()
-    # contenu = isinstance(myConf, dict)
-    # if Path(myConf).is_file(): INITIAL
-    if extension and fichier: #  and contenu
-        # print('OK')
-        #exit(0)
+    if extension and fichier:  # and contenu
         with open(myConf) as f:
             try:
                 global conf
-                conf = yaml.load(f, Loader=yaml.FullLoader) #  PYTEST yaml.scanner.ScannerError
+                conf = yaml.load(f, Loader=yaml.FullLoader)  # PYTEST yaml.scanner.ScannerError
                 return conf
             except Exception as e:
                 print('erreur fichier mal formate')  # KO avant au load ! (texte, variable)
@@ -66,23 +61,23 @@ def recupererTouteLaConf(myConf):
                 exit(2)
     else:
         print('erreur fichier de configuration')
-        exit(1) # couvert par test fichier non trouve
+        exit(1)  # couvert par test fichier non trouve
 
 
 def listerFichiersExtensionRepertoire():
-    """ recuperer la liste des fichiers .md
+    """recuperer la liste des fichiers .md
     aurait pu etre moins generique
     nom plus metier : recupererListeMarkup
     """
     global conf
     inPath = conf['inputPath']
     inExt = conf['inputExtension']
-    myList = sorted(Path(inPath).glob('**/*'+inExt))  # FIX-0005
+    myList = sorted(Path(inPath).glob('**/*' + inExt))  # FIX-0005
     return myList
 
 
 def creerReferentielPagesLiens(mdFiles):
-    """ Referentiel propre :
+    """Referentiel propre :
     objectif : eviter des nettoyages rendondants effectues par fonction
     solution : zip des listes : (category, label, page, url)
     note : + nettoyage si path windows pose probleme ?
@@ -112,7 +107,7 @@ def creerReferentielPagesLiens(mdFiles):
             category.append(unPrefixe)
             categorie = unPrefixe  # FIX-020
         else:
-            print("--- WARNING : fichier "+str(f)+" sans prefixe ---")
+            print("--- WARNING : fichier " + str(f) + " sans prefixe ---")
             # exit()
             category.append('HOME')
             # TODO: sur de vouloir cat par defaut ?
@@ -121,12 +116,12 @@ def creerReferentielPagesLiens(mdFiles):
         unLabel = str(unFichierMd).replace("_", " ").replace("-", " ")  # - sep
         unLabel = unLabel.replace(inExt, "")  # - extension
         unLabel = unLabel.replace(categorie, "")  # FIX-020
-        unLabel = unLabel.strip() # FIX-BUG-050 enlever espace devant
+        unLabel = unLabel.strip()  # FIX-BUG-050 enlever espace devant
 
         if unLabel in label:  # FIX-0006
             DOUBLON = True
             compteur += 1
-            print("--- WARNING : fichier "+str(f)+" avec doublon de nom ---")
+            print("--- WARNING : fichier " + str(f) + " avec doublon de nom ---")
             label.append(unLabel + " " + str(compteur))
         else:
             DOUBLON = False
@@ -143,9 +138,9 @@ def creerReferentielPagesLiens(mdFiles):
 
 
 def creerLiensMenu(referentiel):
-    """ sortie de liste de dict par group
+    """sortie de liste de dict par group
     result['BUG'] = [{'label':'BUG 0001 le win..','url':'winpath.html'}]
-    dépendance : pas de conf
+    dependance : pas de conf
     """
     result = {}
     for key, group in groupby(referentiel, lambda x: x[0]):
@@ -160,8 +155,8 @@ def creerLiensMenu(referentiel):
     return result
 
 
-def afficherMenu(liens, vousEtesIci):  # FIX-023 
-    """ menu html de plan de site
+def afficherMenu(liens, vousEtesIci):  # FIX-023
+    """menu html de plan de site
     Tracabilite: test_afficherMenu
     """
     global conf
@@ -169,21 +164,18 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
     menu = ''
     for k, v in liens.items():
         if k != inFooter:  # EVOL footer
-            #  print(k+" : ul de début de rubrique")
-            menu += '<ul class="postCategorie" id='+k+'><span title='+k+'>'+k+'</span>\n'  # new = title
+            menu += '<ul class="postCategorie" id=' + k + '><span title=' + k + '>' + k + '</span>\n'  # new = title
             for e in v:
-                #  print("url : "+e['url']+" et label "+e['label'])
                 if vousEtesIci == e['url']:
-                    menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
+                    menu += '<li><a href="' + e['url'] + '" class="active">' + e['label'] + '</a></li>\n'
                 else:
-                    menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
-            #  print(k+" : ul de fin de rubrique")
+                    menu += '<li><a href="' + e['url'] + '">' + e['label'] + '</a></li>\n'
             menu += '</ul>\n'
     return menu
 
 
 def afficherLiensFooter(liens, vousEtesIci):
-    """ liste à plat de liens légaux et autres
+    """liste à plat de liens legaux et autres
     Beaucoup (trop ?) de duplication de code
     peut être null, sans lien
     """
@@ -192,23 +184,18 @@ def afficherLiensFooter(liens, vousEtesIci):
     menu = ''
     for k, v in liens.items():
         if k == inFooter:  # EVOL footer
-            #  print(k+" : ul de début de rubrique")
             menu += '<ul class="postFooter">\n'
             for e in v:
-                #  print("url : "+e['url']+" et label "+e['label'])
                 if vousEtesIci == e['url']:
-                    menu += '<li><a href="'+e['url']+'" class="active">'+e['label']+'</a></li>\n'
+                    menu += '<li><a href="' + e['url'] + '" class="active">' + e['label'] + '</a></li>\n'
                 else:
-                    menu += '<li><a href="'+e['url']+'">'+e['label']+'</a></li>\n'
-            #  print(k+" : ul de fin de rubrique")
+                    menu += '<li><a href="' + e['url'] + '">' + e['label'] + '</a></li>\n'
             menu += '</ul>\n'
     return menu
 
-# recupererNomDeFichier(file)
-# recupererTitreDeFichier(fileName)
 
 def lireLeMarkdown(file):
-    """ recuperation du contenu .md
+    """recuperation du contenu .md
     besoin du path reel vers md :
     garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
     OU se fier au referentiel enrichi
@@ -222,7 +209,7 @@ def lireLeMarkdown(file):
 
 
 def remplacerExtensionDansContenu(content, pattern, changer):
-    """ remplacer une extension trouvee dans un pattern
+    """remplacer une extension trouvee dans un pattern
     - remplacer par exemple l'hyperlien markdown [](.md) par .html
     - retourner le contenu avec le remplacement effectue
     """
@@ -231,7 +218,7 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     # liste remplacee
     enRemplacement = list()
     for el in aRemplacer:
-        el = el.replace(changer['old'],changer['new'])
+        el = el.replace(changer['old'], changer['new'])
         list.append(enRemplacement, el)
     # dictionnaire avec cle/valeur de type aRemplacer/enRemplacement
     aFaire = dict(zip(aRemplacer, enRemplacement))
@@ -241,7 +228,7 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     return resultat
 
 
-def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False): 
+def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False):
     """ sortie html enrichie
     en plus du contenu, ajout du titre et des menus page et site
     """
@@ -260,14 +247,14 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     elif menuVisible == "page":
         statusPage = "checked"
     else:
-        pass;
- 
+        pass
+
     # pourrait être réalisé à part, et ici, assemblage
-    md = markdown.Markdown(extensions=['toc','fenced_code'])  # Majuscule obligee FIX-0012
+    md = markdown.Markdown(extensions=['toc', 'fenced_code'])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
-    toc = md.toc # anticipation externalisation
- 
-    html = '<html><head><title>'+title+'</title>'
+    toc = md.toc  # anticipation externalisation
+
+    html = '<html><head><title>' + title + '</title>'
     html += '<meta http-equiv="Content-type" content="text/html;'
     html += 'charset=utf-8" />'
     html += '<link rel="stylesheet" href="/media/style.css" media="all">'
@@ -279,20 +266,20 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
         html += '<a href="./">accueil</a>'  # header
 
     html += '<input type="radio" id="men" name="menu"'
-    html += f' value="site" class="cache" {statusSite}>'  # AM-002 
+    html += f' value="site" class="cache" {statusSite}>'  # AM-002
     html += '<label for="men">Menu du site</label>'
 
     html += '<input type="radio" id="tdm" name="menu"'
-    html += f' value="page" class="cache" {statusPage}>'  # AM-002 
+    html += f' value="page" class="cache" {statusPage}>'  # AM-002
     html += '<label for="tdm">Menu de la page</label>'
 
     html += '<input type="radio" id="rien" name="menu"'
     html += ' value="fermer" class="cache">'
-    html += '<label for="rien">(FERMER MENU)</label>\n' # header
+    html += '<label for="rien">(FERMER MENU)</label>\n'  # header
 
-    html += '<div class="menu">'+menu+'</div></header>\n'  # nav
-    html += toc+'\n<article>'+content+'</article>\n'
-    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss '+version+'</a> </p>'
+    html += '<div class="menu">' + menu + '</div></header>\n'  # nav
+    html += toc + '\n<article>' + content + '</article>\n'
+    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss ' + version + '</a> </p>'
     # html += ' #  BOF fonction imbriquee
     html += footer + '</div>'  # TODO: liens FOOTER conf
     html += '</body></html>'  # FIX-0004
@@ -300,40 +287,40 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
 
 
 def creerFichierHtml(fileName, html, post=True):  # AM-
-    """ ecriture des fichiers html
+    """ecriture des fichiers html
     REMANIER filename est fourni par autre source
     ENLEVER inputExtension, outputExtension
     """
     global conf
     outPath = conf['outputPath']
     inExt = conf['inputExtension']  # inutile en generation index
-    outExt = conf['outputExtension'] # inutile en generation index
+    outExt = conf['outputExtension']  # inutile en generation index
     fOutput = outPath + str(fileName)  # FIX Linux
     if post:
-        fOutput = fOutput.replace(inExt, outExt) # pas en generation index
-    print('creation de '+fOutput)  # pour info en console
+        fOutput = fOutput.replace(inExt, outExt)  # pas en generation index
+    print('creation de ', fOutput)  # pour info en console
     z = open(fOutput, "w")
     z.write(html)
     z.close()
 
 
 def supprimerFichiersDuRepertoireHtml():
-    """ nettoyage du site statique
+    """nettoyage du site statique
     RISQUE: avoir tout supprime sans pouvoir rien recreer
     verifier faisabilite de la creation avant
     """
     global conf
     outPath = conf['outputPath']
-    files = glob.glob(outPath+'*')  # pour eviter /media/
+    files = glob.glob(outPath + '*')  # pour eviter /media/
     for f in files:
         if path.isfile(f):
-            print('suppression de '+f)
+            print('suppression de', f)
             os.remove(f)
     shutil.rmtree(os.path.join(outPath, 'media'), ignore_errors=True)
 
 
 def recreerDossierMediaDeplacerStyle():
-    """" recuperation de la feuille de style
+    """"recuperation de la feuille de style
     """
     global conf
     outPath = conf['outputPath']
@@ -360,6 +347,6 @@ def lancerServeurDebug():
     print("Serveur actif sur le port :", port)
 
     httpd = server(server_address, handler)
-    if browser:        
+    if browser:
         webbrowser.open(url)
     httpd.serve_forever()
