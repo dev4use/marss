@@ -65,12 +65,12 @@ Pour lancer les analyses et rapports :
 pdoc --config sort_identifiers=False --force --html --output-dir Doc/ Code/marss.py \
 & pdoc --config sort_identifiers=False --force --output-dir=Doc/ Code/marss.py \
 & pygount Code/marss.py --format=json | python -m json.tool > Doc/code-marss-$(date '+%Y%m%d').json \
-& flake8 --max-line-length=121 --max-doc-length=99 --format=pylint --ignore=E24,W503 --statistics --output-file=Doc/qualite-marss-$(date '+%Y%m%d').txt Code/
+& flake8 --max-line-length=121 --max-doc-length=99 --format=pylint --ignore=W503 --statistics --output-file=Doc/qualite-marss-$(date '+%Y%m%d').txt Code/
 ```
 
 ## Comment tester l'application
 
-L'application utilise le format de description BDD pour les tests.  
+L'application utilise le format de description Gherkin BDD pour les tests.  
 Il est ainsi possible de voir et comprendre le comportement du système.  
 Le comportement du système est retracé à travers [les features en BDD](Tests/Features/).  
 Pour lancer les tests :

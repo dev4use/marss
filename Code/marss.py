@@ -69,7 +69,6 @@ def listerFichiersExtensionRepertoire():
     aurait pu etre moins generique
     nom plus metier : recupererListeMarkup
     """
-    global conf
     inPath = conf['inputPath']
     inExt = conf['inputExtension']
     myList = sorted(Path(inPath).glob('**/*' + inExt))  # FIX-0005
@@ -82,7 +81,6 @@ def creerReferentielPagesLiens(mdFiles):
     solution : zip des listes : (category, label, page, url)
     note : + nettoyage si path windows pose probleme ?
     """
-    global conf
     inExt = conf['inputExtension']
     outExt = conf['outputExtension']
     category = []
@@ -159,7 +157,6 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
     """menu html de plan de site
     Tracabilite: test_afficherMenu
     """
-    global conf
     inFooter = conf['footerLiens']
     menu = ''
     for k, v in liens.items():
@@ -179,7 +176,6 @@ def afficherLiensFooter(liens, vousEtesIci):
     Beaucoup (trop ?) de duplication de code
     peut être null, sans lien
     """
-    global conf
     inFooter = conf['footerLiens']
     menu = ''
     for k, v in liens.items():
@@ -201,7 +197,6 @@ def lireLeMarkdown(file):
     OU se fier au referentiel enrichi
     """
     if file == 'home':
-        global conf
         file = conf['home']
     f = open(file, "r")
     md_text = f.read()  # BUG-orangelabs-02
@@ -234,7 +229,6 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     """
     # FIX-023 - typeDePage apportera support pour multiple template
     # AM-002 + pouvoir forcer desactiver (comme en accueil)
-    global conf
     version = conf['version']
     if menuVisible:
         menuVisible = ""
@@ -279,7 +273,10 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
 
     html += '<div class="menu">' + menu + '</div></header>\n'  # nav
     html += toc + '\n<article>' + content + '</article>\n'
-    html += '<footer></footer><div id="finish"><p class="infos">généré depuis <a href="https://github.com/dev4use/marss" class="trademark">Marss ' + version + '</a> </p>'
+    html += '<footer></footer>' \
+            '<div id="finish"><p class="infos">généré depuis ' \
+            '<a href="https://github.com/dev4use/marss" class="trademark">Marss ' \
+            f'{version}</a> </p>'
     # html += ' #  BOF fonction imbriquee
     html += footer + '</div>'  # TODO: liens FOOTER conf
     html += '</body></html>'  # FIX-0004
@@ -291,7 +288,6 @@ def creerFichierHtml(fileName, html, post=True):  # AM-
     REMANIER filename est fourni par autre source
     ENLEVER inputExtension, outputExtension
     """
-    global conf
     outPath = conf['outputPath']
     inExt = conf['inputExtension']  # inutile en generation index
     outExt = conf['outputExtension']  # inutile en generation index
@@ -309,7 +305,6 @@ def supprimerFichiersDuRepertoireHtml():
     RISQUE: avoir tout supprime sans pouvoir rien recreer
     verifier faisabilite de la creation avant
     """
-    global conf
     outPath = conf['outputPath']
     files = glob.glob(outPath + '*')  # pour eviter /media/
     for f in files:
@@ -322,7 +317,6 @@ def supprimerFichiersDuRepertoireHtml():
 def recreerDossierMediaDeplacerStyle():
     """"recuperation de la feuille de style
     """
-    global conf
     outPath = conf['outputPath']
     fichierCss = conf['style']  # TODO pouvoir en parser plusieurs ?
     os.mkdir(outPath + 'media')  # FIX Linux
@@ -330,7 +324,6 @@ def recreerDossierMediaDeplacerStyle():
 
 
 def lancerServeurDebug():
-    global conf
     outPath = conf['outputPath']
     # host = conf['host']
     port = conf['port']

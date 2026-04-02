@@ -47,7 +47,10 @@ if __name__ == "__main__":
     title = conf['projet']  # BUG-042
     menuHtml = marss.afficherMenu(menuListe, "index.html")
     footer = marss.afficherLiensFooter(menuListe, "index.html")
-    html = marss.ajouterEtTransformerEnHtml(md_text + "<div class='plan'>" + menuHtml + "</div>", title, menuHtml, footer, "home", True)
+    html = marss.ajouterEtTransformerEnHtml(md_text
+                                            + "<div class='plan'>"
+                                            + menuHtml + "</div>",
+                                            title, menuHtml, footer, "home", True)
     # ci dessus, par True, forcer desactivation menu en accueil
     marss.creerFichierHtml("index.html", html, False)
 
