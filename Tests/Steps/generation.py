@@ -18,7 +18,6 @@ herePath = file_path = Path(here)
 
 #----------------------- MAINTENANCE
 
-
 @given("j'ai un fichier de log configuré")
 def configurer_log(echanges):
     # conf = dict()
@@ -566,18 +565,21 @@ def presence_menu_footer(echanges, presence_menu):
         assert  echanges["menuFooter"] == ""
 
 @then(parsers.parse("on a {args} présent dans le dossier"))
-def presence_fichier_dossier(echanges, args):
-      if args == "le style css du site":          
-          file = os.path.exists(f'{here}/Dataset/WebSite-reference/media/style.css')
-          assert file == True
-      elif args == "chaque fichier html du contenu":
-          expected_list = data.propre_pagesHtml
-          inPath = echanges['conf']['inputPath']
-          inExt = echanges['conf']['inputExtension']
-          actual_list = sorted(Path(inPath).glob('**/*' + inExt))
-          assert  actual_list == expected_list
-      else:
-          pass          
+def presence_fichier_dossier(echanges, args, nettoyer):
+    if args == "le style css du site":          
+        file = os.path.exists(f'{here}/Dataset/WebSite-reference/media/style.css')
+        assert file == True
+        # nettoyer  # (f'{here}/Dataset/WebSite-reference')
+    elif args == "chaque fichier html du contenu":
+        expected_list = data.propre_pagesHtml
+        inPath = echanges['conf']['inputPath']
+        inExt = echanges['conf']['inputExtension']
+        actual_list = sorted(Path(inPath).glob('**/*' + inExt))
+        assert  actual_list == expected_list
+        # nettoyer   # (f'{here}/Dataset/WebSite-reference')
+    else:
+        pass          
+    # fixture executée qu'une fois
 
 @then("j'ai le lien accueil actif")
 def lien_accueil_actif(echanges):  

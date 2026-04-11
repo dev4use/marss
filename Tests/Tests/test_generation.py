@@ -1,16 +1,42 @@
 # -*- coding: utf-8 -*-
 import pytest  # pour fixture
 from pytest_bdd import scenario
+import os
+from pathlib import Path
+import itertools
 """
 jointure avec le scenario de la feature
 appel pytest standard
 suit l'ordre des tests exposés ici et non l'ordre de la feature
 """
 
+
+here = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+herePath = file_path = Path(here)
+
 @pytest.fixture(scope="function")
 def echanges():
    """ echanges de données entre steps """
    yield {}
+
+@pytest.fixture(scope="function")
+def nettoyer():
+   """ nettoyer les repertoires de site statique """
+   yield {}
+   print("nettoyer :")
+   files = Path(f'{here}/Dataset/WebSite-reference').rglob('*.*')
+   files2 = Path(f'{here}/Dataset/WebSite-accueil').rglob('*.*')
+   # chainer/merger generator
+   def chained_generator():
+        yield from files
+        yield from files2
+   # generator object Path.rglob
+   for file in chained_generator():
+    if file.name.startswith("."):
+        print("ne pas supprimer :", file.name)        
+    else:
+        print("supprimer :", file)
+        file.unlink()
 
 @scenario("generation.feature", "récupérer la configuration interne")
 def test_conf_parDefaut():  # test pytest obligatoire
