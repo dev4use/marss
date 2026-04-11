@@ -37,4 +37,4 @@ Le rapport de test est visible en markdown :
 
 - [test-report.md](test-report.md)
 
-Ce rapport est également disponible [en html](Tests/Report/report.html) dans Tests/Report/.
+Ce rapport est également disponible [en html](../Tests/Report/report.html) dans Tests/Report/.
