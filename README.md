@@ -2,9 +2,11 @@
 
 *Slogan : Pour garder vos idées sur terre*
 
+[![resultats de tests](Doc/testBadge.svg?dummy=8484744)](Doc/test-report.md) [![couverture de code par les tests](Doc/coverageBadge.svg?dummy=8484744)](Tests/Report/coverage.md) [![convention de codage](Doc/qualityBadge.svg?dummy=8484744)](Doc/qualite-marss.txt)
+
 Clin d'oeil à la conquête spatiale.  
 Jouer à se donner de grandes ambitions, mais trop grandes, avec deux S dans le nom.  
-Parce qu'il existe tant de générateur de site statique, et que cela peut sembler si fantastique, alors que...  
+Parce qu'il existe tant de générateurs de site statique, et que cela peut sembler si fantastique, alors que...  
 Cela peut être fait en peu de lignes de code (du moins au départ), et beaucoup de dérision et de pédagogie.   
 
 - Contenu markdown.
@@ -36,7 +38,7 @@ pip install -r requirements.txt
     ```
     # A la racine du 'repository' (et dans l'environnement virtuel ?) taper
 
-    python Code/app.py
+    python Code
 
     # Visualiser les informations de débuggage en console
     # Le navigateur par défaut s'ouvre avec le site statique.
@@ -55,7 +57,7 @@ Pour vérifier la qualité de l'application, certains tests qualité sont lancé
 
 - Taille du code et proportions de commentaires.
 - Rapport de violation des normes de codage.
-- Documentation du code source.
+- [Documentation du code source](Doc/marss.md).
 
 Pour lancer les analyses et rapports :
 
@@ -64,8 +66,24 @@ Pour lancer les analyses et rapports :
 
 pdoc --config sort_identifiers=False --force --html --output-dir Doc/ Code/marss.py \
 & pdoc --config sort_identifiers=False --force --output-dir=Doc/ Code/marss.py \
-& pygount Code/marss.py --format=json | python -m json.tool > Doc/code-marss-$(date '+%Y%m%d').json \
-& flake8 --max-line-length=121 --max-doc-length=99 --format=pylint --ignore=W503 --statistics --output-file=Doc/qualite-marss-$(date '+%Y%m%d').txt Code/
+& flake8 --max-line-length=121 --max-doc-length=99 --format=pylint --statistics --output-file=Doc/qualite-marss.txt Code/ \
+& pygount Code/marss.py --format=json | python -m json.tool > Doc/code-marss.json \
+& pygount Code/marss.py --format=summary --out=Doc/code-marss.txt \
+& pygount Code/marss.py  --format=cloc-xml --out=Doc/cloc.xml 
+
+# Etant dynamique, la couverture de code est exécutée par pytest lui même en configuration.
+```
+
+## Comment afficher la qualité de l'application
+
+Pour information, voici comment sont générés les badges :
+
+```
+# A la racine du repository
+
+genbadge tests -i Doc/junit.xml -o Doc/testBadge.svg \
+& genbadge coverage -i Doc/coverage.xml -o Doc/coverageBadge.svg \
+& genbadge flake8 -i Doc/qualite-marss.txt -o Doc/qualityBadge.svg
 ```
 
 ## Comment tester l'application

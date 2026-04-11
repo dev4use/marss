@@ -8,7 +8,8 @@ logique apparente dedans, avec boucle par fichier
 import os
 import marss
 
-if __name__ == "__main__":
+
+def main():
 
     myConf = marss.recupererCmdLine()  # sys.argv[1:]
     if myConf is None:  # CONF fixe
@@ -22,6 +23,9 @@ if __name__ == "__main__":
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
     menuListe = marss.creerLiensMenu(referentiel)
     # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active VousEtesIci
+    marss.aideLoggerFichier("listeMarkdown", mdFiles)
+    marss.aideLoggerFichier("listeAvecHtml", referentiel)
+    marss.aideLoggerFichier("listeLiens", menuListe)
 
     marss.supprimerFichiersDuRepertoireHtml()
     marss.recreerDossierMediaDeplacerStyle()  # BUG-
@@ -55,3 +59,8 @@ if __name__ == "__main__":
     marss.creerFichierHtml("index.html", html, False)
 
     marss.lancerServeurDebug()
+
+
+# pragma: exclude file
+if __name__ == "__main__":
+    main()

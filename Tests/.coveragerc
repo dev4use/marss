@@ -1,0 +1,7 @@
+[run]
+branch = True
+omit =
+    Code/__init__.py
+    Code/__main__.py
+
+

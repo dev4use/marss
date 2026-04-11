@@ -30,7 +30,13 @@ Feature: Générer le site statique
         Given J'ai une configuration mal formatée
         When Je récupère la configuration mal formatée
         Then Je reçois une erreur de format
-    
+
+    @robustesse
+    Scenario: logger les événements
+        Given j'ai un fichier de log configuré
+        When je veux logger un événement
+        Then je vois apparaître l'événement en log
+
     @robustesse
     Scenario: récupérer le contenu
         Given Le Contenu A Des Fichiers Markdown Parmi D'autres Extensions
@@ -43,7 +49,14 @@ Feature: Générer le site statique
         Given le contenu n'a que du markdown
         When Je Récupère Les Fichiers
         Then Je Recois La Liste Des Fichiers Markdown Exclusivement
-    
+
+    @robustesse
+    Scenario: récupérer des fichiers markdown en doublon
+        Given le contenu a des fichiers au nom identique
+        When Je Récupère Les Fichiers avec doublon
+        Then j'ai une alerte concernant les doublons
+        Then Je Recois La Liste Des doublons avec un nom incrémenté
+
     @nominal
     Scenario: récupérer les fichiers html, labels et catégories
         Given la liste des markdowns propre est prête
@@ -64,6 +77,12 @@ Feature: Générer le site statique
         Given le référentiel complet des pages est disponible
         When je demande la liste finale des liens
         Then j'ai une liste de libellé url
+
+    @nominal
+    Scenario: transformer les liens md
+        Given j'ai des contenus md avec lien md
+        When je veux transformer ces liens md
+        Then je me retrouve avec des liens html
 
     @nominal
     Scenario: afficher le menu du site
@@ -89,13 +108,43 @@ Feature: Générer le site statique
           | absent                   |    absentes   |    absent     |
           | present                  |    absentes   |    absent     |
 
+    @nominal
+    Scenario: récupérer le contenu md de la page d'accueil
+        Given la page d'accueil est en configuration
+        When je souhaite récupérer le contenu de la page d'accueil
+        Then le contenu correspond à celui du fichier indiqué en accueil
 
+    @alternatif
+    Scenario: récupérer le contenu html de la page d'accueil
+        Given la page d'accueil est en configuration
+        When je souhaite récupérer le contenu html de la page d'accueil
+        Then j'ai le lien accueil actif
+
+    @alternatif
+    Scenario: créer le fichier html de l'accueil
+        Given la page d'accueil est en configuration
+        When je souhaite créer le fichier html de la page d'accueil
+        Then le fichier créé s'appelle index.html
+
+    @alternatif
+    Scenario: récupérer le html d'une page avec menu page actif
+        Given le menu de page est en configuration
+        When je souhaite récupérer le contenu html d'une page forçant le plan de page
+        Then j'ai le menu page actif    
+
+    @nominal
     Scenario: disposer de tous les fichiers du site statique
-        Given est finalisé "le referentiel des pages"
-        Given est finalisé "chaque menu"
-        Given est finalisé "chaque contenu html"
+        Given est finalisé le referentiel des pages
+        Given est finalisé chaque menu
+        Given est finalisé chaque contenu html
         When on nettoie le dossier destination
-        When on dépose "le dossier media" dans le dossier
-        When on dépose "le fichier html de chaque contenu" dans le dossier
-        Then on a "le style css du site" présent dans le dossier
-        Then on a "chaque fichier html du contenu" présent dans le dossier
+        When on dépose le dossier media dans le dossier
+        When on dépose le fichier html de chaque contenu dans le dossier
+        Then on a le style css du site présent dans le dossier
+        Then on a chaque fichier html du contenu présent dans le dossier
+
+    @nominal
+    Scenario: visualiser le site statique
+        Given le site est configuré et le contenu markdown est présent
+        When je lance la génération du site
+        Then le site est accessible en serveur de debug

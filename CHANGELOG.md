@@ -2,6 +2,8 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-1.0.0 - 2026-04-11
+
 ### Ajouts
 
 1. **légalité** : dossier de test automatique
@@ -10,10 +12,18 @@ Suivi des changements de version par classement antéchronologique.
 1. code : génération de la documentation de code avec pdoc3
 1. **test** : tests automatiques en BDD Gherkin avec pytest-bdd
 1. test : test du contenu html avec BeautifulSoup bs4
+1. test : contrôle de couverture du code par les tests
+1. test : rapports de qualité en doc
+1. test:  badges de qualité en readme principal
+1. **debug**: en dossier "Logs", suivi des étapes d'enrichissement des inventaires de page
 
 ### Suppressions
 
 1. code : retrait de code mort dans marss.py
+
+### Changements
+
+1. code : module/package Code avec __init__ et __main__
 
 ## ST-0.2.0 - 2026-03-22
 

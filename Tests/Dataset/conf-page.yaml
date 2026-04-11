@@ -1,14 +1,14 @@
 host: 0.0.0.0
 port: 8001
 inputPath: "/home/user/Documents/marss/Content/"
-outputPath: "/home/user/Documents/marss/WebSite/"  # slash obligatoire : TODO: robustesse
+outputPath: "/home/user/Documents/marss/Tests/Dataset/WebSite-accueil/" # DISCRIMINANT: seule page
 openBrowser: True
 inputExtension: .md
 outputExtension: .html
 home: "/home/user/Documents/marss/Tests/Dataset/Theme/index.txt"
 style: "/home/user/Documents/marss/Tests/Dataset/Theme/style.css"
 projet: "MAR-kdown-S-imple-web-S-ite"
-menuVisible: "site" # site|page|vide ou autre AM-002
-footerLiens: "FOOTER"  # prefixe du md et html
-logs: "/home/user/Documents/marss/Tests/Dataset/flux.txt"  # necessaire
+menuVisible: "page" # DISCRIMINANT: couverture page
+footerLiens: "FOOTER"
+logs: "/home/user/Documents/marss/Tests/Dataset/flux.txt"
 version: "TEST-0.2.0"

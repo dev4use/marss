@@ -11,3 +11,4 @@ projet: "MAR-kdown-S-imple-web-S-ite"
 menuVisible: "site" # site|page|vide ou autre AM-002
 footerLiens: "FOOTER"  # prefixe du md et html
 version: "TEST-0.2.0"
+logs: ""  # necessaire

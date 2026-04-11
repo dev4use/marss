@@ -6,7 +6,10 @@ pytest
 pyest-bdd
 pytest-bdd-report
 beautifulsoup4
+requests
 # qualité
 pdoc3
 pygount
 flake8
+pytest-bdd-md-report
+genbadge[all]

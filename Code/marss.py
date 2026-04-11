@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# version : Standard : ST-0.0.0
+# version : Standard
+"""fonctions procedurales du site statique
+
+- partir d'un ensemble de fichiers .md pour aboutir a un ensemble de fichiers html navigables
+- ordre d'exposition respectant la cinematique de transformation et d'enrichissement de la donnee
+"""
 
 import markdown
 import yaml
@@ -17,14 +22,17 @@ from functools import reduce
 import shutil
 import argparse
 import platform
+import pprint
+import contextlib
 
 
-def recupererCmdLine(myConf=None):  # sys.argv[1:]
-    """recuperer arguments console
-    - configuration yaml
-    - serveur en fond, stop, down -> goto with exit
+def recupererCmdLine(myConf=None):  # pragma: no cover
+    """recuperer les arguments en console
+
+    configuration yaml
+    plus tard : serveur en fond, up et down ?
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()  # sys.argv[1:]
     parser.add_argument("-V", "--version", help="version", action="store_true")
     parser.add_argument("-C", "--configuration", help="path de configuration")
     args = parser.parse_args()
@@ -43,31 +51,60 @@ def recupererCmdLine(myConf=None):  # sys.argv[1:]
 
 
 def recupererTouteLaConf(myConf):
-    """point de depart de tout
-    permet de tout deporter pour portabilite
-    mis en global pour la lib : contrainte de taille method(arg) pour PEP8
+    """point de depart de tout, recuperer la conf
+
+    - portabilite de la configuration avec fichier deporte
+    - mis en global pour la lib
+    - en profite pour supprimer le fichier de log à cette etape
     """
     extension = str(myConf).lower().endswith(('.yml', '.yaml'))
     fichier = Path(myConf).is_file()
+    # fichier = True
+    print("le chemin du fichier de configuration est:", myConf)
+    print("la ressource a la bonne extension:", extension)
+    print("la ressource est bien un fichier:", fichier)
     if extension and fichier:  # and contenu
         with open(myConf) as f:
             try:
                 global conf
-                conf = yaml.load(f, Loader=yaml.FullLoader)  # PYTEST yaml.scanner.ScannerError
+                conf = yaml.load(f, Loader=yaml.FullLoader)
+                with contextlib.suppress(FileNotFoundError):
+                    os.remove(conf['logs'])
                 return conf
             except Exception as e:
-                print('erreur fichier mal formate')  # KO avant au load ! (texte, variable)
+                print('erreur fichier mal formate')
                 print(e)
                 exit(2)
     else:
         print('erreur fichier de configuration')
-        exit(1)  # couvert par test fichier non trouve
+        exit(1)
+
+
+def aideLoggerFichier(etape, donnees):
+    """visualiser les formats d'echange a chaque etape
+
+    - refentiels logges en mode "pretty"
+    """
+    pp = pprint.PrettyPrinter(indent=4, width=100)
+    donnees = pp.pformat(donnees)
+    with open(conf['logs'], mode="a+", encoding='UTF-8') as f:
+        sep = "" if Path(conf['logs']).stat().st_size == 0 else "\n"
+        # gestion de premiere ligne ci dessus
+        f.write(f"{sep}---------------- {etape} ----------------\n")
+        f.write(donnees)
+        # f.write(str(donnees))
+        # # pp.pprint(donnees) argument must be str, not None
+        # argument must be str, not None
+        # pp.pprint(donnees, stream=f)
 
 
 def listerFichiersExtensionRepertoire():
     """recuperer la liste des fichiers .md
-    aurait pu etre moins generique
-    nom plus metier : recupererListeMarkup
+
+    - aurait pu etre moins generique
+    - nom plus metier DDD : recupererListeMarkup
+    - entrants : fichiers d'un repertoire
+    - sortants : [ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md'), ...]
     """
     inPath = conf['inputPath']
     inExt = conf['inputExtension']
@@ -76,10 +113,15 @@ def listerFichiersExtensionRepertoire():
 
 
 def creerReferentielPagesLiens(mdFiles):
-    """Referentiel propre :
-    objectif : eviter des nettoyages rendondants effectues par fonction
-    solution : zip des listes : (category, label, page, url)
-    note : + nettoyage si path windows pose probleme ?
+    """referentiel propre
+
+    - objectif : eviter des nettoyages rendondants effectues par fonction
+    - solution : zip des listes : (category, label, page, url)
+    - note : + nettoyage si path windows pose probleme
+    - entrants : [Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md'), ...]
+    - sortants : [('BUG', '040 nom categorie dans lien post',
+    'BUG-040-nom-categorie-dans-lien-post.html',
+    Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', ...)]
     """
     inExt = conf['inputExtension']
     outExt = conf['outputExtension']
@@ -91,7 +133,7 @@ def creerReferentielPagesLiens(mdFiles):
     compteur = 1
 
     for f in mdFiles:
-        if platform.system() == "Windows":
+        if platform.system() == "Windows":   # pragma: no cover
             unFichierMd = str(str(f).split('\\')[-1])
         else:
             unFichierMd = str(str(f).split('/')[-1])  # FIX-008
@@ -106,7 +148,6 @@ def creerReferentielPagesLiens(mdFiles):
             categorie = unPrefixe  # FIX-020
         else:
             print("--- WARNING : fichier " + str(f) + " sans prefixe ---")
-            # exit()
             category.append('HOME')
             # TODO: sur de vouloir cat par defaut ?
             categorie = 'HOME'  # FIX-020
@@ -137,8 +178,12 @@ def creerReferentielPagesLiens(mdFiles):
 
 def creerLiensMenu(referentiel):
     """sortie de liste de dict par group
-    result['BUG'] = [{'label':'BUG 0001 le win..','url':'winpath.html'}]
-    dependance : pas de conf
+
+    - entrants : [('BUG', '040 nom categorie dans lien post',
+     'BUG-040-nom-categorie-dans-lien-post.html',
+      Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', ...)]
+    - sortants : {'BUG': [{'label': '040 nom categorie dans lien post',
+     'url': 'BUG-040-nom-categorie-dans-lien-post.html'}, ... ], 'EB': [...]}
     """
     result = {}
     for key, group in groupby(referentiel, lambda x: x[0]):
@@ -155,7 +200,9 @@ def creerLiensMenu(referentiel):
 
 def afficherMenu(liens, vousEtesIci):  # FIX-023
     """menu html de plan de site
-    Tracabilite: test_afficherMenu
+
+    - liste au format ul/li de l'ensemble des pages
+    - style : ul class = postCategorie / span title / li class active si post en cours
     """
     inFooter = conf['footerLiens']
     menu = ''
@@ -172,9 +219,11 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
 
 
 def afficherLiensFooter(liens, vousEtesIci):
-    """liste à plat de liens legaux et autres
-    Beaucoup (trop ?) de duplication de code
-    peut être null, sans lien
+    """liste a plat de liens legaux et autres
+
+    - beaucoup (trop ?) de duplication de code
+    - le retour peut etre null, sans lien
+    - style : ul class = postFooter /  li class active si post en cours
     """
     inFooter = conf['footerLiens']
     menu = ''
@@ -192,21 +241,22 @@ def afficherLiensFooter(liens, vousEtesIci):
 
 def lireLeMarkdown(file):
     """recuperation du contenu .md
-    besoin du path reel vers md :
-    garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
-    OU se fier au referentiel enrichi
+
+    - besoin du path reel vers md
     """
     if file == 'home':
         file = conf['home']
     f = open(file, "r")
-    md_text = f.read()  # BUG-orangelabs-02
+    md_text = f.read()
     return md_text
 
 
 def remplacerExtensionDansContenu(content, pattern, changer):
     """remplacer une extension trouvee dans un pattern
+
     - remplacer par exemple l'hyperlien markdown [](.md) par .html
     - retourner le contenu avec le remplacement effectue
+    - le  nom la aussi aurait pu etre plus métier DDD
     """
     # liste a remplacer
     aRemplacer = re.findall(pattern, content)
@@ -224,8 +274,9 @@ def remplacerExtensionDansContenu(content, pattern, changer):
 
 
 def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False):
-    """ sortie html enrichie
-    en plus du contenu, ajout du titre et des menus page et site
+    """sortie html enrichie
+
+    - en plus du contenu, ajout du titre et des menus page et site
     """
     # FIX-023 - typeDePage apportera support pour multiple template
     # AM-002 + pouvoir forcer desactiver (comme en accueil)
@@ -243,7 +294,7 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     else:
         pass
 
-    # pourrait être réalisé à part, et ici, assemblage
+    # pourrait etre realisé à part, et ici, assemblage
     md = markdown.Markdown(extensions=['toc', 'fenced_code'])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
     toc = md.toc  # anticipation externalisation
@@ -285,8 +336,9 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
 
 def creerFichierHtml(fileName, html, post=True):  # AM-
     """ecriture des fichiers html
-    REMANIER filename est fourni par autre source
-    ENLEVER inputExtension, outputExtension
+
+    - TODO: REMANIER filename est fourni par autre source
+    - TODO: ENLEVER inputExtension, outputExtension
     """
     outPath = conf['outputPath']
     inExt = conf['inputExtension']  # inutile en generation index
@@ -302,8 +354,9 @@ def creerFichierHtml(fileName, html, post=True):  # AM-
 
 def supprimerFichiersDuRepertoireHtml():
     """nettoyage du site statique
-    RISQUE: avoir tout supprime sans pouvoir rien recreer
-    verifier faisabilite de la creation avant
+
+    - RISQUE: avoir tout supprime sans pouvoir rien recree
+    - verifier faisabilite de la creation avant ?
     """
     outPath = conf['outputPath']
     files = glob.glob(outPath + '*')  # pour eviter /media/
@@ -315,7 +368,7 @@ def supprimerFichiersDuRepertoireHtml():
 
 
 def recreerDossierMediaDeplacerStyle():
-    """"recuperation de la feuille de style
+    """recuperation de la feuille de style
     """
     outPath = conf['outputPath']
     fichierCss = conf['style']  # TODO pouvoir en parser plusieurs ?
@@ -323,7 +376,11 @@ def recreerDossierMediaDeplacerStyle():
     shutil.copy(fichierCss, outPath + 'media/style.css')  # TODO pas en dur
 
 
-def lancerServeurDebug():
+def lancerServeurDebug():  # pragma: no cover
+    """lancement du serveur de debug
+
+    - ouverture optionnelle (par conf) du navigateur
+    """
     outPath = conf['outputPath']
     # host = conf['host']
     port = conf['port']

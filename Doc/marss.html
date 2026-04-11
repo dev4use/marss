@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>marss API documentation</title>
-<meta name="description" content="">
+<meta name="description" content="fonctions procedurales du site statique …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,6 +36,11 @@ el.replaceWith(d);
 <h1 class="title">Module <code>marss</code></h1>
 </header>
 <section id="section-intro">
+<p>fonctions procedurales du site statique</p>
+<ul>
+<li>partir d'un ensemble de fichiers .md pour aboutir a un ensemble de fichiers html navigables</li>
+<li>ordre d'exposition respectant la cinematique de transformation et d'enrichissement de la donnee</li>
+</ul>
 </section>
 <section>
 </section>
@@ -52,12 +57,13 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def recupererCmdLine(myConf=None):  # sys.argv[1:]
-    &#34;&#34;&#34; recuperer arguments console
-    - configuration yaml
-    - serveur en fond, stop, down -&gt; goto with exit
+<pre><code class="python">def recupererCmdLine(myConf=None):  # pragma: no cover
+    &#34;&#34;&#34;recuperer les arguments en console
+
+    configuration yaml
+    plus tard : serveur en fond, up et down ?
     &#34;&#34;&#34;
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()  # sys.argv[1:]
     parser.add_argument(&#34;-V&#34;, &#34;--version&#34;, help=&#34;version&#34;, action=&#34;store_true&#34;)
     parser.add_argument(&#34;-C&#34;, &#34;--configuration&#34;, help=&#34;path de configuration&#34;)
     args = parser.parse_args()
@@ -65,7 +71,7 @@ el.replaceWith(d);
     if args.version:
         print(&#34;MARSS : gardez vos idées sur terre&#34;)  # en plus de __version__
     if args.configuration:  # FIX long args
-        print(&#34;emplacement specifique de la configuration : &#34;+args.configuration)
+        print(&#34;emplacement specifique de la configuration : &#34; + args.configuration)
         if os.path.isfile(args.configuration) is True:
             print(&#34;configuration bien trouvee&#34;)
             myConf = args.configuration  # CONF en argument
@@ -74,9 +80,9 @@ el.replaceWith(d);
             exit(1)
     return myConf</code></pre>
 </details>
-<div class="desc"><p>recuperer arguments console
-- configuration yaml
-- serveur en fond, stop, down -&gt; goto with exit</p></div>
+<div class="desc"><p>recuperer les arguments en console</p>
+<p>configuration yaml
+plus tard : serveur en fond, up et down ?</p></div>
 </dd>
 <dt id="marss.recupererTouteLaConf"><code class="name flex">
 <span>def <span class="ident">recupererTouteLaConf</span></span>(<span>myConf)</span>
@@ -87,33 +93,70 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def recupererTouteLaConf(myConf):
-    &#34;&#34;&#34; point de depart de tout
-    permet de tout deporter pour portabilite
-    mis en global pour la lib : contrainte de taille method(arg) pour PEP8
+    &#34;&#34;&#34;point de depart de tout, recuperer la conf
+
+    - portabilite de la configuration avec fichier deporte
+    - mis en global pour la lib
+    - en profite pour supprimer le fichier de log à cette etape
     &#34;&#34;&#34;
     extension = str(myConf).lower().endswith((&#39;.yml&#39;, &#39;.yaml&#39;))
     fichier = Path(myConf).is_file()
-    # contenu = isinstance(myConf, dict)
-    # if Path(myConf).is_file(): INITIAL
-    if extension and fichier: #  and contenu
-        # print(&#39;OK&#39;)
-        #exit(0)
+    # fichier = True
+    print(&#34;le chemin du fichier de configuration est:&#34;, myConf)
+    print(&#34;la ressource a la bonne extension:&#34;, extension)
+    print(&#34;la ressource est bien un fichier:&#34;, fichier)
+    if extension and fichier:  # and contenu
         with open(myConf) as f:
             try:
                 global conf
-                conf = yaml.load(f, Loader=yaml.FullLoader) #  PYTEST yaml.scanner.ScannerError
+                conf = yaml.load(f, Loader=yaml.FullLoader)
+                with contextlib.suppress(FileNotFoundError):
+                    os.remove(conf[&#39;logs&#39;])
                 return conf
             except Exception as e:
-                print(&#39;erreur fichier mal formate&#39;)  # KO avant au load ! (texte, variable)
+                print(&#39;erreur fichier mal formate&#39;)
                 print(e)
                 exit(2)
     else:
         print(&#39;erreur fichier de configuration&#39;)
-        exit(1) # couvert par test fichier non trouve</code></pre>
+        exit(1)</code></pre>
 </details>
-<div class="desc"><p>point de depart de tout
-permet de tout deporter pour portabilite
-mis en global pour la lib : contrainte de taille method(arg) pour PEP8</p></div>
+<div class="desc"><p>point de depart de tout, recuperer la conf</p>
+<ul>
+<li>portabilite de la configuration avec fichier deporte</li>
+<li>mis en global pour la lib</li>
+<li>en profite pour supprimer le fichier de log à cette etape</li>
+</ul></div>
+</dd>
+<dt id="marss.aideLoggerFichier"><code class="name flex">
+<span>def <span class="ident">aideLoggerFichier</span></span>(<span>etape, donnees)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def aideLoggerFichier(etape, donnees):
+    &#34;&#34;&#34;visualiser les formats d&#39;echange a chaque etape
+
+    - refentiels logges en mode &#34;pretty&#34;
+    &#34;&#34;&#34;
+    pp = pprint.PrettyPrinter(indent=4, width=100)
+    donnees = pp.pformat(donnees)
+    with open(conf[&#39;logs&#39;], mode=&#34;a+&#34;, encoding=&#39;UTF-8&#39;) as f:
+        sep = &#34;&#34; if Path(conf[&#39;logs&#39;]).stat().st_size == 0 else &#34;\n&#34;
+        # gestion de premiere ligne ci dessus
+        f.write(f&#34;{sep}---------------- {etape} ----------------\n&#34;)
+        f.write(donnees)
+        # f.write(str(donnees))
+        # # pp.pprint(donnees) argument must be str, not None
+        # argument must be str, not None
+        # pp.pprint(donnees, stream=f)</code></pre>
+</details>
+<div class="desc"><p>visualiser les formats d'echange a chaque etape</p>
+<ul>
+<li>refentiels logges en mode "pretty"</li>
+</ul></div>
 </dd>
 <dt id="marss.listerFichiersExtensionRepertoire"><code class="name flex">
 <span>def <span class="ident">listerFichiersExtensionRepertoire</span></span>(<span>)</span>
@@ -124,19 +167,25 @@ mis en global pour la lib : contrainte de taille method(arg) pour PEP8</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def listerFichiersExtensionRepertoire():
-    &#34;&#34;&#34; recuperer la liste des fichiers .md
-    aurait pu etre moins generique
-    nom plus metier : recupererListeMarkup
+    &#34;&#34;&#34;recuperer la liste des fichiers .md
+
+    - aurait pu etre moins generique
+    - nom plus metier DDD : recupererListeMarkup
+    - entrants : fichiers d&#39;un repertoire
+    - sortants : [ Path(&#39;/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md&#39;), ...]
     &#34;&#34;&#34;
-    global conf
     inPath = conf[&#39;inputPath&#39;]
     inExt = conf[&#39;inputExtension&#39;]
-    myList = sorted(Path(inPath).glob(&#39;**/*&#39;+inExt))  # FIX-0005
+    myList = sorted(Path(inPath).glob(&#39;**/*&#39; + inExt))  # FIX-0005
     return myList</code></pre>
 </details>
-<div class="desc"><p>recuperer la liste des fichiers .md
-aurait pu etre moins generique
-nom plus metier : recupererListeMarkup</p></div>
+<div class="desc"><p>recuperer la liste des fichiers .md</p>
+<ul>
+<li>aurait pu etre moins generique</li>
+<li>nom plus metier DDD : recupererListeMarkup</li>
+<li>entrants : fichiers d'un repertoire</li>
+<li>sortants : [ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md'), &hellip;]</li>
+</ul></div>
 </dd>
 <dt id="marss.creerReferentielPagesLiens"><code class="name flex">
 <span>def <span class="ident">creerReferentielPagesLiens</span></span>(<span>mdFiles)</span>
@@ -147,12 +196,16 @@ nom plus metier : recupererListeMarkup</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def creerReferentielPagesLiens(mdFiles):
-    &#34;&#34;&#34; Referentiel propre :
-    objectif : eviter des nettoyages rendondants effectues par fonction
-    solution : zip des listes : (category, label, page, url)
-    note : + nettoyage si path windows pose probleme ?
+    &#34;&#34;&#34;referentiel propre
+
+    - objectif : eviter des nettoyages rendondants effectues par fonction
+    - solution : zip des listes : (category, label, page, url)
+    - note : + nettoyage si path windows pose probleme
+    - entrants : [Path(&#39;/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md&#39;), ...]
+    - sortants : [(&#39;BUG&#39;, &#39;040 nom categorie dans lien post&#39;,
+    &#39;BUG-040-nom-categorie-dans-lien-post.html&#39;,
+    Path(&#39;/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md&#39;)), (&#39;EB&#39;, ...)]
     &#34;&#34;&#34;
-    global conf
     inExt = conf[&#39;inputExtension&#39;]
     outExt = conf[&#39;outputExtension&#39;]
     category = []
@@ -163,7 +216,7 @@ nom plus metier : recupererListeMarkup</p></div>
     compteur = 1
 
     for f in mdFiles:
-        if platform.system() == &#34;Windows&#34;:
+        if platform.system() == &#34;Windows&#34;:   # pragma: no cover
             unFichierMd = str(str(f).split(&#39;\\&#39;)[-1])
         else:
             unFichierMd = str(str(f).split(&#39;/&#39;)[-1])  # FIX-008
@@ -177,8 +230,7 @@ nom plus metier : recupererListeMarkup</p></div>
             category.append(unPrefixe)
             categorie = unPrefixe  # FIX-020
         else:
-            print(&#34;--- WARNING : fichier &#34;+str(f)+&#34; sans prefixe ---&#34;)
-            # exit()
+            print(&#34;--- WARNING : fichier &#34; + str(f) + &#34; sans prefixe ---&#34;)
             category.append(&#39;HOME&#39;)
             # TODO: sur de vouloir cat par defaut ?
             categorie = &#39;HOME&#39;  # FIX-020
@@ -186,12 +238,12 @@ nom plus metier : recupererListeMarkup</p></div>
         unLabel = str(unFichierMd).replace(&#34;_&#34;, &#34; &#34;).replace(&#34;-&#34;, &#34; &#34;)  # - sep
         unLabel = unLabel.replace(inExt, &#34;&#34;)  # - extension
         unLabel = unLabel.replace(categorie, &#34;&#34;)  # FIX-020
-        unLabel = unLabel.strip() # FIX-BUG-050 enlever espace devant
+        unLabel = unLabel.strip()  # FIX-BUG-050 enlever espace devant
 
         if unLabel in label:  # FIX-0006
             DOUBLON = True
             compteur += 1
-            print(&#34;--- WARNING : fichier &#34;+str(f)+&#34; avec doublon de nom ---&#34;)
+            print(&#34;--- WARNING : fichier &#34; + str(f) + &#34; avec doublon de nom ---&#34;)
             label.append(unLabel + &#34; &#34; + str(compteur))
         else:
             DOUBLON = False
@@ -206,10 +258,16 @@ nom plus metier : recupererListeMarkup</p></div>
     referentiel = sorted(referentiel, key=itemgetter(0))
     return referentiel</code></pre>
 </details>
-<div class="desc"><p>Referentiel propre :
-objectif : eviter des nettoyages rendondants effectues par fonction
-solution : zip des listes : (category, label, page, url)
-note : + nettoyage si path windows pose probleme ?</p></div>
+<div class="desc"><p>referentiel propre</p>
+<ul>
+<li>objectif : eviter des nettoyages rendondants effectues par fonction</li>
+<li>solution : zip des listes : (category, label, page, url)</li>
+<li>note : + nettoyage si path windows pose probleme</li>
+<li>entrants : [Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md'), &hellip;]</li>
+<li>sortants : [('BUG', '040 nom categorie dans lien post',
+'BUG-040-nom-categorie-dans-lien-post.html',
+Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &hellip;)]</li>
+</ul></div>
 </dd>
 <dt id="marss.creerLiensMenu"><code class="name flex">
 <span>def <span class="ident">creerLiensMenu</span></span>(<span>referentiel)</span>
@@ -220,9 +278,13 @@ note : + nettoyage si path windows pose probleme ?</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def creerLiensMenu(referentiel):
-    &#34;&#34;&#34; sortie de liste de dict par group
-    result[&#39;BUG&#39;] = [{&#39;label&#39;:&#39;BUG 0001 le win..&#39;,&#39;url&#39;:&#39;winpath.html&#39;}]
-    dépendance : pas de conf
+    &#34;&#34;&#34;sortie de liste de dict par group
+
+    - entrants : [(&#39;BUG&#39;, &#39;040 nom categorie dans lien post&#39;,
+     &#39;BUG-040-nom-categorie-dans-lien-post.html&#39;,
+      Path(&#39;/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md&#39;)), (&#39;EB&#39;, ...)]
+    - sortants : {&#39;BUG&#39;: [{&#39;label&#39;: &#39;040 nom categorie dans lien post&#39;,
+     &#39;url&#39;: &#39;BUG-040-nom-categorie-dans-lien-post.html&#39;}, ... ], &#39;EB&#39;: [...]}
     &#34;&#34;&#34;
     result = {}
     for key, group in groupby(referentiel, lambda x: x[0]):
@@ -236,9 +298,14 @@ note : + nettoyage si path windows pose probleme ?</p></div>
         result[key] = liens  # &#39;test&#39;
     return result</code></pre>
 </details>
-<div class="desc"><p>sortie de liste de dict par group
-result['BUG'] = [{'label':'BUG 0001 le win..','url':'winpath.html'}]
-dépendance : pas de conf</p></div>
+<div class="desc"><p>sortie de liste de dict par group</p>
+<ul>
+<li>entrants : [('BUG', '040 nom categorie dans lien post',
+'BUG-040-nom-categorie-dans-lien-post.html',
+Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &hellip;)]</li>
+<li>sortants : {'BUG': [{'label': '040 nom categorie dans lien post',
+'url': 'BUG-040-nom-categorie-dans-lien-post.html'}, &hellip; ], 'EB': [&hellip;]}</li>
+</ul></div>
 </dd>
 <dt id="marss.afficherMenu"><code class="name flex">
 <span>def <span class="ident">afficherMenu</span></span>(<span>liens, vousEtesIci)</span>
@@ -248,29 +315,30 @@ dépendance : pas de conf</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def afficherMenu(liens, vousEtesIci):  # FIX-023 
-    &#34;&#34;&#34; menu html de plan de site
-    Tracabilite: test_afficherMenu
+<pre><code class="python">def afficherMenu(liens, vousEtesIci):  # FIX-023
+    &#34;&#34;&#34;menu html de plan de site
+
+    - liste au format ul/li de l&#39;ensemble des pages
+    - style : ul class = postCategorie / span title / li class active si post en cours
     &#34;&#34;&#34;
-    global conf
     inFooter = conf[&#39;footerLiens&#39;]
     menu = &#39;&#39;
     for k, v in liens.items():
         if k != inFooter:  # EVOL footer
-            #  print(k+&#34; : ul de début de rubrique&#34;)
-            menu += &#39;&lt;ul class=&#34;postCategorie&#34; id=&#39;+k+&#39;&gt;&lt;span title=&#39;+k+&#39;&gt;&#39;+k+&#39;&lt;/span&gt;\n&#39;  # new = title
+            menu += &#39;&lt;ul class=&#34;postCategorie&#34; id=&#39; + k + &#39;&gt;&lt;span title=&#39; + k + &#39;&gt;&#39; + k + &#39;&lt;/span&gt;\n&#39;  # new = title
             for e in v:
-                #  print(&#34;url : &#34;+e[&#39;url&#39;]+&#34; et label &#34;+e[&#39;label&#39;])
                 if vousEtesIci == e[&#39;url&#39;]:
-                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34; class=&#34;active&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;active&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
                 else:
-                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
-            #  print(k+&#34; : ul de fin de rubrique&#34;)
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
             menu += &#39;&lt;/ul&gt;\n&#39;
     return menu</code></pre>
 </details>
-<div class="desc"><p>menu html de plan de site
-Tracabilite: test_afficherMenu</p></div>
+<div class="desc"><p>menu html de plan de site</p>
+<ul>
+<li>liste au format ul/li de l'ensemble des pages</li>
+<li>style : ul class = postCategorie / span title / li class active si post en cours</li>
+</ul></div>
 </dd>
 <dt id="marss.afficherLiensFooter"><code class="name flex">
 <span>def <span class="ident">afficherLiensFooter</span></span>(<span>liens, vousEtesIci)</span>
@@ -281,30 +349,32 @@ Tracabilite: test_afficherMenu</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def afficherLiensFooter(liens, vousEtesIci):
-    &#34;&#34;&#34; liste à plat de liens légaux et autres
-    Beaucoup (trop ?) de duplication de code
-    peut être null, sans lien
+    &#34;&#34;&#34;liste a plat de liens legaux et autres
+
+    - beaucoup (trop ?) de duplication de code
+    - le retour peut etre null, sans lien
+    - style : ul class = postFooter /  li class active si post en cours
     &#34;&#34;&#34;
-    global conf
     inFooter = conf[&#39;footerLiens&#39;]
     menu = &#39;&#39;
     for k, v in liens.items():
         if k == inFooter:  # EVOL footer
-            #  print(k+&#34; : ul de début de rubrique&#34;)
             menu += &#39;&lt;ul class=&#34;postFooter&#34;&gt;\n&#39;
             for e in v:
-                #  print(&#34;url : &#34;+e[&#39;url&#39;]+&#34; et label &#34;+e[&#39;label&#39;])
                 if vousEtesIci == e[&#39;url&#39;]:
-                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34; class=&#34;active&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;active&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
                 else:
-                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39;+e[&#39;url&#39;]+&#39;&#34;&gt;&#39;+e[&#39;label&#39;]+&#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
-            #  print(k+&#34; : ul de fin de rubrique&#34;)
+                    menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
             menu += &#39;&lt;/ul&gt;\n&#39;
     return menu</code></pre>
 </details>
-<div class="desc"><p>liste à plat de liens légaux et autres
-Beaucoup (trop ?) de duplication de code
-peut être null, sans lien</p></div>
+<div class="desc"><p>liste a plat de liens legaux et autres</p>
+<ul>
+<li>beaucoup (trop ?) de duplication de code</li>
+<li>le retour peut etre null, sans lien</li>
+<li>style : ul class = postFooter /
+li class active si post en cours</li>
+</ul></div>
 </dd>
 <dt id="marss.lireLeMarkdown"><code class="name flex">
 <span>def <span class="ident">lireLeMarkdown</span></span>(<span>file)</span>
@@ -315,22 +385,20 @@ peut être null, sans lien</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def lireLeMarkdown(file):
-    &#34;&#34;&#34; recuperation du contenu .md
-    besoin du path reel vers md :
-    garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
-    OU se fier au referentiel enrichi
+    &#34;&#34;&#34;recuperation du contenu .md
+
+    - besoin du path reel vers md
     &#34;&#34;&#34;
     if file == &#39;home&#39;:
-        global conf
         file = conf[&#39;home&#39;]
     f = open(file, &#34;r&#34;)
-    md_text = f.read()  # BUG-orangelabs-02
+    md_text = f.read()
     return md_text</code></pre>
 </details>
-<div class="desc"><p>recuperation du contenu .md
-besoin du path reel vers md :
-garder la liste originelle : listerFichiersExtensionRepertoire = ROBUSTESSE
-OU se fier au referentiel enrichi</p></div>
+<div class="desc"><p>recuperation du contenu .md</p>
+<ul>
+<li>besoin du path reel vers md</li>
+</ul></div>
 </dd>
 <dt id="marss.remplacerExtensionDansContenu"><code class="name flex">
 <span>def <span class="ident">remplacerExtensionDansContenu</span></span>(<span>content, pattern, changer)</span>
@@ -341,16 +409,18 @@ OU se fier au referentiel enrichi</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def remplacerExtensionDansContenu(content, pattern, changer):
-    &#34;&#34;&#34; remplacer une extension trouvee dans un pattern
+    &#34;&#34;&#34;remplacer une extension trouvee dans un pattern
+
     - remplacer par exemple l&#39;hyperlien markdown [](.md) par .html
     - retourner le contenu avec le remplacement effectue
+    - le  nom la aussi aurait pu etre plus métier DDD
     &#34;&#34;&#34;
     # liste a remplacer
     aRemplacer = re.findall(pattern, content)
     # liste remplacee
     enRemplacement = list()
     for el in aRemplacer:
-        el = el.replace(changer[&#39;old&#39;],changer[&#39;new&#39;])
+        el = el.replace(changer[&#39;old&#39;], changer[&#39;new&#39;])
         list.append(enRemplacement, el)
     # dictionnaire avec cle/valeur de type aRemplacer/enRemplacement
     aFaire = dict(zip(aRemplacer, enRemplacement))
@@ -359,9 +429,13 @@ OU se fier au referentiel enrichi</p></div>
 
     return resultat</code></pre>
 </details>
-<div class="desc"><p>remplacer une extension trouvee dans un pattern
-- remplacer par exemple l'hyperlien markdown <a href=".md"></a> par .html
-- retourner le contenu avec le remplacement effectue</p></div>
+<div class="desc"><p>remplacer une extension trouvee dans un pattern</p>
+<ul>
+<li>remplacer par exemple l'hyperlien markdown <a href=".md"></a> par .html</li>
+<li>retourner le contenu avec le remplacement effectue</li>
+<li>le
+nom la aussi aurait pu etre plus métier DDD</li>
+</ul></div>
 </dd>
 <dt id="marss.ajouterEtTransformerEnHtml"><code class="name flex">
 <span>def <span class="ident">ajouterEtTransformerEnHtml</span></span>(<span>md_text, title, menu, footer, typeDePage, menuVisible=False)</span>
@@ -371,13 +445,13 @@ OU se fier au referentiel enrichi</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False): 
-    &#34;&#34;&#34; sortie html enrichie
-    en plus du contenu, ajout du titre et des menus page et site
+<pre><code class="python">def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False):
+    &#34;&#34;&#34;sortie html enrichie
+
+    - en plus du contenu, ajout du titre et des menus page et site
     &#34;&#34;&#34;
     # FIX-023 - typeDePage apportera support pour multiple template
     # AM-002 + pouvoir forcer desactiver (comme en accueil)
-    global conf
     version = conf[&#39;version&#39;]
     if menuVisible:
         menuVisible = &#34;&#34;
@@ -390,14 +464,14 @@ OU se fier au referentiel enrichi</p></div>
     elif menuVisible == &#34;page&#34;:
         statusPage = &#34;checked&#34;
     else:
-        pass;
- 
-    # pourrait être réalisé à part, et ici, assemblage
-    md = markdown.Markdown(extensions=[&#39;toc&#39;,&#39;fenced_code&#39;])  # Majuscule obligee FIX-0012
+        pass
+
+    # pourrait etre realisé à part, et ici, assemblage
+    md = markdown.Markdown(extensions=[&#39;toc&#39;, &#39;fenced_code&#39;])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
-    toc = md.toc # anticipation externalisation
- 
-    html = &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;&#39;+title+&#39;&lt;/title&gt;&#39;
+    toc = md.toc  # anticipation externalisation
+
+    html = &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;&#39; + title + &#39;&lt;/title&gt;&#39;
     html += &#39;&lt;meta http-equiv=&#34;Content-type&#34; content=&#34;text/html;&#39;
     html += &#39;charset=utf-8&#34; /&gt;&#39;
     html += &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;/media/style.css&#34; media=&#34;all&#34;&gt;&#39;
@@ -409,27 +483,32 @@ OU se fier au referentiel enrichi</p></div>
         html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt;&#39;  # header
 
     html += &#39;&lt;input type=&#34;radio&#34; id=&#34;men&#34; name=&#34;menu&#34;&#39;
-    html += f&#39; value=&#34;site&#34; class=&#34;cache&#34; {statusSite}&gt;&#39;  # AM-002 
+    html += f&#39; value=&#34;site&#34; class=&#34;cache&#34; {statusSite}&gt;&#39;  # AM-002
     html += &#39;&lt;label for=&#34;men&#34;&gt;Menu du site&lt;/label&gt;&#39;
 
     html += &#39;&lt;input type=&#34;radio&#34; id=&#34;tdm&#34; name=&#34;menu&#34;&#39;
-    html += f&#39; value=&#34;page&#34; class=&#34;cache&#34; {statusPage}&gt;&#39;  # AM-002 
+    html += f&#39; value=&#34;page&#34; class=&#34;cache&#34; {statusPage}&gt;&#39;  # AM-002
     html += &#39;&lt;label for=&#34;tdm&#34;&gt;Menu de la page&lt;/label&gt;&#39;
 
     html += &#39;&lt;input type=&#34;radio&#34; id=&#34;rien&#34; name=&#34;menu&#34;&#39;
     html += &#39; value=&#34;fermer&#34; class=&#34;cache&#34;&gt;&#39;
-    html += &#39;&lt;label for=&#34;rien&#34;&gt;(FERMER MENU)&lt;/label&gt;\n&#39; # header
+    html += &#39;&lt;label for=&#34;rien&#34;&gt;(FERMER MENU)&lt;/label&gt;\n&#39;  # header
 
-    html += &#39;&lt;div class=&#34;menu&#34;&gt;&#39;+menu+&#39;&lt;/div&gt;&lt;/header&gt;\n&#39;  # nav
-    html += toc+&#39;\n&lt;article&gt;&#39;+content+&#39;&lt;/article&gt;\n&#39;
-    html += &#39;&lt;footer&gt;&lt;/footer&gt;&lt;div id=&#34;finish&#34;&gt;&lt;p class=&#34;infos&#34;&gt;généré depuis &lt;a href=&#34;https://github.com/dev4use/marss&#34; class=&#34;trademark&#34;&gt;Marss &#39;+version+&#39;&lt;/a&gt; &lt;/p&gt;&#39;
+    html += &#39;&lt;div class=&#34;menu&#34;&gt;&#39; + menu + &#39;&lt;/div&gt;&lt;/header&gt;\n&#39;  # nav
+    html += toc + &#39;\n&lt;article&gt;&#39; + content + &#39;&lt;/article&gt;\n&#39;
+    html += &#39;&lt;footer&gt;&lt;/footer&gt;&#39; \
+            &#39;&lt;div id=&#34;finish&#34;&gt;&lt;p class=&#34;infos&#34;&gt;généré depuis &#39; \
+            &#39;&lt;a href=&#34;https://github.com/dev4use/marss&#34; class=&#34;trademark&#34;&gt;Marss &#39; \
+            f&#39;{version}&lt;/a&gt; &lt;/p&gt;&#39;
     # html += &#39; #  BOF fonction imbriquee
     html += footer + &#39;&lt;/div&gt;&#39;  # TODO: liens FOOTER conf
     html += &#39;&lt;/body&gt;&lt;/html&gt;&#39;  # FIX-0004
     return html</code></pre>
 </details>
-<div class="desc"><p>sortie html enrichie
-en plus du contenu, ajout du titre et des menus page et site</p></div>
+<div class="desc"><p>sortie html enrichie</p>
+<ul>
+<li>en plus du contenu, ajout du titre et des menus page et site</li>
+</ul></div>
 </dd>
 <dt id="marss.creerFichierHtml"><code class="name flex">
 <span>def <span class="ident">creerFichierHtml</span></span>(<span>fileName, html, post=True)</span>
@@ -440,25 +519,27 @@ en plus du contenu, ajout du titre et des menus page et site</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def creerFichierHtml(fileName, html, post=True):  # AM-
-    &#34;&#34;&#34; ecriture des fichiers html
-    REMANIER filename est fourni par autre source
-    ENLEVER inputExtension, outputExtension
+    &#34;&#34;&#34;ecriture des fichiers html
+
+    - TODO: REMANIER filename est fourni par autre source
+    - TODO: ENLEVER inputExtension, outputExtension
     &#34;&#34;&#34;
-    global conf
     outPath = conf[&#39;outputPath&#39;]
     inExt = conf[&#39;inputExtension&#39;]  # inutile en generation index
-    outExt = conf[&#39;outputExtension&#39;] # inutile en generation index
+    outExt = conf[&#39;outputExtension&#39;]  # inutile en generation index
     fOutput = outPath + str(fileName)  # FIX Linux
     if post:
-        fOutput = fOutput.replace(inExt, outExt) # pas en generation index
-    print(&#39;creation de &#39;+fOutput)  # pour info en console
+        fOutput = fOutput.replace(inExt, outExt)  # pas en generation index
+    print(&#39;creation de &#39;, fOutput)  # pour info en console
     z = open(fOutput, &#34;w&#34;)
     z.write(html)
     z.close()</code></pre>
 </details>
-<div class="desc"><p>ecriture des fichiers html
-REMANIER filename est fourni par autre source
-ENLEVER inputExtension, outputExtension</p></div>
+<div class="desc"><p>ecriture des fichiers html</p>
+<ul>
+<li>TODO: REMANIER filename est fourni par autre source</li>
+<li>TODO: ENLEVER inputExtension, outputExtension</li>
+</ul></div>
 </dd>
 <dt id="marss.supprimerFichiersDuRepertoireHtml"><code class="name flex">
 <span>def <span class="ident">supprimerFichiersDuRepertoireHtml</span></span>(<span>)</span>
@@ -469,22 +550,24 @@ ENLEVER inputExtension, outputExtension</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def supprimerFichiersDuRepertoireHtml():
-    &#34;&#34;&#34; nettoyage du site statique
-    RISQUE: avoir tout supprime sans pouvoir rien recreer
-    verifier faisabilite de la creation avant
+    &#34;&#34;&#34;nettoyage du site statique
+
+    - RISQUE: avoir tout supprime sans pouvoir rien recree
+    - verifier faisabilite de la creation avant ?
     &#34;&#34;&#34;
-    global conf
     outPath = conf[&#39;outputPath&#39;]
-    files = glob.glob(outPath+&#39;*&#39;)  # pour eviter /media/
+    files = glob.glob(outPath + &#39;*&#39;)  # pour eviter /media/
     for f in files:
         if path.isfile(f):
-            print(&#39;suppression de &#39;+f)
+            print(&#39;suppression de&#39;, f)
             os.remove(f)
     shutil.rmtree(os.path.join(outPath, &#39;media&#39;), ignore_errors=True)</code></pre>
 </details>
-<div class="desc"><p>nettoyage du site statique
-RISQUE: avoir tout supprime sans pouvoir rien recreer
-verifier faisabilite de la creation avant</p></div>
+<div class="desc"><p>nettoyage du site statique</p>
+<ul>
+<li>RISQUE: avoir tout supprime sans pouvoir rien recree</li>
+<li>verifier faisabilite de la creation avant ?</li>
+</ul></div>
 </dd>
 <dt id="marss.recreerDossierMediaDeplacerStyle"><code class="name flex">
 <span>def <span class="ident">recreerDossierMediaDeplacerStyle</span></span>(<span>)</span>
@@ -495,15 +578,14 @@ verifier faisabilite de la creation avant</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def recreerDossierMediaDeplacerStyle():
-    &#34;&#34;&#34;&#34; recuperation de la feuille de style
+    &#34;&#34;&#34;recuperation de la feuille de style
     &#34;&#34;&#34;
-    global conf
     outPath = conf[&#39;outputPath&#39;]
     fichierCss = conf[&#39;style&#39;]  # TODO pouvoir en parser plusieurs ?
     os.mkdir(outPath + &#39;media&#39;)  # FIX Linux
     shutil.copy(fichierCss, outPath + &#39;media/style.css&#39;)  # TODO pas en dur</code></pre>
 </details>
-<div class="desc"><p>" recuperation de la feuille de style</p></div>
+<div class="desc"><p>recuperation de la feuille de style</p></div>
 </dd>
 <dt id="marss.lancerServeurDebug"><code class="name flex">
 <span>def <span class="ident">lancerServeurDebug</span></span>(<span>)</span>
@@ -513,8 +595,11 @@ verifier faisabilite de la creation avant</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def lancerServeurDebug():
-    global conf
+<pre><code class="python">def lancerServeurDebug():  # pragma: no cover
+    &#34;&#34;&#34;lancement du serveur de debug
+
+    - ouverture optionnelle (par conf) du navigateur
+    &#34;&#34;&#34;
     outPath = conf[&#39;outputPath&#39;]
     # host = conf[&#39;host&#39;]
     port = conf[&#39;port&#39;]
@@ -531,11 +616,14 @@ verifier faisabilite de la creation avant</p></div>
     print(&#34;Serveur actif sur le port :&#34;, port)
 
     httpd = server(server_address, handler)
-    if browser:        
+    if browser:
         webbrowser.open(url)
     httpd.serve_forever()</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>lancement du serveur de debug</p>
+<ul>
+<li>ouverture optionnelle (par conf) du navigateur</li>
+</ul></div>
 </dd>
 </dl>
 </section>
@@ -551,6 +639,7 @@ verifier faisabilite de la creation avant</p></div>
 <ul class="">
 <li><code><a title="marss.recupererCmdLine" href="#marss.recupererCmdLine">recupererCmdLine</a></code></li>
 <li><code><a title="marss.recupererTouteLaConf" href="#marss.recupererTouteLaConf">recupererTouteLaConf</a></code></li>
+<li><code><a title="marss.aideLoggerFichier" href="#marss.aideLoggerFichier">aideLoggerFichier</a></code></li>
 <li><code><a title="marss.listerFichiersExtensionRepertoire" href="#marss.listerFichiersExtensionRepertoire">listerFichiersExtensionRepertoire</a></code></li>
 <li><code><a title="marss.creerReferentielPagesLiens" href="#marss.creerReferentielPagesLiens">creerReferentielPagesLiens</a></code></li>
 <li><code><a title="marss.creerLiensMenu" href="#marss.creerLiensMenu">creerLiensMenu</a></code></li>
