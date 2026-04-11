@@ -53,7 +53,7 @@ l'utilisateur est libre de ses actions.
 
 ## Comment vérifier la qualité de l'application
 
-Pour vérifier la qualité de l'application, certains tests qualité sont lancés et les résultats sont dans [la documentation](Doc).  
+Pour vérifier la qualité de l'application, certains tests qualité sont lancés et les résultats sont dans [la documentation](Doc/README.md).  
 
 - Taille du code et proportions de commentaires.
 - Rapport de violation des normes de codage.
