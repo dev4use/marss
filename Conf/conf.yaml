@@ -11,4 +11,4 @@ style: "/home/user/Documents/marss/Theme/style.css"
 projet: "MAR-kdown-S-imple-web-S-ite"
 menuVisible: "site" # site|page|vide ou autre AM-002
 footerLiens: "FOOTER"  # prefixe du md et html
-version: "ST-0.2.0"
+version: "ST-1.0.1"

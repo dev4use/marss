@@ -2,6 +2,13 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-1.0.1 - 2026-04-12
+
+### Bugs
+
+1. **documentation** : README.md d'accueil et de "Doc" avec liens incorrects
+1. **debug** : mise à jour du numéro de version configuration et pied de page
+
 ## ST-1.0.0 - 2026-04-11
 
 ### Ajouts
@@ -69,6 +76,3 @@ Version intiale de l'applicatif.
 1. code : écrit et documenté en français et orienté "métier" (Domain Driven Development like)
 1. **site** : site statique délivré dans un dossier dédié avec son média css
 1. site : site lancé par un serveur de debug sur le navigateur par défaut
-
-
-
