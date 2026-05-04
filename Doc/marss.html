@@ -320,6 +320,7 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
 
     - liste au format ul/li de l&#39;ensemble des pages
     - style : ul class = postCategorie / span title / li class active si post en cours
+    - EVOL : deportee dasn une fonction dediee un peu dupliquee
     &#34;&#34;&#34;
     inFooter = conf[&#39;footerLiens&#39;]
     menu = &#39;&#39;
@@ -338,6 +339,7 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
 <ul>
 <li>liste au format ul/li de l'ensemble des pages</li>
 <li>style : ul class = postCategorie / span title / li class active si post en cours</li>
+<li>EVOL : deportee dasn une fonction dediee un peu dupliquee</li>
 </ul></div>
 </dd>
 <dt id="marss.afficherLiensFooter"><code class="name flex">
@@ -375,6 +377,25 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
 <li>style : ul class = postFooter /
 li class active si post en cours</li>
 </ul></div>
+</dd>
+<dt id="marss.afficherPostsDeCategorie"><code class="name flex">
+<span>def <span class="ident">afficherPostsDeCategorie</span></span>(<span>liens)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherPostsDeCategorie(liens):
+    menu = &#39;&#39;
+    menu += &#39;&lt;ol class=&#34;&#34;&gt;\n&#39;
+    for e in liens:
+        menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
+        # tuple indices must be integers or slices, not str
+    menu += &#39;&lt;/ol&gt;\n&#39;
+    return menu</code></pre>
+</details>
+<div class="desc"></div>
 </dd>
 <dt id="marss.lireLeMarkdown"><code class="name flex">
 <span>def <span class="ident">lireLeMarkdown</span></span>(<span>file)</span>
@@ -437,15 +458,91 @@ li class active si post en cours</li>
 nom la aussi aurait pu etre plus métier DDD</li>
 </ul></div>
 </dd>
-<dt id="marss.ajouterEtTransformerEnHtml"><code class="name flex">
-<span>def <span class="ident">ajouterEtTransformerEnHtml</span></span>(<span>md_text, title, menu, footer, typeDePage, menuVisible=False)</span>
+<dt id="marss.liensPrecedentSuivant"><code class="name flex">
+<span>def <span class="ident">liensPrecedentSuivant</span></span>(<span>courant='', liste='')</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False):
+<pre><code class="python">def liensPrecedentSuivant(courant=&#34;&#34;, liste=&#34;&#34;):
+    &#34;&#34;&#34;presenter les liens de post : precedent suivant
+
+    - intercepter le contexte : post courant, categorie courante, type de page
+    - cibler le contexte : posts de la categorie
+    - sortie : dictionnaires vides ou avec clés url label pour precedent et suivant
+    &#34;&#34;&#34;
+    array = liste
+    place = [courant == i[&#39;url&#39;] for i in array].index(True)
+    size = len(array)
+    dernier = size-1
+    precedent = dict()
+    suivant = dict()
+    # precedent = &#34;...&#34;
+    # suivant = &#34;...&#34;
+    if size &gt;= 3:
+        precedent[&#39;url&#39;] = array[place-1][&#39;url&#39;]
+        precedent[&#39;label&#39;] = array[place-1][&#39;label&#39;]
+        if place != dernier:
+            suivant[&#39;url&#39;] = array[place+1][&#39;url&#39;]  # erreur si dernier
+            suivant[&#39;label&#39;] = array[place+1][&#39;label&#39;]
+        else:
+            suivant[&#39;url&#39;] = array[0][&#39;url&#39;]  # aller au premier
+            suivant[&#39;label&#39;] = array[0][&#39;label&#39;]
+    elif size == 2:
+        if place != dernier:
+            suivant[&#39;url&#39;] = array[place+1][&#39;url&#39;]  # erreur si dernier
+            suivant[&#39;label&#39;] = array[place+1][&#39;label&#39;]
+        else:
+            precedent[&#39;url&#39;] = array[place-1][&#39;url&#39;]
+            precedent[&#39;label&#39;] = array[place-1][&#39;label&#39;]
+    else:
+        pass
+    return precedent, suivant</code></pre>
+</details>
+<div class="desc"><p>presenter les liens de post : precedent suivant</p>
+<ul>
+<li>intercepter le contexte : post courant, categorie courante, type de page</li>
+<li>cibler le contexte : posts de la categorie</li>
+<li>sortie : dictionnaires vides ou avec clés url label pour precedent et suivant</li>
+</ul></div>
+</dd>
+<dt id="marss.afficherInfosPost"><code class="name flex">
+<span>def <span class="ident">afficherInfosPost</span></span>(<span>precedent, suivant)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherInfosPost(precedent, suivant):
+    &#34;&#34;&#34;afficher des informations liees au post
+
+    - lien precedent suivant
+    - date de modification et temps de lecture (bientôt)
+    &#34;&#34;&#34;
+    html = &#34;&#34;
+    html += f&#34;&lt; &lt;a href=\&#34;{precedent[&#39;url&#39;]}\&#34;&gt;{precedent[&#39;label&#39;]}&lt;/a&gt; |&#34;
+    html += &#34; ... &#34;
+    html += f&#34;| &lt;a href=\&#34;{suivant[&#39;url&#39;]}\&#34;&gt;{suivant[&#39;label&#39;]}&lt;/a&gt; &gt;&#34;
+    return html</code></pre>
+</details>
+<div class="desc"><p>afficher des informations liees au post</p>
+<ul>
+<li>lien precedent suivant</li>
+<li>date de modification et temps de lecture (bientôt)</li>
+</ul></div>
+</dd>
+<dt id="marss.ajouterEtTransformerEnHtml"><code class="name flex">
+<span>def <span class="ident">ajouterEtTransformerEnHtml</span></span>(<span>infos, md_text, title, famille, menu, footer, typeDePage, menuVisible=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typeDePage, menuVisible=False):
     &#34;&#34;&#34;sortie html enrichie
 
     - en plus du contenu, ajout du titre et des menus page et site
@@ -479,8 +576,13 @@ nom la aussi aurait pu etre plus métier DDD</li>
 
     if typeDePage == &#34;home&#34;:
         html += &#39;&lt;a href=&#34;./&#34; class=&#34;active&#34;&gt;accueil&lt;/a&gt;&#39;  # AM-001  header
+    elif famille == conf[&#39;footerLiens&#39;] or typeDePage == &#34;categorie&#34;:  # exclure categorie footer
+        html += &#39;&lt;a href=&#34;./&#34; class=&#34;&#34;&gt;accueil&lt;/a&gt;&#39;
     else:
-        html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt;&#39;  # header
+        html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt; &gt; &lt;a href=&#34;&#39; + famille + &#39;.html&#34;&gt;&#39; + famille + &#39;&lt;/a&gt;&#39;  # header
+        # EVOL-lien-categorie
+        # EVOL-page-categorie &#34;categorie&#34; lien comme home,
+        # contenu : title_conf, presentation_conf, liens : 1 rubrique, liens avec saut de ligne
 
     html += &#39;&lt;input type=&#34;radio&#34; id=&#34;men&#34; name=&#34;menu&#34;&#39;
     html += f&#39; value=&#34;site&#34; class=&#34;cache&#34; {statusSite}&gt;&#39;  # AM-002
@@ -495,7 +597,14 @@ nom la aussi aurait pu etre plus métier DDD</li>
     html += &#39;&lt;label for=&#34;rien&#34;&gt;(FERMER MENU)&lt;/label&gt;\n&#39;  # header
 
     html += &#39;&lt;div class=&#34;menu&#34;&gt;&#39; + menu + &#39;&lt;/div&gt;&lt;/header&gt;\n&#39;  # nav
-    html += toc + &#39;\n&lt;article&gt;&#39; + content + &#39;&lt;/article&gt;\n&#39;
+    # html += toc + &#39;\n&lt;article&gt;&#39; + content + &#39;&lt;/article&gt;\n&#39;
+    html += toc + &#39;\n&lt;article&gt;&#39;
+    if typeDePage == &#34;post&#34; and famille != conf[&#39;footerLiens&#39;]:
+        html += infos
+    html += content
+    if typeDePage == &#34;post&#34; and famille != conf[&#39;footerLiens&#39;]:
+        html += infos
+    html += &#39;&lt;/article&gt;\n&#39;
     html += &#39;&lt;footer&gt;&lt;/footer&gt;&#39; \
             &#39;&lt;div id=&#34;finish&#34;&gt;&lt;p class=&#34;infos&#34;&gt;généré depuis &#39; \
             &#39;&lt;a href=&#34;https://github.com/dev4use/marss&#34; class=&#34;trademark&#34;&gt;Marss &#39; \
@@ -556,7 +665,9 @@ nom la aussi aurait pu etre plus métier DDD</li>
     - verifier faisabilite de la creation avant ?
     &#34;&#34;&#34;
     outPath = conf[&#39;outputPath&#39;]
+    print(f&#34;---- nettoyage du dossier site {outPath} -----&#34;)
     files = glob.glob(outPath + &#39;*&#39;)  # pour eviter /media/
+    print(&#34;-&gt; pages trouvees :&#34;, files)
     for f in files:
         if path.isfile(f):
             print(&#39;suppression de&#39;, f)
@@ -645,8 +756,11 @@ nom la aussi aurait pu etre plus métier DDD</li>
 <li><code><a title="marss.creerLiensMenu" href="#marss.creerLiensMenu">creerLiensMenu</a></code></li>
 <li><code><a title="marss.afficherMenu" href="#marss.afficherMenu">afficherMenu</a></code></li>
 <li><code><a title="marss.afficherLiensFooter" href="#marss.afficherLiensFooter">afficherLiensFooter</a></code></li>
+<li><code><a title="marss.afficherPostsDeCategorie" href="#marss.afficherPostsDeCategorie">afficherPostsDeCategorie</a></code></li>
 <li><code><a title="marss.lireLeMarkdown" href="#marss.lireLeMarkdown">lireLeMarkdown</a></code></li>
 <li><code><a title="marss.remplacerExtensionDansContenu" href="#marss.remplacerExtensionDansContenu">remplacerExtensionDansContenu</a></code></li>
+<li><code><a title="marss.liensPrecedentSuivant" href="#marss.liensPrecedentSuivant">liensPrecedentSuivant</a></code></li>
+<li><code><a title="marss.afficherInfosPost" href="#marss.afficherInfosPost">afficherInfosPost</a></code></li>
 <li><code><a title="marss.ajouterEtTransformerEnHtml" href="#marss.ajouterEtTransformerEnHtml">ajouterEtTransformerEnHtml</a></code></li>
 <li><code><a title="marss.creerFichierHtml" href="#marss.creerFichierHtml">creerFichierHtml</a></code></li>
 <li><code><a title="marss.supprimerFichiersDuRepertoireHtml" href="#marss.supprimerFichiersDuRepertoireHtml">supprimerFichiersDuRepertoireHtml</a></code></li>

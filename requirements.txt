@@ -13,3 +13,4 @@ pygount
 flake8
 pytest-bdd-md-report
 genbadge[all]
+anybadge

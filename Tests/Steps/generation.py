@@ -27,6 +27,7 @@ def configurer_log(echanges):
     myConf = os.path.join(dirname, "../Dataset/conf.yaml")
     echanges['conf'] = recupererTouteLaConf(myConf)  # initialise la conf dans marss
 
+@given("le répertoire destination est connu")
 @given("la page d'accueil est en configuration")
 @given("le menu de page est en configuration")
 def configurer_log(echanges):
@@ -112,7 +113,7 @@ def recuperer_conf_mauvais_format(echanges):
 @then("Je Recois La Configuration par défaut")
 def lire_configuration_defaut(echanges):
 
-    assert echanges['confData']['version'] == "ST-0.2.0"
+    assert echanges['confData']['version'] == data.version_actuelle 
     # print("retour:", echanges['confData']['version'])
 
 @then("Je Recois La Configuration Personnalisée")
@@ -397,14 +398,16 @@ def recuperer_accueil_html(echanges):
     md_text = lireLeMarkdown('home')
     menu = "tout menu"  # peu importe, non lié à l'objectif de test
     footer = "pied de page"  # peu importe, non lié à l'objectif de test
-    echanges["html_text"] = ajouterEtTransformerEnHtml(md_text, "titre", menu, footer, "home", True)
+    infos = ""  # evolution, mal interceptee, mal debuggee en erreur de test
+    echanges["html_text"] = ajouterEtTransformerEnHtml(infos, md_text, "titre", "famille", menu, footer, "home", True)
 
 @when("je souhaite récupérer le contenu html d'une page forçant le plan de page")
 def recuperer_page_avec_menu(echanges):
     md_text = lireLeMarkdown('home')
     menu = "tout menu"  # peu importe, non lié à l'objectif de test
     footer = "pied de page"  # peu importe, non lié à l'objectif de test
-    echanges["html_text"] = ajouterEtTransformerEnHtml(md_text, "titre", menu, footer, "home", False)
+    echanges["html_text"] = ajouterEtTransformerEnHtml(md_text, "titre", "famille", menu, footer, "home", False)
+    # EVOL-lien-categorie
 
 @when("on nettoie le dossier destination")
 def demander_menu_footer(echanges):
@@ -412,8 +415,10 @@ def demander_menu_footer(echanges):
 
     - prérequis : récupérer la conf en step avant
     """
+    # n'est pas effectué ? est déjà propre sans rien
     # conf = echanges['conf']
-    # print(echanges['conf'])
+    print(echanges['conf'])
+    print("--------- nettoyage en cours -----")
     supprimerFichiersDuRepertoireHtml()
     pass
 
@@ -437,6 +442,7 @@ def demander_menu_footer(echanges, args):
         referentiel = data.propre_listeAvecHtml
 
         for element in referentiel:
+            famille = element[0]  # EVOL-lien-categorie
             fileName = element[2]
             title = element[1]
             filePath = element[3]
@@ -444,7 +450,8 @@ def demander_menu_footer(echanges, args):
             md_text = remplacerExtensionDansContenu(md_text, pattern, changer)
             menuHtml = afficherMenu(menuListe, fileName)
             footer = afficherLiensFooter(menuListe, fileName)
-            html = ajouterEtTransformerEnHtml(md_text, title, menuHtml, footer, "post")
+            infos = ""  # evolution
+            html = ajouterEtTransformerEnHtml(infos, md_text, title, famille, menuHtml, footer, "post")
             creerFichierHtml(fileName, html)
     else:
         pass
@@ -593,6 +600,8 @@ def plan_page_actif(echanges):
 def visualiser_fichier_accueil_html(echanges):
     fichier = echanges['conf']['outputPath'] + 'index.html'
     assert os.path.isfile(fichier)
+    if os.path.isfile(fichier):
+        os.remove(fichier)    
 
 #--------------- PROGRAMME -----------
 
@@ -623,3 +632,86 @@ def lancer():
 
     time.sleep(1) 
     os.system("kill -15 $(ps aux | grep '[p]ython Code' | awk -F \" \" '{printf $2}')")
+
+@given(parsers.parse("ma liste comporte {nombre:d} posts"))
+def liste_de_liens(echanges, nombre):
+    print(nombre)
+    if nombre == 3:
+        data =  [{'label': 'premier', 'url': 'premier.html'}, 
+            {'label': 'milieu', 'url': 'milieu.html'}, 
+            {'label': 'dernier', 'url': 'dernier.html'}
+            ]
+    elif nombre == 2:
+        data =  [{'label': 'premier', 'url': 'premier.html'}, 
+            {'label': 'milieu', 'url': 'milieu.html'} 
+            ]
+    elif nombre == 1:
+        data =  [{'label': 'premier', 'url': 'premier.html'}
+            ]
+    echanges["data"] = data
+    pass
+
+@when(parsers.parse("je suis au post {index}"))
+def liste_de_liens(echanges, index):
+    res_precedent, res_suivant = liensPrecedentSuivant(courant=index + ".html", liste=echanges["data"])
+    echanges["precedent"] = res_precedent
+    echanges["suivant"] = res_suivant
+
+@then(parsers.parse("j'ai en post precedent {precedent}"))
+def lien_precedent(echanges, precedent):
+    if precedent == "aucun":
+        assert  echanges["precedent"] ==  {}
+    else:
+        assert  echanges["precedent"]["label"] == precedent
+
+@then(parsers.parse("j'ai en post suivant {suivant}"))
+def lien_suivant(echanges, suivant):
+    if suivant == "aucun":
+        assert  echanges["suivant"] ==  {}
+    else:
+        assert  echanges["suivant"]["label"] == suivant
+
+@when(parsers.parse("j'affiche le post {index}"))
+def liste_de_liens(echanges, index):
+    res_precedent, res_suivant = liensPrecedentSuivant(courant=index + ".html", liste=echanges["data"])
+    echanges["html"] = afficherInfosPost(res_precedent, res_suivant)
+
+@then(parsers.parse("j'ai ce résultat {affichage}"))
+def affichage_liens_suivant_precedent(echanges, affichage):
+    assert  echanges["html"] ==  affichage
+
+@when("j'affiche les posts de la catégorie")
+def affichage_posts_categorie(echanges):
+    res = afficherPostsDeCategorie(echanges["data"])
+    print(res)
+    echanges["res"] = res
+    pass
+
+@then("j'ai mes liens pour chaque post")
+def liens_posts_categorie(echanges):
+    # etre fin et  robuste, compter nombre de li et de a
+    soup = BeautifulSoup(echanges["res"], features='html.parser')
+    liste = soup.find_all("li")
+    liens = soup.find_all("a")
+    assert len(liste) == 3
+    assert len(liens) == 3
+    # test exact très fragile
+    liste_de_posts = '<ol class="">\n<li><a href="premier.html" class="">premier</a></li>\n<li><a href="milieu.html" class="">milieu</a></li>\n<li><a href="dernier.html" class="">dernier</a></li>\n</ol>\n'
+    # ne doit pas etre """..."""
+    assert  echanges["res"]  == liste_de_posts
+
+@given("le répertoire de destination n'est pas vide")
+def dossier_non_vide(echanges):
+    print(echanges['conf']['outputPath'])    
+    fichier = echanges['conf']['outputPath'] + "new.html" 
+    with open(fichier, "w+") as f:
+        f.write("non vide")
+    assert os.path.exists(fichier)  # contrôle vs test
+    assert len(os.listdir(echanges['conf']['outputPath'])) == 2
+    # bien isoler des autres tests
+    # .keep seul fichier avant
+
+@then("le dossier de destination est vide")
+def dossier_vide(echanges):
+    assert len(os.listdir(echanges['conf']['outputPath'])) == 1
+    # .keep seul fichier

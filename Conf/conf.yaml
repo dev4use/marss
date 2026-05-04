@@ -9,6 +9,22 @@ logs: "/home/user/Documents/marss/Logs/flux.txt"
 home: "/home/user/Documents/marss/Theme/index.txt"
 style: "/home/user/Documents/marss/Theme/style.css"
 projet: "MAR-kdown-S-imple-web-S-ite"
-menuVisible: "site" # site|page|vide ou autre AM-002
+menuVisible: "" # site|page|vide ou autre AM-002
 footerLiens: "FOOTER"  # prefixe du md et html
-version: "ST-1.0.1"
+version: "ST-1.0.2"
+familles:
+  default:
+    titre: titre à venir pour la catégorie
+    description: description à venir pour la catégorie
+  BUG:
+    titre: "incidents logiciels"
+    description: "Traitement des incidents en cours de projet"
+  EB:
+    titre: "expression de besoin"
+    description: "Traitement des demandes de fonctionnalité."
+  PROJET:
+    titre: "gestion de projet"
+    description: "Techniques de gestion de projet et réflexions liées."
+  TEST:
+    titre: "test logiciel"
+    description: "Problématiques liées au test logiciel."

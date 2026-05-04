@@ -2,6 +2,17 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-1.0.2 - 2026-05-04
+
+### Ajouts
+
+1. **navigation** : lien fil d'ariane vers la page de catégorie
+1. navigation : page de catégorie avec liens vers chaque post de la catégorie
+1. navigation : sur chaque post, lien vers les posts suivant et précédent
+1. **contenu** : en fichier de configuration, titre long et description de chaque catégorie
+1. contenu : titre et description par défaut d'une catégorie en cas d'absence en fichier de configuration
+1. **code** : comptage du nombre de fonctions et affichage en badge
+
 ## ST-1.0.1 - 2026-04-12
 
 ### Bugs

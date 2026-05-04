@@ -91,6 +91,42 @@ Feature: Générer le site statique
         Then j'ai une liste par catégorie
         Then j'ai toutes les pages dans les bonnes catégories
 
+    Scenario: identifier les liens des posts précédent et suivant
+        Given ma liste comporte <nombre> posts
+        When je suis au post <index>
+        Then j'ai en post precedent <precedent>
+        Then j'ai en post suivant <suivant>
+
+        Examples: assez de posts
+        | nombre | index   | precedent | suivant |
+        | 3      | milieu  | premier   | dernier |
+        | 3      | dernier | milieu   | premier |
+        | 3      | premier | dernier  | milieu |
+
+        Examples: pas assez de posts
+        | nombre | index   | precedent | suivant |
+        | 2      | milieu  |  premier  |  aucun  |
+        | 2      | premier  |  aucun  |  milieu |
+        | 1      | premier  |  aucun  |  aucun |
+
+    Scenario: afficher les liens des posts précédent et suivant
+        Given ma liste comporte <nombre> posts
+        When j'affiche le post <index>
+        Then j'ai ce résultat <affichage>
+
+        Examples: sortie html nominale
+        | nombre | index   | affichage |
+        | 3      | milieu  | < <a href="premier.html">premier</a> \| ... \| <a href="dernier.html">dernier</a> >|
+ 
+    Scenario: afficher les posts d'une catégorie
+        Given ma liste comporte <nombre> posts
+        When j'affiche les posts de la catégorie
+        Then j'ai mes liens pour chaque post
+
+        Examples:
+        |nombre|
+        |3|
+
     Scenario: afficher les liens du footer
         Given le préfixe footer est <presence_configuration> en configuration
         Given les pages correspondant au préfixe footer sont <presence_page>
@@ -131,6 +167,13 @@ Feature: Générer le site statique
         Given le menu de page est en configuration
         When je souhaite récupérer le contenu html d'une page forçant le plan de page
         Then j'ai le menu page actif    
+
+    @nominal
+    Scenario: preparer le dossier de destination
+        Given le répertoire destination est connu
+        Given le répertoire de destination n'est pas vide
+        When on nettoie le dossier destination
+        Then le dossier de destination est vide
 
     @nominal
     Scenario: disposer de tous les fichiers du site statique

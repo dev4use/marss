@@ -2,7 +2,9 @@
 
 *Slogan : Pour garder vos idées sur terre*
 
-[![resultats de tests](Doc/testBadge.svg?dummy=8484744)](Doc/test-report.md) [![couverture de code par les tests](Doc/coverageBadge.svg?dummy=8484744)](Tests/Report/coverage.md) [![convention de codage](Doc/qualityBadge.svg?dummy=8484744)](Doc/qualite-marss.txt)
+
+[![nombre de fonctions](Doc/fonctions.svg?dummy=8484744)](Doc/marss.md)
+[![resultats de tests](Doc/testBadge.svg?dummy=8484744)](Doc/test-report.md) [![couverture de code par les tests](Doc/coverageBadge.svg?dummy=8484744)](Doc/coverage.md) [![convention de codage](Doc/qualityBadge.svg?dummy=8484744)](Doc/qualite-marss.txt)
 
 Clin d'oeil à la conquête spatiale.  
 Jouer à se donner de grandes ambitions, mais trop grandes, avec deux S dans le nom.  
@@ -81,7 +83,8 @@ Pour information, voici comment sont générés les badges :
 ```
 # A la racine du repository
 
-genbadge tests -i Doc/junit.xml -o Doc/testBadge.svg \
+python Tests/qualite.py \
+& genbadge tests -i Doc/junit.xml -o Doc/testBadge.svg \
 & genbadge coverage -i Doc/coverage.xml -o Doc/coverageBadge.svg \
 & genbadge flake8 -i Doc/qualite-marss.txt -o Doc/qualityBadge.svg
 ```

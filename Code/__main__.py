@@ -22,6 +22,7 @@ def main():
     mdFiles = marss.listerFichiersExtensionRepertoire()
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
     menuListe = marss.creerLiensMenu(referentiel)
+    marss.aideLoggerFichier("sous menu", menuListe['EB'])
     # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active VousEtesIci
     marss.aideLoggerFichier("listeMarkdown", mdFiles)
     marss.aideLoggerFichier("listeAvecHtml", referentiel)
@@ -36,7 +37,10 @@ def main():
     changer['old'] = ".md"
     changer['new'] = ".html"
 
+    inFooter = conf['footerLiens']
+
     for element in referentiel:
+        famille = element[0]  # EVOL-lien-categorie
         fileName = element[2]
         title = element[1]
         filePath = element[3]
@@ -44,17 +48,53 @@ def main():
         md_text = marss.remplacerExtensionDansContenu(md_text, pattern, changer)
         menuHtml = marss.afficherMenu(menuListe, fileName)
         footer = marss.afficherLiensFooter(menuListe, fileName)
-        html = marss.ajouterEtTransformerEnHtml(md_text, title, menuHtml, footer, "post")
+        precedent, suivant = marss.liensPrecedentSuivant(liste=menuListe[famille], courant=fileName)
+        if famille != inFooter:
+            infos = marss.afficherInfosPost(precedent, suivant)
+            # print(infos)
+        else:
+            infos = ""
+        html = marss.ajouterEtTransformerEnHtml(infos, md_text, title, famille, menuHtml, footer, "post")
         marss.creerFichierHtml(fileName, html)
+
+    for element in menuListe:  # EVOL-page-categorie
+        if element != inFooter:
+            marss.aideLoggerFichier("générer une page par rubrique", element)
+            if element not in conf['familles']:
+                print("a faire :", f"ajouter la categorie {element} en configuration")
+                titre = conf['familles']['default']['titre'] + " " + element
+                description = conf['familles']['default']['description'] + " " + element
+                title = element
+            else:
+                titre = conf['familles'][element]['titre']
+                description = conf['familles'][element]['description']
+                title = conf['familles'][element]['titre']
+            md_text = f"<h1>Catégorie :  {element}</h1>"  # bug si en md supprime ol
+            md_text += "<p>" + titre + "</p>"
+            md_text += "<p>" + description + "</p>"
+            marss.aideLoggerFichier(f"sous menu dynamique pour : {element}", menuListe[element])
+            menuCat = marss.afficherPostsDeCategorie(menuListe[element])
+            footer = marss.afficherLiensFooter(menuListe, "index.html")
+            famille = ""  # EVOL-lien-categorie
+            infos = ""
+            html = marss.ajouterEtTransformerEnHtml(infos,
+                                                    md_text
+                                                    + menuCat,
+                                                    title, famille, menuCat, footer, "categorie", True)
+            # ci dessus, par True, forcer desactivation menu en accueil
+            marss.creerFichierHtml(element + ".html", html, False)
 
     md_text = marss.lireLeMarkdown('home')
     title = conf['projet']  # BUG-042
     menuHtml = marss.afficherMenu(menuListe, "index.html")
     footer = marss.afficherLiensFooter(menuListe, "index.html")
-    html = marss.ajouterEtTransformerEnHtml(md_text
+    famille = ""  # EVOL-lien-categorie
+    infos = ""
+    html = marss.ajouterEtTransformerEnHtml(infos,
+                                            md_text
                                             + "<div class='plan'>"
                                             + menuHtml + "</div>",
-                                            title, menuHtml, footer, "home", True)
+                                            title, famille, menuHtml, footer, "home", True)
     # ci dessus, par True, forcer desactivation menu en accueil
     marss.creerFichierHtml("index.html", html, False)
 

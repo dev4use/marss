@@ -203,6 +203,7 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
 
     - liste au format ul/li de l'ensemble des pages
     - style : ul class = postCategorie / span title / li class active si post en cours
+    - EVOL : deportee dasn une fonction dediee un peu dupliquee
     """
     inFooter = conf['footerLiens']
     menu = ''
@@ -236,6 +237,16 @@ def afficherLiensFooter(liens, vousEtesIci):
                 else:
                     menu += '<li><a href="' + e['url'] + '">' + e['label'] + '</a></li>\n'
             menu += '</ul>\n'
+    return menu
+
+
+def afficherPostsDeCategorie(liens):
+    menu = ''
+    menu += '<ol class="">\n'
+    for e in liens:
+        menu += '<li><a href="' + e['url'] + '" class="">' + e['label'] + '</a></li>\n'
+        # tuple indices must be integers or slices, not str
+    menu += '</ol>\n'
     return menu
 
 
@@ -273,7 +284,56 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     return resultat
 
 
-def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False):
+def liensPrecedentSuivant(courant="", liste=""):
+    """presenter les liens de post : precedent suivant
+
+    - intercepter le contexte : post courant, categorie courante, type de page
+    - cibler le contexte : posts de la categorie
+    - sortie : dictionnaires vides ou avec clés url label pour precedent et suivant
+    """
+    array = liste
+    place = [courant == i['url'] for i in array].index(True)
+    size = len(array)
+    dernier = size-1
+    precedent = dict()
+    suivant = dict()
+    # precedent = "..."
+    # suivant = "..."
+    if size >= 3:
+        precedent['url'] = array[place-1]['url']
+        precedent['label'] = array[place-1]['label']
+        if place != dernier:
+            suivant['url'] = array[place+1]['url']  # erreur si dernier
+            suivant['label'] = array[place+1]['label']
+        else:
+            suivant['url'] = array[0]['url']  # aller au premier
+            suivant['label'] = array[0]['label']
+    elif size == 2:
+        if place != dernier:
+            suivant['url'] = array[place+1]['url']  # erreur si dernier
+            suivant['label'] = array[place+1]['label']
+        else:
+            precedent['url'] = array[place-1]['url']
+            precedent['label'] = array[place-1]['label']
+    else:
+        pass
+    return precedent, suivant
+
+
+def afficherInfosPost(precedent, suivant):
+    """afficher des informations liees au post
+
+    - lien precedent suivant
+    - date de modification et temps de lecture (bientôt)
+    """
+    html = ""
+    html += f"< <a href=\"{precedent['url']}\">{precedent['label']}</a> |"
+    html += " ... "
+    html += f"| <a href=\"{suivant['url']}\">{suivant['label']}</a> >"
+    return html
+
+
+def ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typeDePage, menuVisible=False):
     """sortie html enrichie
 
     - en plus du contenu, ajout du titre et des menus page et site
@@ -307,8 +367,13 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
 
     if typeDePage == "home":
         html += '<a href="./" class="active">accueil</a>'  # AM-001  header
+    elif famille == conf['footerLiens'] or typeDePage == "categorie":  # exclure categorie footer
+        html += '<a href="./" class="">accueil</a>'
     else:
-        html += '<a href="./">accueil</a>'  # header
+        html += '<a href="./">accueil</a> > <a href="' + famille + '.html">' + famille + '</a>'  # header
+        # EVOL-lien-categorie
+        # EVOL-page-categorie "categorie" lien comme home,
+        # contenu : title_conf, presentation_conf, liens : 1 rubrique, liens avec saut de ligne
 
     html += '<input type="radio" id="men" name="menu"'
     html += f' value="site" class="cache" {statusSite}>'  # AM-002
@@ -323,7 +388,14 @@ def ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVis
     html += '<label for="rien">(FERMER MENU)</label>\n'  # header
 
     html += '<div class="menu">' + menu + '</div></header>\n'  # nav
-    html += toc + '\n<article>' + content + '</article>\n'
+    # html += toc + '\n<article>' + content + '</article>\n'
+    html += toc + '\n<article>'
+    if typeDePage == "post" and famille != conf['footerLiens']:
+        html += infos
+    html += content
+    if typeDePage == "post" and famille != conf['footerLiens']:
+        html += infos
+    html += '</article>\n'
     html += '<footer></footer>' \
             '<div id="finish"><p class="infos">généré depuis ' \
             '<a href="https://github.com/dev4use/marss" class="trademark">Marss ' \
@@ -359,7 +431,9 @@ def supprimerFichiersDuRepertoireHtml():
     - verifier faisabilite de la creation avant ?
     """
     outPath = conf['outputPath']
+    print(f"---- nettoyage du dossier site {outPath} -----")
     files = glob.glob(outPath + '*')  # pour eviter /media/
+    print("-> pages trouvees :", files)
     for f in files:
         if path.isfile(f):
             print('suppression de', f)

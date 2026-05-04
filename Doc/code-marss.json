@@ -1,0 +1,57 @@
+{
+    "formatVersion": "1.1.0",
+    "pygountVersion": "3.1.1",
+    "files": [
+        {
+            "codeCount": 292,
+            "documentationCount": 127,
+            "emptyCount": 57,
+            "group": "Code",
+            "isCountable": true,
+            "language": "Python",
+            "lineCount": 476,
+            "path": "Code/marss.py",
+            "state": "analyzed",
+            "stateInfo": null,
+            "sourceCount": 292
+        }
+    ],
+    "languages": [
+        {
+            "documentationCount": 127,
+            "documentationPercentage": 26.680672268907564,
+            "codeCount": 292,
+            "codePercentage": 61.34453781512605,
+            "emptyCount": 57,
+            "emptyPercentage": 11.974789915966387,
+            "fileCount": 1,
+            "filePercentage": 100.0,
+            "isPseudoLanguage": false,
+            "language": "Python",
+            "sourceCount": 292,
+            "sourcePercentage": 61.34453781512605,
+            "stringCount": 0,
+            "stringPercentage": 0.0
+        }
+    ],
+    "runtime": {
+        "durationInSeconds": 0.185607,
+        "filesPerSecond": 5.387727833540761,
+        "finishedAt": "2026-05-04T13:06:00.494547+00:00",
+        "linesPerSecond": 2564.5584487654023,
+        "startedAt": "2026-05-04T13:06:00.308940+00:00"
+    },
+    "summary": {
+        "totalCodeCount": 292,
+        "totalCodePercentage": 61.34453781512605,
+        "totalDocumentationCount": 127,
+        "totalDocumentationPercentage": 26.680672268907564,
+        "totalEmptyCount": 57,
+        "totalEmptyPercentage": 11.974789915966387,
+        "totalFileCount": 1,
+        "totalSourceCount": 292,
+        "totalSourcePercentage": 61.34453781512605,
+        "totalStringCount": 0,
+        "totalStringPercentage": 0.0
+    }
+}

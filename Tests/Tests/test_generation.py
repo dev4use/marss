@@ -128,14 +128,33 @@ def test_liens_toutes_pages_html():
 def test_menu_site():
     pass
 
+@scenario("generation.feature", "identifier les liens des posts précédent et suivant")
+def test_liens_precedent_suivant():
+    pass
+
+@scenario("generation.feature", "afficher les liens des posts précédent et suivant")
+def test_afficher_liens_precedent_suivant():
+    pass
+
+@scenario("generation.feature", "afficher les posts d'une catégorie")
+def test_afficher_posts_categorie():
+    pass
+
 @scenario("generation.feature", "afficher les liens du footer")
 # pas de parser pour un scenario, dommage pour lisibilité du rapport
 # @scenario("generation.feature", parsers.parse("afficher les liens du footer pour {cas}"))
 def test_liens_footer():
     pass
 
+@scenario("generation.feature", "preparer le dossier de destination")
+def test_nettoyer_dossier():
+    pass
+
 @scenario("generation.feature", "disposer de tous les fichiers du site statique")
 def test_depot_fichiers_statiques():
+    # ne trouve pas de fichier à supprimer à cause de la fixture de nettoyage
+    # python -m pytest Tests/Tests/test_generation.py::test_depot_fichiers_statiques
+    # test_lancer_tout_le_programme
     pass
 
 @scenario("generation.feature", "visualiser le site statique")

@@ -1,13 +1,13 @@
 # Test Report
 
-**Generated**: 2026-04-11 17:46:11
+**Generated**: 2026-05-04 15:05:39
 
 ## Summary
-- **Total Tests**: 22
-- **Passed**: 22
+- **Total Tests**: 31
+- **Passed**: 31
 - **Failed**: 0
 - **Skipped**: 0
-- **Total Duration**: 2.60s
+- **Total Duration**: 2.85s
 
 ## Test Results
 
@@ -21,14 +21,14 @@
 
 #### [PASS] Scenario: récupérer la configuration interne
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.03s
 
 
 **Steps:**
 
 1. [PASS] **Given** Je Ne Précise Pas La Configuration (0.00s)
 
-2. [PASS] **When** je récupère la configuration (0.00s)
+2. [PASS] **When** je récupère la configuration (0.01s)
 
 3. [PASS] **Then** Je Recois La Configuration par défaut (0.00s)
 
@@ -69,7 +69,7 @@
 
 #### [PASS] Scenario: récupérer la configuration avec erreur de format
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -85,7 +85,7 @@
 
 #### [PASS] Scenario: logger les événements
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -101,7 +101,7 @@
 
 #### [PASS] Scenario: récupérer le contenu
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.03s
 
 
 **Steps:**
@@ -119,7 +119,7 @@
 
 #### [PASS] Scenario: récupérer les fichiers markdown présents en contenu
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -153,12 +153,12 @@
 
 #### [PASS] Scenario: récupérer les fichiers html, labels et catégories
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.03s
 
 
 **Steps:**
 
-1. [PASS] **Given** la liste des markdowns propre est prête (0.00s)
+1. [PASS] **Given** la liste des markdowns propre est prête (0.01s)
 
 2. [PASS] **When** je demande cette liste en lien html avec catégorie (0.00s)
 
@@ -191,14 +191,14 @@
 
 #### [PASS] Scenario: transformer les liens md
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
 
 1. [PASS] **Given** j'ai des contenus md avec lien md (0.00s)
 
-2. [PASS] **When** je veux transformer ces liens md (0.01s)
+2. [PASS] **When** je veux transformer ces liens md (0.00s)
 
 3. [PASS] **Then** je me retrouve avec des liens html (0.00s)
 
@@ -207,12 +207,12 @@
 
 #### [PASS] Scenario: récupérer le contenu md de la page d'accueil
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
 
 2. [PASS] **When** je souhaite récupérer le contenu de la page d'accueil (0.00s)
 
@@ -223,12 +223,12 @@
 
 #### [PASS] Scenario: récupérer le contenu html de la page d'accueil
 - **Status**: PASSED
-- **Duration**: 0.05s
+- **Duration**: 0.06s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
 
 2. [PASS] **When** je souhaite récupérer le contenu html de la page d'accueil (0.04s)
 
@@ -255,7 +255,7 @@
 
 #### [PASS] Scenario: récupérer le html d'une page avec menu page actif
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -303,6 +303,146 @@
 
 
 
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
+
+2. [PASS] **When** je suis au post milieu (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent premier (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant dernier (0.00s)
+
+
+
+
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
+
+2. [PASS] **When** je suis au post dernier (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent milieu (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant premier (0.00s)
+
+
+
+
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
+
+2. [PASS] **When** je suis au post premier (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent dernier (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant milieu (0.00s)
+
+
+
+
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 2 posts (0.00s)
+
+2. [PASS] **When** je suis au post milieu (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent premier (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant aucun (0.00s)
+
+
+
+
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 2 posts (0.00s)
+
+2. [PASS] **When** je suis au post premier (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent aucun (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant milieu (0.00s)
+
+
+
+
+#### [PASS] Scenario: identifier les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 1 posts (0.00s)
+
+2. [PASS] **When** je suis au post premier (0.00s)
+
+3. [PASS] **Then** j'ai en post precedent aucun (0.00s)
+
+4. [PASS] **Then** j'ai en post suivant aucun (0.00s)
+
+
+
+
+#### [PASS] Scenario: afficher les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.01s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
+
+2. [PASS] **When** j'affiche le post milieu (0.00s)
+
+3. [PASS] **Then** j'ai ce résultat < <a href="premier.html">premier</a> | ... | <a href="dernier.html">dernier</a> > (0.00s)
+
+
+
+
+#### [PASS] Scenario: afficher les posts d'une catégorie
+- **Status**: PASSED
+- **Duration**: 0.01s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
+
+2. [PASS] **When** j'affiche les posts de la catégorie (0.00s)
+
+3. [PASS] **Then** j'ai mes liens pour chaque post (0.00s)
+
+
+
+
 #### [PASS] Scenario: afficher les liens du footer
 - **Status**: PASSED
 - **Duration**: 0.02s
@@ -314,7 +454,7 @@
 
 2. [PASS] **Given** les pages correspondant au préfixe footer sont presentes (0.00s)
 
-3. [PASS] **When** je demande le menu footer (0.00s)
+3. [PASS] **When** je demande le menu footer (0.01s)
 
 4. [PASS] **Then** j'ai le menu footer present en pied de page (0.00s)
 
@@ -357,9 +497,27 @@
 
 
 
+#### [PASS] Scenario: preparer le dossier de destination
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** le répertoire destination est connu (0.00s)
+
+2. [PASS] **Given** le répertoire de destination n'est pas vide (0.00s)
+
+3. [PASS] **When** on nettoie le dossier destination (0.00s)
+
+4. [PASS] **Then** le dossier de destination est vide (0.00s)
+
+
+
+
 #### [PASS] Scenario: disposer de tous les fichiers du site statique
 - **Status**: PASSED
-- **Duration**: 0.03s
+- **Duration**: 0.04s
 
 
 **Steps:**
@@ -392,7 +550,7 @@
 
 1. [PASS] **Given** le site est configuré et le contenu markdown est présent (0.00s)
 
-2. [PASS] **When** je lance la génération du site (1.01s)
+2. [PASS] **When** je lance la génération du site (1.00s)
 
 3. [PASS] **Then** le site est accessible en serveur de debug (1.03s)
 

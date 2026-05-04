@@ -59,6 +59,7 @@ Functions
     
     - liste au format ul/li de l'ensemble des pages
     - style : ul class = postCategorie / span title / li class active si post en cours
+    - EVOL : deportee dasn une fonction dediee un peu dupliquee
 
 `afficherLiensFooter(liens, vousEtesIci)`
 :   liste a plat de liens legaux et autres
@@ -66,6 +67,9 @@ Functions
     - beaucoup (trop ?) de duplication de code
     - le retour peut etre null, sans lien
     - style : ul class = postFooter /  li class active si post en cours
+
+`afficherPostsDeCategorie(liens)`
+:   
 
 `lireLeMarkdown(file)`
 :   recuperation du contenu .md
@@ -79,7 +83,20 @@ Functions
     - retourner le contenu avec le remplacement effectue
     - le  nom la aussi aurait pu etre plus métier DDD
 
-`ajouterEtTransformerEnHtml(md_text, title, menu, footer, typeDePage, menuVisible=False)`
+`liensPrecedentSuivant(courant='', liste='')`
+:   presenter les liens de post : precedent suivant
+    
+    - intercepter le contexte : post courant, categorie courante, type de page
+    - cibler le contexte : posts de la categorie
+    - sortie : dictionnaires vides ou avec clés url label pour precedent et suivant
+
+`afficherInfosPost(precedent, suivant)`
+:   afficher des informations liees au post
+    
+    - lien precedent suivant
+    - date de modification et temps de lecture (bientôt)
+
+`ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typeDePage, menuVisible=False)`
 :   sortie html enrichie
     
     - en plus du contenu, ajout du titre et des menus page et site

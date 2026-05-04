@@ -1,5 +1,8 @@
 from pathlib import Path
 
+
+version_actuelle = "ST-1.0.2"  # peu d'intérêt à ce test si ce n'est s'assurer que tests à jour
+
 # referentiel propre
 propre_pagesMarkdown = [ Path('/home/user/Documents/marss/Tests/Dataset/Content-reference/DEV-kiss.md'),
         Path('/home/user/Documents/marss/Tests/Dataset/Content-reference/DEV-langage-et-langue.md'),
