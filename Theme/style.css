@@ -1048,6 +1048,16 @@ a.trademark:hover{
   text-decoration: none;
   text-shadow: rgb(59, 55, 53) 1px 0 10px;
 }
+a.diff{
+color:coral;
+}
+a.diff:link{
+color:coral;
+}
+a.diff:hover{
+color:coral;
+text-decoration: none;
+}
 #finish ul.postFooter{
   float: left;
    margin: 0em 0em 0em;

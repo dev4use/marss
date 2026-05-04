@@ -209,7 +209,10 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
     menu = ''
     for k, v in liens.items():
         if k != inFooter:  # EVOL footer
-            menu += '<ul class="postCategorie" id=' + k + '><span title=' + k + '>' + k + '</span>\n'  # new = title
+            nombrePostsCategorie = str(len(v))
+            menu += '<ul class="postCategorie" id=' + k + '>'
+            menu += '<span title=' + k + '>'
+            menu += '<a class="diff" href="' + k + '.html">' + k + '</a> (' + nombrePostsCategorie + ')</span>\n'
             for e in v:
                 if vousEtesIci == e['url']:
                     menu += '<li><a href="' + e['url'] + '" class="active">' + e['label'] + '</a></li>\n'
@@ -370,7 +373,7 @@ def ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typ
     elif famille == conf['footerLiens'] or typeDePage == "categorie":  # exclure categorie footer
         html += '<a href="./" class="">accueil</a>'
     else:
-        html += '<a href="./">accueil</a> > <a href="' + famille + '.html">' + famille + '</a>'  # header
+        html += '<a href="./">accueil</a> > <a class="diff" href="' + famille + '.html">' + famille + '</a>'
         # EVOL-lien-categorie
         # EVOL-page-categorie "categorie" lien comme home,
         # contenu : title_conf, presentation_conf, liens : 1 rubrique, liens avec saut de ligne

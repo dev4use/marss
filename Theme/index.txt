@@ -6,8 +6,12 @@ Et une fois que c'est fait, on passe à autre chose.
 Je ne parle pas que pour moi, j'ai connu des devs passionnés qui savaient orienter le patron vers des technos qu'ils voulaient essayer...  
 
 Ce site statique en markdown est donc généré par MARSS (l'outil) ( ≖‿ ≖ ).    
-Et ce site évoque principalement le développement réalisé sur MARSS.  
+Et **ce site évoque principalement le développement réalisé sur MARSS**.  
 Le traditionnel [README du projet MARSS](https://github.com/dev4use/marss) vous en dira plus.  
 
-## Voici le plan de site
+## Des nouvelles de marss
+
+Ou posts de suivi du développement logiciel.   
+
+
 
