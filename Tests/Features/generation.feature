@@ -117,6 +117,7 @@ Feature: Générer le site statique
         Examples: sortie html nominale
         | nombre | index   | affichage |
         | 3      | milieu  | < <a href="premier.html">premier</a> \| ... \| <a href="dernier.html">dernier</a> >|
+        | 1      | premier  | aucun |
  
     Scenario: afficher les posts d'une catégorie
         Given ma liste comporte <nombre> posts

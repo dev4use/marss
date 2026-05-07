@@ -12,6 +12,7 @@ projet: "MAR-kdown-S-imple-web-S-ite"
 menuVisible: "" # site|page|vide ou autre AM-002
 footerLiens: "FOOTER"  # prefixe du md et html
 version: "ST-1.0.2"
+#--- contenu ---
 familles:
   default:
     titre: titre à venir pour la catégorie
@@ -28,3 +29,9 @@ familles:
   TEST:
     titre: "test logiciel"
     description: "Problématiques liées au test logiciel."
+  US:
+    titre: "User Story Agile"
+    description: "Element décrit le plus souvent comme ce fameux 'item' du backlog produit."
+  DEV:
+    titre: "développement logiciel"
+    description: "Une pensée particulière pour le code source."

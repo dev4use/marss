@@ -330,9 +330,14 @@ def afficherInfosPost(precedent, suivant):
     - date de modification et temps de lecture (bientôt)
     """
     html = ""
-    html += f"< <a href=\"{precedent['url']}\">{precedent['label']}</a> |"
-    html += " ... "
-    html += f"| <a href=\"{suivant['url']}\">{suivant['label']}</a> >"
+    if 'url' in precedent:
+        html += f"< <a href=\"{precedent['url']}\">{precedent['label']}</a> |"
+    if 'url' not in precedent and 'url' not in suivant:
+        html += ""
+    else:
+        html += " ... "
+    if 'url' in suivant:
+        html += f"| <a href=\"{suivant['url']}\">{suivant['label']}</a> >"
     return html
 
 
@@ -358,7 +363,9 @@ def ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typ
         pass
 
     # pourrait etre realisé à part, et ici, assemblage
-    md = markdown.Markdown(extensions=['toc', 'fenced_code'])  # Majuscule obligee FIX-0012
+    md = markdown.Markdown(extensions=['toc', 'fenced_code', 'tables',
+                                       'footnotes', 'pymdownx.tilde',
+                                       'pymdownx.tasklist'])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
     toc = md.toc  # anticipation externalisation
 

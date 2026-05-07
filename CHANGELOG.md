@@ -2,7 +2,21 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-1.1.0
+
+### Correctifs
+
+1. gestion du texte barré
+1. cas  du menu précédent suivant pour 1 seul post
+
+### Ajouts
+
+1. **contenu** : gestion markdown : table, texte barré, case à cocher, notes de bas de page
+1. **navigation** : nombre de posts par catégorie
+
 ## ST-1.0.2 - 2026-05-04
+
+Aurait dû être la version ST-1.1.0 car non dédiée à des correctifs.
 
 ### Ajouts
 

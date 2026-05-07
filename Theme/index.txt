@@ -11,7 +11,5 @@ Le traditionnel [README du projet MARSS](https://github.com/dev4use/marss) vous 
 
 ## Des nouvelles de marss
 
-Ou posts de suivi du développement logiciel.   
-
-
+Billets de suivi du développement logiciel.   
 

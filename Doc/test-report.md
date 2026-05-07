@@ -1,13 +1,13 @@
 # Test Report
 
-**Generated**: 2026-05-04 15:05:39
+**Generated**: 2026-05-07 17:57:43
 
 ## Summary
-- **Total Tests**: 31
-- **Passed**: 31
+- **Total Tests**: 32
+- **Passed**: 32
 - **Failed**: 0
 - **Skipped**: 0
-- **Total Duration**: 2.85s
+- **Total Duration**: 2.92s
 
 ## Test Results
 
@@ -69,7 +69,7 @@
 
 #### [PASS] Scenario: récupérer la configuration avec erreur de format
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.01s
 
 
 **Steps:**
@@ -90,7 +90,7 @@
 
 **Steps:**
 
-1. [PASS] **Given** j'ai un fichier de log configuré (0.01s)
+1. [PASS] **Given** j'ai un fichier de log configuré (0.00s)
 
 2. [PASS] **When** je veux logger un événement (0.00s)
 
@@ -101,7 +101,7 @@
 
 #### [PASS] Scenario: récupérer le contenu
 - **Status**: PASSED
-- **Duration**: 0.03s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -119,14 +119,14 @@
 
 #### [PASS] Scenario: récupérer les fichiers markdown présents en contenu
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.01s
 
 
 **Steps:**
 
 1. [PASS] **Given** le contenu n'a que du markdown (0.00s)
 
-2. [PASS] **When** Je Récupère Les Fichiers (0.00s)
+2. [PASS] **When** Je Récupère Les Fichiers (0.01s)
 
 3. [PASS] **Then** Je Recois La Liste Des Fichiers Markdown Exclusivement (0.00s)
 
@@ -198,7 +198,7 @@
 
 1. [PASS] **Given** j'ai des contenus md avec lien md (0.00s)
 
-2. [PASS] **When** je veux transformer ces liens md (0.00s)
+2. [PASS] **When** je veux transformer ces liens md (0.01s)
 
 3. [PASS] **Then** je me retrouve avec des liens html (0.00s)
 
@@ -212,7 +212,7 @@
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
 
 2. [PASS] **When** je souhaite récupérer le contenu de la page d'accueil (0.00s)
 
@@ -223,14 +223,14 @@
 
 #### [PASS] Scenario: récupérer le contenu html de la page d'accueil
 - **Status**: PASSED
-- **Duration**: 0.06s
+- **Duration**: 0.09s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
 
-2. [PASS] **When** je souhaite récupérer le contenu html de la page d'accueil (0.04s)
+2. [PASS] **When** je souhaite récupérer le contenu html de la page d'accueil (0.07s)
 
 3. [PASS] **Then** j'ai le lien accueil actif (0.00s)
 
@@ -296,7 +296,7 @@
 
 2. [PASS] **When** je demande le menu des pages (0.00s)
 
-3. [PASS] **Then** j'ai une liste par catégorie (0.00s)
+3. [PASS] **Then** j'ai une liste par catégorie (0.01s)
 
 4. [PASS] **Then** j'ai toutes les pages dans les bonnes catégories (0.00s)
 
@@ -323,7 +323,7 @@
 
 #### [PASS] Scenario: identifier les liens des posts précédent et suivant
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.01s
 
 
 **Steps:**
@@ -427,6 +427,22 @@
 
 
 
+#### [PASS] Scenario: afficher les liens des posts précédent et suivant
+- **Status**: PASSED
+- **Duration**: 0.01s
+
+
+**Steps:**
+
+1. [PASS] **Given** ma liste comporte 1 posts (0.00s)
+
+2. [PASS] **When** j'affiche le post premier (0.00s)
+
+3. [PASS] **Then** j'ai ce résultat aucun (0.00s)
+
+
+
+
 #### [PASS] Scenario: afficher les posts d'une catégorie
 - **Status**: PASSED
 - **Duration**: 0.01s
@@ -472,7 +488,7 @@
 
 2. [PASS] **Given** les pages correspondant au préfixe footer sont absentes (0.00s)
 
-3. [PASS] **When** je demande le menu footer (0.00s)
+3. [PASS] **When** je demande le menu footer (0.01s)
 
 4. [PASS] **Then** j'ai le menu footer absent en pied de page (0.00s)
 
@@ -504,7 +520,7 @@
 
 **Steps:**
 
-1. [PASS] **Given** le répertoire destination est connu (0.00s)
+1. [PASS] **Given** le répertoire destination est connu (0.01s)
 
 2. [PASS] **Given** le répertoire de destination n'est pas vide (0.00s)
 
@@ -517,7 +533,7 @@
 
 #### [PASS] Scenario: disposer de tous les fichiers du site statique
 - **Status**: PASSED
-- **Duration**: 0.04s
+- **Duration**: 0.05s
 
 
 **Steps:**
@@ -543,7 +559,7 @@
 
 #### [PASS] Scenario: visualiser le site statique
 - **Status**: PASSED
-- **Duration**: 2.04s
+- **Duration**: 2.05s
 
 
 **Steps:**
@@ -552,5 +568,5 @@
 
 2. [PASS] **When** je lance la génération du site (1.00s)
 
-3. [PASS] **Then** le site est accessible en serveur de debug (1.03s)
+3. [PASS] **Then** le site est accessible en serveur de debug (1.04s)
 

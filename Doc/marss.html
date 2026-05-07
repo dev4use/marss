@@ -326,7 +326,10 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
     menu = &#39;&#39;
     for k, v in liens.items():
         if k != inFooter:  # EVOL footer
-            menu += &#39;&lt;ul class=&#34;postCategorie&#34; id=&#39; + k + &#39;&gt;&lt;span title=&#39; + k + &#39;&gt;&#39; + k + &#39;&lt;/span&gt;\n&#39;  # new = title
+            nombrePostsCategorie = str(len(v))
+            menu += &#39;&lt;ul class=&#34;postCategorie&#34; id=&#39; + k + &#39;&gt;&#39;
+            menu += &#39;&lt;span title=&#39; + k + &#39;&gt;&#39;
+            menu += &#39;&lt;a class=&#34;diff&#34; href=&#34;&#39; + k + &#39;.html&#34;&gt;&#39; + k + &#39;&lt;/a&gt; (&#39; + nombrePostsCategorie + &#39;)&lt;/span&gt;\n&#39;
             for e in v:
                 if vousEtesIci == e[&#39;url&#39;]:
                     menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;active&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
@@ -523,9 +526,14 @@ nom la aussi aurait pu etre plus métier DDD</li>
     - date de modification et temps de lecture (bientôt)
     &#34;&#34;&#34;
     html = &#34;&#34;
-    html += f&#34;&lt; &lt;a href=\&#34;{precedent[&#39;url&#39;]}\&#34;&gt;{precedent[&#39;label&#39;]}&lt;/a&gt; |&#34;
-    html += &#34; ... &#34;
-    html += f&#34;| &lt;a href=\&#34;{suivant[&#39;url&#39;]}\&#34;&gt;{suivant[&#39;label&#39;]}&lt;/a&gt; &gt;&#34;
+    if &#39;url&#39; in precedent:
+        html += f&#34;&lt; &lt;a href=\&#34;{precedent[&#39;url&#39;]}\&#34;&gt;{precedent[&#39;label&#39;]}&lt;/a&gt; |&#34;
+    if &#39;url&#39; not in precedent and &#39;url&#39; not in suivant:
+        html += &#34;&#34;
+    else:
+        html += &#34; ... &#34;
+    if &#39;url&#39; in suivant:
+        html += f&#34;| &lt;a href=\&#34;{suivant[&#39;url&#39;]}\&#34;&gt;{suivant[&#39;label&#39;]}&lt;/a&gt; &gt;&#34;
     return html</code></pre>
 </details>
 <div class="desc"><p>afficher des informations liees au post</p>
@@ -564,7 +572,9 @@ nom la aussi aurait pu etre plus métier DDD</li>
         pass
 
     # pourrait etre realisé à part, et ici, assemblage
-    md = markdown.Markdown(extensions=[&#39;toc&#39;, &#39;fenced_code&#39;])  # Majuscule obligee FIX-0012
+    md = markdown.Markdown(extensions=[&#39;toc&#39;, &#39;fenced_code&#39;, &#39;tables&#39;,
+                                       &#39;footnotes&#39;, &#39;pymdownx.tilde&#39;,
+                                       &#39;pymdownx.tasklist&#39;])  # Majuscule obligee FIX-0012
     content = md.convert(md_text)
     toc = md.toc  # anticipation externalisation
 
@@ -579,7 +589,7 @@ nom la aussi aurait pu etre plus métier DDD</li>
     elif famille == conf[&#39;footerLiens&#39;] or typeDePage == &#34;categorie&#34;:  # exclure categorie footer
         html += &#39;&lt;a href=&#34;./&#34; class=&#34;&#34;&gt;accueil&lt;/a&gt;&#39;
     else:
-        html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt; &gt; &lt;a href=&#34;&#39; + famille + &#39;.html&#34;&gt;&#39; + famille + &#39;&lt;/a&gt;&#39;  # header
+        html += &#39;&lt;a href=&#34;./&#34;&gt;accueil&lt;/a&gt; &gt; &lt;a class=&#34;diff&#34; href=&#34;&#39; + famille + &#39;.html&#34;&gt;&#39; + famille + &#39;&lt;/a&gt;&#39;
         # EVOL-lien-categorie
         # EVOL-page-categorie &#34;categorie&#34; lien comme home,
         # contenu : title_conf, presentation_conf, liens : 1 rubrique, liens avec saut de ligne

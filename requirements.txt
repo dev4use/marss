@@ -1,6 +1,7 @@
 pyaml
 markdown
 markdown-toc
+pymdown-extensions
 # test
 pytest
 pyest-bdd

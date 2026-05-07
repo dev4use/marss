@@ -520,16 +520,19 @@ def menu_par_categorie(echanges):
     expected_categories_nombre = 2
     expected_categories_liste_nom = ["DEV", "TEST"]
 
-    # pprint.pprint(echanges["menu_pages"])
+    pprint.pprint(echanges["menu_pages"])
     soup = BeautifulSoup(echanges["menu_pages"], features='html.parser')
     echanges['soup'] = soup
-    # content = soup.prettify()
-    # print(content)
-    categories = soup.find_all("span")
+    content = soup.prettify()
+    print("DEBUG:", content)
+    categories = soup.find_all('a', attrs={"class": "diff"})  # span (avant)
+    print("CAT:", categories)
+    # le texte seul devient lien et nombre de post : impact du dev "compter posts par rubrique"
     assert len(categories) == expected_categories_nombre 
     categories_liste_nom = list()
     for nom in categories:
         categories_liste_nom.append(nom.contents[0])
+        # equivalent de .get_text()
     assert categories_liste_nom == expected_categories_liste_nom
 
 @then("j'ai toutes les pages dans les bonnes catégories")
@@ -675,10 +678,14 @@ def lien_suivant(echanges, suivant):
 def liste_de_liens(echanges, index):
     res_precedent, res_suivant = liensPrecedentSuivant(courant=index + ".html", liste=echanges["data"])
     echanges["html"] = afficherInfosPost(res_precedent, res_suivant)
+    print("HTML infosPost:", echanges["html"])
 
 @then(parsers.parse("j'ai ce résultat {affichage}"))
 def affichage_liens_suivant_precedent(echanges, affichage):
-    assert  echanges["html"] ==  affichage
+    if affichage != "aucun":
+        assert  echanges["html"] ==  affichage
+    else:
+        assert  echanges["html"] == ""
 
 @when("j'affiche les posts de la catégorie")
 def affichage_posts_categorie(echanges):
