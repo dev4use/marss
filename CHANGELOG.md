@@ -2,12 +2,13 @@
 
 Suivi des changements de version par classement antéchronologique.
 
-## ST-1.1.0
+## ST-1.1.0 - 2026-05-08
 
 ### Correctifs
 
 1. gestion du texte barré
 1. cas  du menu précédent suivant pour 1 seul post
+1. sous liste numérotée à afficher plutôt en décimal
 
 ### Ajouts
 

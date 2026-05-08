@@ -2,8 +2,7 @@
 
 *Slogan : Pour garder vos idées sur terre*
 
-
-[![nombre de fonctions](Doc/fonctions.svg?dummy=8484744)](Doc/marss.md) [![lignes de code](Doc/code.svg?dummy=8484744)](Doc/code-marss.txt) [![resultats de tests](Doc/testBadge.svg?dummy=8484744)](Doc/test-report.md) [![couverture de code par les tests](Doc/coverageBadge.svg?dummy=8484744)](Doc/coverage.md) [![convention de codage](Doc/qualityBadge.svg?dummy=8484744)](Doc/qualite-marss.txt)
+[![lignes de code](Doc/code.svg?dummy=8484744)](Doc/code-marss.txt) [![resultats de tests](Doc/testBadge.svg?dummy=8484744)](Doc/test-report.md) [![nombre de fonctions](Doc/fonctions.svg?dummy=8484744)](Doc/marss.md) [![couverture de code par les tests](Doc/coverageBadge.svg?dummy=8484744)](Doc/coverage.md) [![convention de codage](Doc/qualityBadge.svg?dummy=8484744)](Doc/qualite-marss.txt)
 
 Clin d'oeil à la conquête spatiale.  
 Jouer à se donner de grandes ambitions, mais trop grandes, avec deux S dans le nom.  
