@@ -8,6 +8,7 @@ pyest-bdd
 pytest-bdd-report
 beautifulsoup4
 requests
+Faker
 # qualité
 pdoc3
 pygount

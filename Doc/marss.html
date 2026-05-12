@@ -295,6 +295,8 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
             # TODO: enlever 1er mot en uppercase ici ou avant
             descriptif[&#39;url&#39;] = element[2]
             liens.append(descriptif)  # element[1]
+            # en meme temps, gerer le contenu de l&#39;extrait md ? NON
+            # rester referentiel
         result[key] = liens  # &#39;test&#39;
     return result</code></pre>
 </details>
@@ -381,24 +383,40 @@ Path('/home/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')), ('EB', &he
 li class active si post en cours</li>
 </ul></div>
 </dd>
-<dt id="marss.afficherPostsDeCategorie"><code class="name flex">
-<span>def <span class="ident">afficherPostsDeCategorie</span></span>(<span>liens)</span>
+<dt id="marss.helper_fichierCorrespondance"><code class="name flex">
+<span>def <span class="ident">helper_fichierCorrespondance</span></span>(<span>ref, search)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def afficherPostsDeCategorie(liens):
-    menu = &#39;&#39;
-    menu += &#39;&lt;ol class=&#34;&#34;&gt;\n&#39;
-    for e in liens:
-        menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&lt;/li&gt;\n&#39;
-        # tuple indices must be integers or slices, not str
-    menu += &#39;&lt;/ol&gt;\n&#39;
-    return menu</code></pre>
+<pre><code class="python">def helper_fichierCorrespondance(ref, search):
+    &#34;&#34;&#34;recuperer le path du fichier md
+
+    - search : avec le nom de fichier html
+    - ref : le referentiel des pages pour correspondance
+    - retrouver le path du fichier md : position 4 du tuple ci dessous
+    (   &#39;BUG&#39;,
+        &#39;040 nom categorie dans lien post&#39;,
+        &#39;BUG-040-nom-categorie-dans-lien-post.html&#39;,
+         PosixPath(&#39;/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-post.md&#39;)
+    &#34;&#34;&#34;
+    res = list(filter(lambda tup: search in tup, ref))
+
+    return res[0][3]</code></pre>
 </details>
-<div class="desc"></div>
+<div class="desc"><p>recuperer le path du fichier md</p>
+<ul>
+<li>search : avec le nom de fichier html</li>
+<li>ref : le referentiel des pages pour correspondance</li>
+<li>retrouver le path du fichier md : position 4 du tuple ci dessous
+(
+'BUG',
+'040 nom categorie dans lien post',
+'BUG-040-nom-categorie-dans-lien-post.html',
+PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')</li>
+</ul></div>
 </dd>
 <dt id="marss.lireLeMarkdown"><code class="name flex">
 <span>def <span class="ident">lireLeMarkdown</span></span>(<span>file)</span>
@@ -422,6 +440,50 @@ li class active si post en cours</li>
 <div class="desc"><p>recuperation du contenu .md</p>
 <ul>
 <li>besoin du path reel vers md</li>
+</ul></div>
+</dd>
+<dt id="marss.extraitDeMarkdown"><code class="name flex">
+<span>def <span class="ident">extraitDeMarkdown</span></span>(<span>texte)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extraitDeMarkdown(texte):
+    &#34;&#34;&#34;recuperation d&#39;un extrait du chapo sous h1
+
+    - prérequis : h1, h2, contenu sous h1
+    - entrant : texte markdown
+    - sortant : texte avec [...] si tronque
+    &#34;&#34;&#34;
+
+    res = texte.splitlines()
+    # print(&#34;Tableau initial:&#34;, res)
+    res = list(filter(None, res))
+    # print(&#34;Tableau nettoye:&#34;, res)
+    start = [i for i, s in enumerate(res) if s.startswith(&#39;# &#39;)]
+    debut = int(start[0])
+    assert len(start) == 1
+    stop = [i for i, s in enumerate(res) if s.startswith(&#39;## &#39;)]
+    fin = int(stop[0])
+    assert len(stop) &gt;= 1
+    debut += 1
+    res = res[debut:fin]
+    # print(&#34;Tableau cible:&#34;, res)
+    res = &#34; &#34;.join(res)
+    # print(&#34;Contenu cible:&#34;, res)
+    # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
+    res = textwrap.shorten(res, width=120, placeholder=&#34; [...]&#34;)
+    # print(&#34;Contenu ecourte:&#34;, res)
+
+    return res</code></pre>
+</details>
+<div class="desc"><p>recuperation d'un extrait du chapo sous h1</p>
+<ul>
+<li>prérequis : h1, h2, contenu sous h1</li>
+<li>entrant : texte markdown</li>
+<li>sortant : texte avec [&hellip;] si tronque</li>
 </ul></div>
 </dd>
 <dt id="marss.remplacerExtensionDansContenu"><code class="name flex">
@@ -459,6 +521,63 @@ li class active si post en cours</li>
 <li>retourner le contenu avec le remplacement effectue</li>
 <li>le
 nom la aussi aurait pu etre plus métier DDD</li>
+</ul></div>
+</dd>
+<dt id="marss.remplacerPathMedia"><code class="name flex">
+<span>def <span class="ident">remplacerPathMedia</span></span>(<span>content, changer)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remplacerPathMedia(content, changer):
+    &#34;&#34;&#34;Remplacer le lien vers les medias images
+
+    - Dans content, est &#34;../Media&#34;
+    - Dans WebSite, est &#34;Media&#34;
+    &#34;&#34;&#34;
+    resultat = content.replace(changer[&#39;contenu&#39;], changer[&#39;site&#39;])
+
+    return resultat</code></pre>
+</details>
+<div class="desc"><p>Remplacer le lien vers les medias images</p>
+<ul>
+<li>Dans content, est "../Media"</li>
+<li>Dans WebSite, est "Media"</li>
+</ul></div>
+</dd>
+<dt id="marss.afficherPostsDeCategorie"><code class="name flex">
+<span>def <span class="ident">afficherPostsDeCategorie</span></span>(<span>liens, referentiel)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherPostsDeCategorie(liens, referentiel):
+    &#34;&#34;&#34;afficher les posts par catégorie
+
+    - fonction de type integration : appelle d&#39;autres fonctions
+    &#34;&#34;&#34;
+    menu = &#39;&#39;
+    menu += &#39;&lt;ol class=&#34;&#34;&gt;\n&#39;
+    for e in liens:
+        menu += &#39;&lt;li&gt;&lt;a href=&#34;&#39; + e[&#39;url&#39;] + &#39;&#34; class=&#34;&#34;&gt;&#39; + e[&#39;label&#39;] + &#39;&lt;/a&gt;&#39;
+
+        mdFile = helper_fichierCorrespondance(referentiel, e[&#39;url&#39;])
+        # Path bien recupere : can only concatenate str (not &#34;PosixPath&#34;) to str
+        mdText = lireLeMarkdown(mdFile)
+        mdExtract = extraitDeMarkdown(mdText)
+        menu += &#39; &#39; + mdExtract
+
+        menu += &#39;&lt;/li&gt;\n&#39;
+    menu += &#39;&lt;/ol&gt;\n&#39;
+    return menu</code></pre>
+</details>
+<div class="desc"><p>afficher les posts par catégorie</p>
+<ul>
+<li>fonction de type integration : appelle d'autres fonctions</li>
 </ul></div>
 </dd>
 <dt id="marss.liensPrecedentSuivant"><code class="name flex">
@@ -511,15 +630,111 @@ nom la aussi aurait pu etre plus métier DDD</li>
 <li>sortie : dictionnaires vides ou avec clés url label pour precedent et suivant</li>
 </ul></div>
 </dd>
-<dt id="marss.afficherInfosPost"><code class="name flex">
-<span>def <span class="ident">afficherInfosPost</span></span>(<span>precedent, suivant)</span>
+<dt id="marss.dateMiseAjour"><code class="name flex">
+<span>def <span class="ident">dateMiseAjour</span></span>(<span>pathFichier)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def afficherInfosPost(precedent, suivant):
+<pre><code class="python">def dateMiseAjour(pathFichier):
+    &#34;&#34;&#34;date de mise a jour du fichier markdown
+
+    - entrant : chemin PathLib du fichier markdown
+    - sortant : date formattee
+    &#34;&#34;&#34;
+    maj = pathFichier.stat().st_mtime
+    maj = datetime.fromtimestamp(maj).strftime(&#34;%Y-%m-%d&#34;)
+    return maj</code></pre>
+</details>
+<div class="desc"><p>date de mise a jour du fichier markdown</p>
+<ul>
+<li>entrant : chemin PathLib du fichier markdown</li>
+<li>sortant : date formattee</li>
+</ul></div>
+</dd>
+<dt id="marss.nombreDeMots"><code class="name flex">
+<span>def <span class="ident">nombreDeMots</span></span>(<span>text)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def nombreDeMots(text):
+    &#34;&#34;&#34;compter le nombre de mots, hors balises markdown
+
+    - depuis : https://github.com/gandreadis/markdown-word-count/blob/master/mwc/counter.py
+    &#34;&#34;&#34;
+
+    # Comments
+    text = re.sub(r&#39;&lt;!--(.*?)--&gt;&#39;, &#39;&#39;, text, flags=re.MULTILINE)
+    # Tabs to spaces
+    text = text.replace(&#39;\t&#39;, &#39;    &#39;)
+    # More than 1 space to 4 spaces
+    text = re.sub(r&#39;[ ]{2,}&#39;, &#39;    &#39;, text)
+    # Footnotes
+    text = re.sub(r&#39;^\[[^]]*\][^(].*&#39;, &#39;&#39;, text, flags=re.MULTILINE)
+    # Indented blocks of code
+    text = re.sub(r&#39;^( {4,}[^-*]).*&#39;, &#39;&#39;, text, flags=re.MULTILINE)
+    # Custom header IDs
+    text = re.sub(r&#39;{#.*}&#39;, &#39;&#39;, text)
+    # Replace newlines with spaces for uniform handling
+    text = text.replace(&#39;\n&#39;, &#39; &#39;)
+    # Remove images
+    text = re.sub(r&#39;!\[[^\]]*\]\([^)]*\)&#39;, &#39;&#39;, text)
+    # Remove HTML tags
+    text = re.sub(r&#39;&lt;/?[^&gt;]*&gt;&#39;, &#39;&#39;, text)
+    # Remove special characters
+    text = re.sub(r&#39;[#*`~\-–^=&lt;&gt;+|/:]&#39;, &#39;&#39;, text)
+    # Remove footnote references
+    text = re.sub(r&#39;\[[0-9]*\]&#39;, &#39;&#39;, text)
+    # Remove enumerations
+    text = re.sub(r&#39;[0-9#]*\.&#39;, &#39;&#39;, text)
+
+    resultat = len(text.split())
+
+    return resultat</code></pre>
+</details>
+<div class="desc"><p>compter le nombre de mots, hors balises markdown</p>
+<ul>
+<li>depuis : <a href="https://github.com/gandreadis/markdown-word-count/blob/master/mwc/counter.py">https://github.com/gandreadis/markdown-word-count/blob/master/mwc/counter.py</a></li>
+</ul></div>
+</dd>
+<dt id="marss.tempsDeLecture"><code class="name flex">
+<span>def <span class="ident">tempsDeLecture</span></span>(<span>totalDeMots)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tempsDeLecture(totalDeMots):
+    &#34;&#34;&#34;estimer le temps de lecture
+
+    - entrant : nombre de mots en integer
+    - sortant : temps avec unite de temps
+    &#34;&#34;&#34;
+    motsParMinute = 200  # constante du secteur, inutile en conf (sauf pour test)
+    resultat = round(totalDeMots // motsParMinute)
+    return str(resultat) + &#34; min&#34;</code></pre>
+</details>
+<div class="desc"><p>estimer le temps de lecture</p>
+<ul>
+<li>entrant : nombre de mots en integer</li>
+<li>sortant : temps avec unite de temps</li>
+</ul></div>
+</dd>
+<dt id="marss.afficherInfosPost"><code class="name flex">
+<span>def <span class="ident">afficherInfosPost</span></span>(<span>precedent, suivant, modif, mots, temps)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def afficherInfosPost(precedent, suivant, modif, mots, temps):
     &#34;&#34;&#34;afficher des informations liees au post
 
     - lien precedent suivant
@@ -531,7 +746,7 @@ nom la aussi aurait pu etre plus métier DDD</li>
     if &#39;url&#39; not in precedent and &#39;url&#39; not in suivant:
         html += &#34;&#34;
     else:
-        html += &#34; ... &#34;
+        html += &#34; &#34; + modif + &#34; - &#34; + temps + &#34; (&#34; + str(mots) + &#34; mots) &#34;
     if &#39;url&#39; in suivant:
         html += f&#34;| &lt;a href=\&#34;{suivant[&#39;url&#39;]}\&#34;&gt;{suivant[&#39;label&#39;]}&lt;/a&gt; &gt;&#34;
     return html</code></pre>
@@ -581,7 +796,7 @@ nom la aussi aurait pu etre plus métier DDD</li>
     html = &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;&#39; + title + &#39;&lt;/title&gt;&#39;
     html += &#39;&lt;meta http-equiv=&#34;Content-type&#34; content=&#34;text/html;&#39;
     html += &#39;charset=utf-8&#34; /&gt;&#39;
-    html += &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;/media/style.css&#34; media=&#34;all&#34;&gt;&#39;
+    html += &#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;/assets/style.css&#34; media=&#34;all&#34;&gt;&#39;
     html += &#39;&lt;/head&gt;&lt;body class=&#34;markdown-body&#34;&gt;\n&#39;  # EVOL-css-markdown class=&#34;markdown-body&#34;
 
     if typeDePage == &#34;home&#34;:
@@ -682,7 +897,8 @@ nom la aussi aurait pu etre plus métier DDD</li>
         if path.isfile(f):
             print(&#39;suppression de&#39;, f)
             os.remove(f)
-    shutil.rmtree(os.path.join(outPath, &#39;media&#39;), ignore_errors=True)</code></pre>
+    shutil.rmtree(os.path.join(outPath, &#39;assets&#39;), ignore_errors=True)
+    shutil.rmtree(os.path.join(outPath, &#39;Media&#39;), ignore_errors=True)</code></pre>
 </details>
 <div class="desc"><p>nettoyage du site statique</p>
 <ul>
@@ -703,10 +919,29 @@ nom la aussi aurait pu etre plus métier DDD</li>
     &#34;&#34;&#34;
     outPath = conf[&#39;outputPath&#39;]
     fichierCss = conf[&#39;style&#39;]  # TODO pouvoir en parser plusieurs ?
-    os.mkdir(outPath + &#39;media&#39;)  # FIX Linux
-    shutil.copy(fichierCss, outPath + &#39;media/style.css&#39;)  # TODO pas en dur</code></pre>
+    os.mkdir(outPath + &#39;assets&#39;)  # FIX Linux
+    shutil.copy(fichierCss, outPath + &#39;assets/style.css&#39;)  # TODO pas en dur</code></pre>
 </details>
 <div class="desc"><p>recuperation de la feuille de style</p></div>
+</dd>
+<dt id="marss.deplacerDossierMedia"><code class="name flex">
+<span>def <span class="ident">deplacerDossierMedia</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deplacerDossierMedia():
+    &#34;&#34;&#34;recuperation des images
+    &#34;&#34;&#34;
+    destination = os.path.join(conf[&#39;outputPath&#39;], &#34;Media&#34;)
+    source = os.path.join(conf[&#39;inputPath&#39;], &#39;../Media&#39;)
+    elements = os.listdir(source)
+    print(&#34;Media pris ici:&#34;, source, &#34;\nAvec fichiers:&#34;, elements)
+    shutil.copytree(source, destination)</code></pre>
+</details>
+<div class="desc"><p>recuperation des images</p></div>
 </dd>
 <dt id="marss.lancerServeurDebug"><code class="name flex">
 <span>def <span class="ident">lancerServeurDebug</span></span>(<span>)</span>
@@ -766,15 +1001,22 @@ nom la aussi aurait pu etre plus métier DDD</li>
 <li><code><a title="marss.creerLiensMenu" href="#marss.creerLiensMenu">creerLiensMenu</a></code></li>
 <li><code><a title="marss.afficherMenu" href="#marss.afficherMenu">afficherMenu</a></code></li>
 <li><code><a title="marss.afficherLiensFooter" href="#marss.afficherLiensFooter">afficherLiensFooter</a></code></li>
-<li><code><a title="marss.afficherPostsDeCategorie" href="#marss.afficherPostsDeCategorie">afficherPostsDeCategorie</a></code></li>
+<li><code><a title="marss.helper_fichierCorrespondance" href="#marss.helper_fichierCorrespondance">helper_fichierCorrespondance</a></code></li>
 <li><code><a title="marss.lireLeMarkdown" href="#marss.lireLeMarkdown">lireLeMarkdown</a></code></li>
+<li><code><a title="marss.extraitDeMarkdown" href="#marss.extraitDeMarkdown">extraitDeMarkdown</a></code></li>
 <li><code><a title="marss.remplacerExtensionDansContenu" href="#marss.remplacerExtensionDansContenu">remplacerExtensionDansContenu</a></code></li>
+<li><code><a title="marss.remplacerPathMedia" href="#marss.remplacerPathMedia">remplacerPathMedia</a></code></li>
+<li><code><a title="marss.afficherPostsDeCategorie" href="#marss.afficherPostsDeCategorie">afficherPostsDeCategorie</a></code></li>
 <li><code><a title="marss.liensPrecedentSuivant" href="#marss.liensPrecedentSuivant">liensPrecedentSuivant</a></code></li>
+<li><code><a title="marss.dateMiseAjour" href="#marss.dateMiseAjour">dateMiseAjour</a></code></li>
+<li><code><a title="marss.nombreDeMots" href="#marss.nombreDeMots">nombreDeMots</a></code></li>
+<li><code><a title="marss.tempsDeLecture" href="#marss.tempsDeLecture">tempsDeLecture</a></code></li>
 <li><code><a title="marss.afficherInfosPost" href="#marss.afficherInfosPost">afficherInfosPost</a></code></li>
 <li><code><a title="marss.ajouterEtTransformerEnHtml" href="#marss.ajouterEtTransformerEnHtml">ajouterEtTransformerEnHtml</a></code></li>
 <li><code><a title="marss.creerFichierHtml" href="#marss.creerFichierHtml">creerFichierHtml</a></code></li>
 <li><code><a title="marss.supprimerFichiersDuRepertoireHtml" href="#marss.supprimerFichiersDuRepertoireHtml">supprimerFichiersDuRepertoireHtml</a></code></li>
 <li><code><a title="marss.recreerDossierMediaDeplacerStyle" href="#marss.recreerDossierMediaDeplacerStyle">recreerDossierMediaDeplacerStyle</a></code></li>
+<li><code><a title="marss.deplacerDossierMedia" href="#marss.deplacerDossierMedia">deplacerDossierMedia</a></code></li>
 <li><code><a title="marss.lancerServeurDebug" href="#marss.lancerServeurDebug">lancerServeurDebug</a></code></li>
 </ul>
 </li>

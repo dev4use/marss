@@ -32,8 +32,10 @@ pip install -r requirements.txt
 
 
 1. Dans le dossier **Content**, gérer le contenu sous forme de fichiers markdown avec ```l'extension .md``` puisque c'est un site statique de transformation de markdown en html. 
+1. Pour gérer des images éventuelles incluses dans vos fichiers markdown, disposer ces images/medias dans le dossier **Media** au même niveau que Content
 1. Dans le dossier **Conf**, un fichier yaml permet de gérer la configuration de manière explicite.
-1. Pour la version STANDARD de l'applicatif qui est non intrusive en méta données, ajouter au nom de fichier```le préfixe en majuscule < PREF- >```qui permet de déterminer la catégorie unique d'appartenance du billet.
+1. Pour la version STANDARD de l'applicatif qui est non intrusive en méta données, ajouter au nom de fichier ```le préfixe en majuscule < PREF- >```qui permet de déterminer la catégorie unique d'appartenance du billet.
+1. Pour la version STANDARD de l'applicatif qui est non intrusive en méta données, mettre [un chapô](https://www.href.fr/redaction-web-quest-ce-quun-chapo-et-comment-bien-le-rediger/) ou ```texte d'accroche entre le titre de niveau 1 et le titre de niveau 2 du post``` pour qu'un extrait soit automatiquement généré en page de catégorie.
 1. Pour publier ou prévisualiser le contenu, ouvrir la console depuis le dossier du dépôt Git.
     ```
     # A la racine du 'repository' (et dans l'environnement virtuel ?) taper

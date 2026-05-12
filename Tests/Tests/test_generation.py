@@ -104,6 +104,10 @@ def test_html_avec_categorie_par_defaut():
 def test_transformer_les_liens_md():
     pass
 
+@scenario("generation.feature", "transformer le chemin image")
+def test_changer_chemin_image_md():
+    pass
+
 @scenario("generation.feature", "récupérer le contenu md de la page d'accueil")
 def test_contenu_initial_accueil():
     pass
@@ -130,6 +134,10 @@ def test_menu_site():
 
 @scenario("generation.feature", "identifier les liens des posts précédent et suivant")
 def test_liens_precedent_suivant():
+    pass
+
+@scenario("generation.feature", "récupérer les infos du markdown")
+def test_infos_markdown():
     pass
 
 @scenario("generation.feature", "afficher les liens des posts précédent et suivant")

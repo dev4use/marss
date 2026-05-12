@@ -15,6 +15,8 @@ ensemble des éléments GWT appelés
 
 here = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 herePath = file_path = Path(here)
+monRepertoire = Path(__file__).parents[1]
+# repertoire = os.path.dirname(__file__)
 
 #----------------------- MAINTENANCE
 
@@ -155,6 +157,14 @@ def dataset_mixte_indiquer(echanges):
 def liens_md_en_contenu(echanges):
     echanges["contenu"] = data.contenuMd_avecLiensMd
 
+@given("j'ai des images en contenu md")
+def liens_md_en_contenu(echanges):
+    echanges["contenu"] = """
+    # ici
+
+    ![dette technique](../Media/dette-technique.png "dette technique")
+    """
+
 @when("je souhaite récupérer le contenu de la page d'accueil")
 def recuperer_accueil(echanges):
     echanges["contenu"] = lireLeMarkdown('home')
@@ -171,6 +181,13 @@ def transformer_liens_md(echanges):
     changer['old'] = ".md"
     changer['new'] = ".html"
     echanges["contenuMd_avecLiensHtml"] = remplacerExtensionDansContenu(echanges["contenu"], pattern, changer)
+
+@when("je veux transformer ces chemins")
+def transformer_chemins_images_md(echanges):
+    changer = dict()
+    changer['contenu'] = "(../Media"
+    changer['site'] = "(Media"
+    echanges["changer"] = changer
 
 @when("Je Récupère Les Fichiers")
 def dataset_mixte_recuperer(echanges):
@@ -198,6 +215,11 @@ def controler_contenu_accueil(echanges):
 def visualiser_liens_transformes_en_html(echanges):
     # print(echanges["contenuMd_avecLiensHtml"])
     assert echanges["contenuMd_avecLiensHtml"] == data.expected_contenuMd_avecLiensHtml
+
+@then("je me retrouve avec des chemins modifiés")
+def visualiser_chemins_transformes(echanges):
+    actual = remplacerPathMedia(echanges["contenu"], echanges["changer"])
+    assert "(Media" in actual
 
 @then("Je Recois La Liste Des Fichiers Markdown Exclusivement")
 def liste_markdown(echanges):
@@ -426,11 +448,10 @@ def demander_menu_footer(echanges):
 def demander_menu_footer(echanges, args):
 
     if args == "le dossier media":
-
-        recreerDossierMediaDeplacerStyle()
-
+        recreerDossierMediaDeplacerStyle()   
+    elif args == "le dossier image":
+        deplacerDossierMedia()
     elif args == "le fichier html de chaque contenu":
-
         # pour changer extension hyperlien markdown
         pattern = r'(?<=\]\().*?(?=\s|\))'
         changer = dict()
@@ -577,9 +598,11 @@ def presence_menu_footer(echanges, presence_menu):
 @then(parsers.parse("on a {args} présent dans le dossier"))
 def presence_fichier_dossier(echanges, args, nettoyer):
     if args == "le style css du site":          
-        file = os.path.exists(f'{here}/Dataset/WebSite-reference/media/style.css')
+        file = os.path.exists(f'{here}/Dataset/WebSite-reference/assets/style.css')
         assert file == True
-        # nettoyer  # (f'{here}/Dataset/WebSite-reference')
+    elif args == "le dossier image ":
+        dir = os.path.isdir(f'{here}/Dataset/WebSite-reference/Media/')
+        assert dir == True
     elif args == "chaque fichier html du contenu":
         expected_list = data.propre_pagesHtml
         inPath = echanges['conf']['inputPath']
@@ -644,6 +667,19 @@ def liste_de_liens(echanges, nombre):
             {'label': 'milieu', 'url': 'milieu.html'}, 
             {'label': 'dernier', 'url': 'dernier.html'}
             ]
+        ref = [('TEST',
+                'premier',
+                'premier.html',
+                Path(f'{here}/Dataset/Content/premier.md')),
+                ('TEST',
+                'milieu',
+                'milieu.html',
+                Path(f'{here}/Dataset/Content/milieu.md')),
+                ('TEST',
+                'dernier',
+                'dernier.html',
+                Path(f'{here}/Dataset/Content/dernier.md'))]
+        echanges["ref"] = ref
     elif nombre == 2:
         data =  [{'label': 'premier', 'url': 'premier.html'}, 
             {'label': 'milieu', 'url': 'milieu.html'} 
@@ -677,7 +713,8 @@ def lien_suivant(echanges, suivant):
 @when(parsers.parse("j'affiche le post {index}"))
 def liste_de_liens(echanges, index):
     res_precedent, res_suivant = liensPrecedentSuivant(courant=index + ".html", liste=echanges["data"])
-    echanges["html"] = afficherInfosPost(res_precedent, res_suivant)
+    # on ne teste pas ici les 2 derniers arguments
+    echanges["html"] = afficherInfosPost(res_precedent, res_suivant, "1920-12-01", 150, "0 min")
     print("HTML infosPost:", echanges["html"])
 
 @then(parsers.parse("j'ai ce résultat {affichage}"))
@@ -689,10 +726,9 @@ def affichage_liens_suivant_precedent(echanges, affichage):
 
 @when("j'affiche les posts de la catégorie")
 def affichage_posts_categorie(echanges):
-    res = afficherPostsDeCategorie(echanges["data"])
-    print(res)
+    res = afficherPostsDeCategorie(echanges["data"], echanges["ref"])
+    # print(res)
     echanges["res"] = res
-    pass
 
 @then("j'ai mes liens pour chaque post")
 def liens_posts_categorie(echanges):
@@ -700,12 +736,38 @@ def liens_posts_categorie(echanges):
     soup = BeautifulSoup(echanges["res"], features='html.parser')
     liste = soup.find_all("li")
     liens = soup.find_all("a")
+    # print(liens)
     assert len(liste) == 3
     assert len(liens) == 3
-    # test exact très fragile
-    liste_de_posts = '<ol class="">\n<li><a href="premier.html" class="">premier</a></li>\n<li><a href="milieu.html" class="">milieu</a></li>\n<li><a href="dernier.html" class="">dernier</a></li>\n</ol>\n'
-    # ne doit pas etre """..."""
-    assert  echanges["res"]  == liste_de_posts
+    # bs4 : pas liste avec "" mais objet : est en tuple ? 
+    attendu = [ {"label": "premier", "link":"premier.html"},
+               {"label": "milieu", "link":"milieu.html"},
+               {"label": "dernier", "link":"dernier.html"}
+                ]   
+    for el, att in zip(liens, attendu):
+        # print(el['href'], el.get_text(), att["link"], att["label"])
+        assert el['href'] == att["link"]
+        assert el.get_text() == att["label"]
+
+@then("j'ai mon extrait pour chaque post")
+def posts_categorie_extrait(echanges):
+    print(echanges["res"])
+    soup = BeautifulSoup(echanges["res"], features='html.parser')
+    liste = soup.find_all("li")
+    # 1 n'a pas de [...] 2 et 3 si
+    # 2 et 3 hors [...] ne dépassent pas 120 + 7 avec espaces...
+    # print("liste:", liste)
+    i = 0
+    for el in liste:
+        i += 1
+        # print("-", i, el.get_text())
+        if i == 1:
+            assert "[...]" not in el.get_text()
+        else:
+            assert "[...]" in el.get_text()
+            size = len(el.get_text())
+            # print(size)
+            assert len(el.get_text()) < 130  # oblige de prendre de la marge
 
 @given("le répertoire de destination n'est pas vide")
 def dossier_non_vide(echanges):
@@ -722,3 +784,36 @@ def dossier_non_vide(echanges):
 def dossier_vide(echanges):
     assert len(os.listdir(echanges['conf']['outputPath'])) == 1
     # .keep seul fichier
+
+@given("mon fichier comporte 200 mots")
+def fichier_seuil_minute(echanges):
+    
+    print("\n\ndir:", monRepertoire)
+    # Tests/Tests/test_generation.py::test_infos_markdown
+    # echanges["fichier"] = os.path.join(repertoire, "../Dataset/motsEtDate.md")  # cas d'erreur
+    echanges["fichier"] = monRepertoire / "Dataset" / "motsEtDate.md"
+    # join tr-s simple en pathLib
+    # # here + "../Dataset/motsEtDate.md"
+
+@when("je récupère les informations du fichier")
+def fichier_infos(echanges):
+    # obligatoirement en PathLib, sinon erreur
+    maj = dateMiseAjour(echanges["fichier"])
+    echanges["maj"] = maj
+    echanges["contenu"] =lireLeMarkdown(echanges["fichier"])
+
+@then("j'ai la date de modification du fichier")
+def fichier_date(echanges):
+    assert echanges["maj"] == "2026-05-08"
+
+@then("j'ai le nombre de mots du fichier")
+def fichier_mots(echanges):
+    echanges["taille"] = nombreDeMots(echanges["contenu"])
+    assert echanges["taille"] == 200
+    # print(echanges["taille"])
+
+@then("j'ai le temps de lecture du fichier")
+def fichier_lecture(echanges):
+    duree = tempsDeLecture(echanges["taille"])
+    assert duree == "1 min"
+

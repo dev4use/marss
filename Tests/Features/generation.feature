@@ -85,6 +85,12 @@ Feature: Générer le site statique
         Then je me retrouve avec des liens html
 
     @nominal
+    Scenario: transformer le chemin image
+        Given j'ai des images en contenu md
+        When je veux transformer ces chemins
+        Then je me retrouve avec des chemins modifiés
+
+    @nominal
     Scenario: afficher le menu du site
         Given la liste de libellé url
         When je demande le menu des pages
@@ -116,13 +122,21 @@ Feature: Générer le site statique
 
         Examples: sortie html nominale
         | nombre | index   | affichage |
-        | 3      | milieu  | < <a href="premier.html">premier</a> \| ... \| <a href="dernier.html">dernier</a> >|
+        | 3      | milieu  | < <a href="premier.html">premier</a> \| 1920-12-01 - 0 min (150 mots) \| <a href="dernier.html">dernier</a> >|
         | 1      | premier  | aucun |
  
+    Scenario: récupérer les infos du markdown
+        Given mon fichier comporte 200 mots
+        When je récupère les informations du fichier
+        Then j'ai la date de modification du fichier
+        Then j'ai le nombre de mots du fichier
+        Then j'ai le temps de lecture du fichier
+
     Scenario: afficher les posts d'une catégorie
         Given ma liste comporte <nombre> posts
         When j'affiche les posts de la catégorie
         Then j'ai mes liens pour chaque post
+        Then j'ai mon extrait pour chaque post
 
         Examples:
         |nombre|
@@ -183,9 +197,12 @@ Feature: Générer le site statique
         Given est finalisé chaque contenu html
         When on nettoie le dossier destination
         When on dépose le dossier media dans le dossier
+        When on dépose le dossier image dans le dossier
         When on dépose le fichier html de chaque contenu dans le dossier
         Then on a le style css du site présent dans le dossier
+        Then on a le dossier image présent dans le dossier
         Then on a chaque fichier html du contenu présent dans le dossier
+
 
     @nominal
     Scenario: visualiser le site statique

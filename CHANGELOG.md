@@ -2,6 +2,15 @@
 
 Suivi des changements de version par classement antéchronologique.
 
+## ST-2.0.0
+
+### Ajouts
+
+1. **contenu** : en page de catégorie, extrait du post
+1. contenu: gestion des images locales incluses dans les markdown
+1. **navigation** : nombre de mots du post et temps de lecture
+1. navigation : date de mise à jour du post
+
 ## ST-1.1.0 - 2026-05-08
 
 ### Correctifs

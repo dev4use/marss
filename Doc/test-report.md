@@ -1,13 +1,13 @@
 # Test Report
 
-**Generated**: 2026-05-07 17:57:43
+**Generated**: 2026-05-12 18:28:02
 
 ## Summary
-- **Total Tests**: 32
-- **Passed**: 32
+- **Total Tests**: 34
+- **Passed**: 34
 - **Failed**: 0
 - **Skipped**: 0
-- **Total Duration**: 2.92s
+- **Total Duration**: 3.17s
 
 ## Test Results
 
@@ -37,14 +37,14 @@
 
 #### [PASS] Scenario: récupérer la configuration externe
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
 
 1. [PASS] **Given** Je Précise La Configuration (0.00s)
 
-2. [PASS] **When** je récupère la configuration (0.00s)
+2. [PASS] **When** je récupère la configuration (0.01s)
 
 3. [PASS] **Then** Je Recois La Configuration Personnalisée (0.00s)
 
@@ -69,7 +69,7 @@
 
 #### [PASS] Scenario: récupérer la configuration avec erreur de format
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -90,7 +90,7 @@
 
 **Steps:**
 
-1. [PASS] **Given** j'ai un fichier de log configuré (0.00s)
+1. [PASS] **Given** j'ai un fichier de log configuré (0.01s)
 
 2. [PASS] **When** je veux logger un événement (0.00s)
 
@@ -119,7 +119,7 @@
 
 #### [PASS] Scenario: récupérer les fichiers markdown présents en contenu
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -175,7 +175,7 @@
 
 #### [PASS] Scenario: récupérer des fichiers html, parfois incomplets
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -205,14 +205,30 @@
 
 
 
-#### [PASS] Scenario: récupérer le contenu md de la page d'accueil
+#### [PASS] Scenario: transformer le chemin image
 - **Status**: PASSED
 - **Duration**: 0.02s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
+1. [PASS] **Given** j'ai des images en contenu md (0.00s)
+
+2. [PASS] **When** je veux transformer ces chemins (0.00s)
+
+3. [PASS] **Then** je me retrouve avec des chemins modifiés (0.00s)
+
+
+
+
+#### [PASS] Scenario: récupérer le contenu md de la page d'accueil
+- **Status**: PASSED
+- **Duration**: 0.03s
+
+
+**Steps:**
+
+1. [PASS] **Given** la page d'accueil est en configuration (0.02s)
 
 2. [PASS] **When** je souhaite récupérer le contenu de la page d'accueil (0.00s)
 
@@ -223,14 +239,14 @@
 
 #### [PASS] Scenario: récupérer le contenu html de la page d'accueil
 - **Status**: PASSED
-- **Duration**: 0.09s
+- **Duration**: 0.10s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
 
-2. [PASS] **When** je souhaite récupérer le contenu html de la page d'accueil (0.07s)
+2. [PASS] **When** je souhaite récupérer le contenu html de la page d'accueil (0.08s)
 
 3. [PASS] **Then** j'ai le lien accueil actif (0.00s)
 
@@ -239,12 +255,12 @@
 
 #### [PASS] Scenario: créer le fichier html de l'accueil
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
 
-1. [PASS] **Given** la page d'accueil est en configuration (0.00s)
+1. [PASS] **Given** la page d'accueil est en configuration (0.01s)
 
 2. [PASS] **When** je souhaite créer le fichier html de la page d'accueil (0.00s)
 
@@ -260,7 +276,7 @@
 
 **Steps:**
 
-1. [PASS] **Given** le menu de page est en configuration (0.00s)
+1. [PASS] **Given** le menu de page est en configuration (0.01s)
 
 2. [PASS] **When** je souhaite récupérer le contenu html d'une page forçant le plan de page (0.00s)
 
@@ -271,7 +287,7 @@
 
 #### [PASS] Scenario: récupérer les liens de toutes les pages
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -287,18 +303,18 @@
 
 #### [PASS] Scenario: afficher le menu du site
 - **Status**: PASSED
-- **Duration**: 0.02s
+- **Duration**: 0.03s
 
 
 **Steps:**
 
 1. [PASS] **Given** la liste de libellé url (0.00s)
 
-2. [PASS] **When** je demande le menu des pages (0.00s)
+2. [PASS] **When** je demande le menu des pages (0.01s)
 
 3. [PASS] **Then** j'ai une liste par catégorie (0.01s)
 
-4. [PASS] **Then** j'ai toutes les pages dans les bonnes catégories (0.00s)
+4. [PASS] **Then** j'ai toutes les pages dans les bonnes catégories (0.01s)
 
 
 
@@ -323,7 +339,7 @@
 
 #### [PASS] Scenario: identifier les liens des posts précédent et suivant
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.02s
 
 
 **Steps:**
@@ -411,6 +427,26 @@
 
 
 
+#### [PASS] Scenario: récupérer les infos du markdown
+- **Status**: PASSED
+- **Duration**: 0.02s
+
+
+**Steps:**
+
+1. [PASS] **Given** mon fichier comporte 200 mots (0.00s)
+
+2. [PASS] **When** je récupère les informations du fichier (0.00s)
+
+3. [PASS] **Then** j'ai la date de modification du fichier (0.00s)
+
+4. [PASS] **Then** j'ai le nombre de mots du fichier (0.00s)
+
+5. [PASS] **Then** j'ai le temps de lecture du fichier (0.00s)
+
+
+
+
 #### [PASS] Scenario: afficher les liens des posts précédent et suivant
 - **Status**: PASSED
 - **Duration**: 0.01s
@@ -422,7 +458,7 @@
 
 2. [PASS] **When** j'affiche le post milieu (0.00s)
 
-3. [PASS] **Then** j'ai ce résultat < <a href="premier.html">premier</a> | ... | <a href="dernier.html">dernier</a> > (0.00s)
+3. [PASS] **Then** j'ai ce résultat < <a href="premier.html">premier</a> | 1920-12-01 - 0 min (150 mots) | <a href="dernier.html">dernier</a> > (0.00s)
 
 
 
@@ -445,16 +481,18 @@
 
 #### [PASS] Scenario: afficher les posts d'une catégorie
 - **Status**: PASSED
-- **Duration**: 0.01s
+- **Duration**: 0.03s
 
 
 **Steps:**
 
 1. [PASS] **Given** ma liste comporte 3 posts (0.00s)
 
-2. [PASS] **When** j'affiche les posts de la catégorie (0.00s)
+2. [PASS] **When** j'affiche les posts de la catégorie (0.01s)
 
 3. [PASS] **Then** j'ai mes liens pour chaque post (0.00s)
+
+4. [PASS] **Then** j'ai mon extrait pour chaque post (0.00s)
 
 
 
@@ -488,7 +526,7 @@
 
 2. [PASS] **Given** les pages correspondant au préfixe footer sont absentes (0.00s)
 
-3. [PASS] **When** je demande le menu footer (0.01s)
+3. [PASS] **When** je demande le menu footer (0.00s)
 
 4. [PASS] **Then** j'ai le menu footer absent en pied de page (0.00s)
 
@@ -506,7 +544,7 @@
 
 2. [PASS] **Given** les pages correspondant au préfixe footer sont absentes (0.00s)
 
-3. [PASS] **When** je demande le menu footer (0.00s)
+3. [PASS] **When** je demande le menu footer (0.01s)
 
 4. [PASS] **Then** j'ai le menu footer absent en pied de page (0.00s)
 
@@ -533,12 +571,12 @@
 
 #### [PASS] Scenario: disposer de tous les fichiers du site statique
 - **Status**: PASSED
-- **Duration**: 0.05s
+- **Duration**: 0.06s
 
 
 **Steps:**
 
-1. [PASS] **Given** est finalisé le referentiel des pages (0.01s)
+1. [PASS] **Given** est finalisé le referentiel des pages (0.02s)
 
 2. [PASS] **Given** est finalisé chaque menu (0.00s)
 
@@ -548,18 +586,22 @@
 
 5. [PASS] **When** on dépose le dossier media dans le dossier (0.00s)
 
-6. [PASS] **When** on dépose le fichier html de chaque contenu dans le dossier (0.01s)
+6. [PASS] **When** on dépose le dossier image dans le dossier (0.00s)
 
-7. [PASS] **Then** on a le style css du site présent dans le dossier (0.00s)
+7. [PASS] **When** on dépose le fichier html de chaque contenu dans le dossier (0.01s)
 
-8. [PASS] **Then** on a chaque fichier html du contenu présent dans le dossier (0.00s)
+8. [PASS] **Then** on a le style css du site présent dans le dossier (0.00s)
+
+9. [PASS] **Then** on a le dossier image présent dans le dossier (0.00s)
+
+10. [PASS] **Then** on a chaque fichier html du contenu présent dans le dossier (0.00s)
 
 
 
 
 #### [PASS] Scenario: visualiser le site statique
 - **Status**: PASSED
-- **Duration**: 2.05s
+- **Duration**: 2.06s
 
 
 **Steps:**

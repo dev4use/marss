@@ -68,13 +68,28 @@ Functions
     - le retour peut etre null, sans lien
     - style : ul class = postFooter /  li class active si post en cours
 
-`afficherPostsDeCategorie(liens)`
-:   
+`helper_fichierCorrespondance(ref, search)`
+:   recuperer le path du fichier md
+    
+    - search : avec le nom de fichier html
+    - ref : le referentiel des pages pour correspondance
+    - retrouver le path du fichier md : position 4 du tuple ci dessous
+    (   'BUG',
+        '040 nom categorie dans lien post',
+        'BUG-040-nom-categorie-dans-lien-post.html',
+         PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')
 
 `lireLeMarkdown(file)`
 :   recuperation du contenu .md
     
     - besoin du path reel vers md
+
+`extraitDeMarkdown(texte)`
+:   recuperation d'un extrait du chapo sous h1
+    
+    - prérequis : h1, h2, contenu sous h1
+    - entrant : texte markdown
+    - sortant : texte avec [...] si tronque
 
 `remplacerExtensionDansContenu(content, pattern, changer)`
 :   remplacer une extension trouvee dans un pattern
@@ -83,6 +98,17 @@ Functions
     - retourner le contenu avec le remplacement effectue
     - le  nom la aussi aurait pu etre plus métier DDD
 
+`remplacerPathMedia(content, changer)`
+:   Remplacer le lien vers les medias images
+    
+    - Dans content, est "../Media"
+    - Dans WebSite, est "Media"
+
+`afficherPostsDeCategorie(liens, referentiel)`
+:   afficher les posts par catégorie
+    
+    - fonction de type integration : appelle d'autres fonctions
+
 `liensPrecedentSuivant(courant='', liste='')`
 :   presenter les liens de post : precedent suivant
     
@@ -90,7 +116,24 @@ Functions
     - cibler le contexte : posts de la categorie
     - sortie : dictionnaires vides ou avec clés url label pour precedent et suivant
 
-`afficherInfosPost(precedent, suivant)`
+`dateMiseAjour(pathFichier)`
+:   date de mise a jour du fichier markdown
+    
+    - entrant : chemin PathLib du fichier markdown
+    - sortant : date formattee
+
+`nombreDeMots(text)`
+:   compter le nombre de mots, hors balises markdown
+    
+    - depuis : https://github.com/gandreadis/markdown-word-count/blob/master/mwc/counter.py
+
+`tempsDeLecture(totalDeMots)`
+:   estimer le temps de lecture
+    
+    - entrant : nombre de mots en integer
+    - sortant : temps avec unite de temps
+
+`afficherInfosPost(precedent, suivant, modif, mots, temps)`
 :   afficher des informations liees au post
     
     - lien precedent suivant
@@ -115,6 +158,9 @@ Functions
 
 `recreerDossierMediaDeplacerStyle()`
 :   recuperation de la feuille de style
+
+`deplacerDossierMedia()`
+:   recuperation des images
 
 `lancerServeurDebug()`
 :   lancement du serveur de debug

@@ -21,21 +21,23 @@ def main():
 
     mdFiles = marss.listerFichiersExtensionRepertoire()
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
-    menuListe = marss.creerLiensMenu(referentiel)
+    menuListe = marss.creerLiensMenu(referentiel)  # + extraitDeMarkdown(texte) ?
     marss.aideLoggerFichier("sous menu", menuListe['EB'])
     # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active VousEtesIci
     marss.aideLoggerFichier("listeMarkdown", mdFiles)
     marss.aideLoggerFichier("listeAvecHtml", referentiel)
     marss.aideLoggerFichier("listeLiens", menuListe)
-
     marss.supprimerFichiersDuRepertoireHtml()
     marss.recreerDossierMediaDeplacerStyle()  # BUG-
+    marss.deplacerDossierMedia()
 
     # pour changer extension hyperlien markdown
     pattern = r'(?<=\]\().*?(?=\s|\))'
     changer = dict()
     changer['old'] = ".md"
     changer['new'] = ".html"
+    changer['contenu'] = "(../Media"
+    changer['site'] = "(Media"
 
     inFooter = conf['footerLiens']
 
@@ -46,12 +48,15 @@ def main():
         filePath = element[3]
         md_text = marss.lireLeMarkdown(filePath)
         md_text = marss.remplacerExtensionDansContenu(md_text, pattern, changer)
+        md_text = marss.remplacerPathMedia(md_text, changer)
         menuHtml = marss.afficherMenu(menuListe, fileName)
         footer = marss.afficherLiensFooter(menuListe, fileName)
         precedent, suivant = marss.liensPrecedentSuivant(liste=menuListe[famille], courant=fileName)
         if famille != inFooter:
-            infos = marss.afficherInfosPost(precedent, suivant)
-            # print(infos)
+            dateModification = marss.dateMiseAjour(filePath)
+            tailleFichier = marss.nombreDeMots(md_text)
+            tempsFichier = marss.tempsDeLecture(tailleFichier)
+            infos = marss.afficherInfosPost(precedent, suivant, dateModification, tailleFichier, tempsFichier)
         else:
             infos = ""
         html = marss.ajouterEtTransformerEnHtml(infos, md_text, title, famille, menuHtml, footer, "post")
@@ -73,7 +78,7 @@ def main():
             md_text += "<p>" + titre + "</p>"
             md_text += "<p>" + description + "</p>"
             marss.aideLoggerFichier(f"sous menu dynamique pour : {element}", menuListe[element])
-            menuCat = marss.afficherPostsDeCategorie(menuListe[element])
+            menuCat = marss.afficherPostsDeCategorie(menuListe[element], referentiel)  # EVOL
             footer = marss.afficherLiensFooter(menuListe, "index.html")
             famille = ""  # EVOL-lien-categorie
             infos = ""

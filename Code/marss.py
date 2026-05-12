@@ -24,6 +24,8 @@ import argparse
 import platform
 import pprint
 import contextlib
+from datetime import datetime
+import textwrap
 
 
 def recupererCmdLine(myConf=None):  # pragma: no cover
@@ -194,6 +196,8 @@ def creerLiensMenu(referentiel):
             # TODO: enlever 1er mot en uppercase ici ou avant
             descriptif['url'] = element[2]
             liens.append(descriptif)  # element[1]
+            # en meme temps, gerer le contenu de l'extrait md ? NON
+            # rester referentiel
         result[key] = liens  # 'test'
     return result
 
@@ -243,14 +247,20 @@ def afficherLiensFooter(liens, vousEtesIci):
     return menu
 
 
-def afficherPostsDeCategorie(liens):
-    menu = ''
-    menu += '<ol class="">\n'
-    for e in liens:
-        menu += '<li><a href="' + e['url'] + '" class="">' + e['label'] + '</a></li>\n'
-        # tuple indices must be integers or slices, not str
-    menu += '</ol>\n'
-    return menu
+def helper_fichierCorrespondance(ref, search):
+    """recuperer le path du fichier md
+
+    - search : avec le nom de fichier html
+    - ref : le referentiel des pages pour correspondance
+    - retrouver le path du fichier md : position 4 du tuple ci dessous
+    (   'BUG',
+        '040 nom categorie dans lien post',
+        'BUG-040-nom-categorie-dans-lien-post.html',
+         PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-post.md')
+    """
+    res = list(filter(lambda tup: search in tup, ref))
+
+    return res[0][3]
 
 
 def lireLeMarkdown(file):
@@ -263,6 +273,36 @@ def lireLeMarkdown(file):
     f = open(file, "r")
     md_text = f.read()
     return md_text
+
+
+def extraitDeMarkdown(texte):
+    """recuperation d'un extrait du chapo sous h1
+
+    - prérequis : h1, h2, contenu sous h1
+    - entrant : texte markdown
+    - sortant : texte avec [...] si tronque
+    """
+
+    res = texte.splitlines()
+    # print("Tableau initial:", res)
+    res = list(filter(None, res))
+    # print("Tableau nettoye:", res)
+    start = [i for i, s in enumerate(res) if s.startswith('# ')]
+    debut = int(start[0])
+    assert len(start) == 1
+    stop = [i for i, s in enumerate(res) if s.startswith('## ')]
+    fin = int(stop[0])
+    assert len(stop) >= 1
+    debut += 1
+    res = res[debut:fin]
+    # print("Tableau cible:", res)
+    res = " ".join(res)
+    # print("Contenu cible:", res)
+    # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
+    res = textwrap.shorten(res, width=120, placeholder=" [...]")
+    # print("Contenu ecourte:", res)
+
+    return res
 
 
 def remplacerExtensionDansContenu(content, pattern, changer):
@@ -285,6 +325,38 @@ def remplacerExtensionDansContenu(content, pattern, changer):
     resultat = reduce(lambda a, kv: a.replace(*kv), aFaire.items(), content)
 
     return resultat
+
+
+def remplacerPathMedia(content, changer):
+    """Remplacer le lien vers les medias images
+
+    - Dans content, est "../Media"
+    - Dans WebSite, est "Media"
+    """
+    resultat = content.replace(changer['contenu'], changer['site'])
+
+    return resultat
+
+
+def afficherPostsDeCategorie(liens, referentiel):
+    """afficher les posts par catégorie
+
+    - fonction de type integration : appelle d'autres fonctions
+    """
+    menu = ''
+    menu += '<ol class="">\n'
+    for e in liens:
+        menu += '<li><a href="' + e['url'] + '" class="">' + e['label'] + '</a>'
+
+        mdFile = helper_fichierCorrespondance(referentiel, e['url'])
+        # Path bien recupere : can only concatenate str (not "PosixPath") to str
+        mdText = lireLeMarkdown(mdFile)
+        mdExtract = extraitDeMarkdown(mdText)
+        menu += ' ' + mdExtract
+
+        menu += '</li>\n'
+    menu += '</ol>\n'
+    return menu
 
 
 def liensPrecedentSuivant(courant="", liste=""):
@@ -323,7 +395,65 @@ def liensPrecedentSuivant(courant="", liste=""):
     return precedent, suivant
 
 
-def afficherInfosPost(precedent, suivant):
+def dateMiseAjour(pathFichier):
+    """date de mise a jour du fichier markdown
+
+    - entrant : chemin PathLib du fichier markdown
+    - sortant : date formattee
+    """
+    maj = pathFichier.stat().st_mtime
+    maj = datetime.fromtimestamp(maj).strftime("%Y-%m-%d")
+    return maj
+
+
+def nombreDeMots(text):
+    """compter le nombre de mots, hors balises markdown
+
+    - depuis : https://github.com/gandreadis/markdown-word-count/blob/master/mwc/counter.py
+    """
+
+    # Comments
+    text = re.sub(r'<!--(.*?)-->', '', text, flags=re.MULTILINE)
+    # Tabs to spaces
+    text = text.replace('\t', '    ')
+    # More than 1 space to 4 spaces
+    text = re.sub(r'[ ]{2,}', '    ', text)
+    # Footnotes
+    text = re.sub(r'^\[[^]]*\][^(].*', '', text, flags=re.MULTILINE)
+    # Indented blocks of code
+    text = re.sub(r'^( {4,}[^-*]).*', '', text, flags=re.MULTILINE)
+    # Custom header IDs
+    text = re.sub(r'{#.*}', '', text)
+    # Replace newlines with spaces for uniform handling
+    text = text.replace('\n', ' ')
+    # Remove images
+    text = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', text)
+    # Remove HTML tags
+    text = re.sub(r'</?[^>]*>', '', text)
+    # Remove special characters
+    text = re.sub(r'[#*`~\-–^=<>+|/:]', '', text)
+    # Remove footnote references
+    text = re.sub(r'\[[0-9]*\]', '', text)
+    # Remove enumerations
+    text = re.sub(r'[0-9#]*\.', '', text)
+
+    resultat = len(text.split())
+
+    return resultat
+
+
+def tempsDeLecture(totalDeMots):
+    """estimer le temps de lecture
+
+    - entrant : nombre de mots en integer
+    - sortant : temps avec unite de temps
+    """
+    motsParMinute = 200  # constante du secteur, inutile en conf (sauf pour test)
+    resultat = round(totalDeMots // motsParMinute)
+    return str(resultat) + " min"
+
+
+def afficherInfosPost(precedent, suivant, modif, mots, temps):
     """afficher des informations liees au post
 
     - lien precedent suivant
@@ -335,7 +465,7 @@ def afficherInfosPost(precedent, suivant):
     if 'url' not in precedent and 'url' not in suivant:
         html += ""
     else:
-        html += " ... "
+        html += " " + modif + " - " + temps + " (" + str(mots) + " mots) "
     if 'url' in suivant:
         html += f"| <a href=\"{suivant['url']}\">{suivant['label']}</a> >"
     return html
@@ -372,7 +502,7 @@ def ajouterEtTransformerEnHtml(infos, md_text, title, famille, menu, footer, typ
     html = '<html><head><title>' + title + '</title>'
     html += '<meta http-equiv="Content-type" content="text/html;'
     html += 'charset=utf-8" />'
-    html += '<link rel="stylesheet" href="/media/style.css" media="all">'
+    html += '<link rel="stylesheet" href="/assets/style.css" media="all">'
     html += '</head><body class="markdown-body">\n'  # EVOL-css-markdown class="markdown-body"
 
     if typeDePage == "home":
@@ -448,7 +578,8 @@ def supprimerFichiersDuRepertoireHtml():
         if path.isfile(f):
             print('suppression de', f)
             os.remove(f)
-    shutil.rmtree(os.path.join(outPath, 'media'), ignore_errors=True)
+    shutil.rmtree(os.path.join(outPath, 'assets'), ignore_errors=True)
+    shutil.rmtree(os.path.join(outPath, 'Media'), ignore_errors=True)
 
 
 def recreerDossierMediaDeplacerStyle():
@@ -456,8 +587,18 @@ def recreerDossierMediaDeplacerStyle():
     """
     outPath = conf['outputPath']
     fichierCss = conf['style']  # TODO pouvoir en parser plusieurs ?
-    os.mkdir(outPath + 'media')  # FIX Linux
-    shutil.copy(fichierCss, outPath + 'media/style.css')  # TODO pas en dur
+    os.mkdir(outPath + 'assets')  # FIX Linux
+    shutil.copy(fichierCss, outPath + 'assets/style.css')  # TODO pas en dur
+
+
+def deplacerDossierMedia():
+    """recuperation des images
+    """
+    destination = os.path.join(conf['outputPath'], "Media")
+    source = os.path.join(conf['inputPath'], '../Media')
+    elements = os.listdir(source)
+    print("Media pris ici:", source, "\nAvec fichiers:", elements)
+    shutil.copytree(source, destination)
 
 
 def lancerServeurDebug():  # pragma: no cover
