@@ -4,7 +4,7 @@ Suivi des changements de version par classement antéchronologique.
 Puisqu'il s'agit de la version PR pour PREMIUM,   
 les fonctionnalités supplémentaires de la version STANDARD sont explicitées.  
 
-## PR-0.1.0 - 2026-09
+## PR-0.1.0 - 2026-09-26
 
 Version intiale de l'applicatif.
 
