@@ -1,0 +1,5 @@
+version: standard
+dossierMdDestination : ../dev4use/Content
+dossierHtmlDestination: ../dev4use/docs
+dossierMdSource : Content
+dossierHtmlSource: WebSite
