@@ -22,7 +22,7 @@ def main():
     mdFiles = marss.listerFichiersExtensionRepertoire()
     referentiel = marss.creerReferentielPagesLiens(mdFiles)
     menuListe = marss.creerLiensMenu(referentiel)  # + extraitDeMarkdown(texte) ?
-    marss.aideLoggerFichier("sous menu", menuListe['EB'])
+    # marss.aideLoggerFichier("sous menu", menuListe['EB'])
     # menuHtml = marss.afficherMenu(menuListe)  # FIX-023 page active VousEtesIci
     marss.aideLoggerFichier("listeMarkdown", mdFiles)
     marss.aideLoggerFichier("listeAvecHtml", referentiel)
@@ -41,6 +41,7 @@ def main():
 
     inFooter = conf['footerLiens']
 
+    # toute page
     for element in referentiel:
         famille = element[0]  # EVOL-lien-categorie
         fileName = element[2]
@@ -62,6 +63,7 @@ def main():
         html = marss.ajouterEtTransformerEnHtml(infos, md_text, title, famille, menuHtml, footer, "post")
         marss.creerFichierHtml(fileName, html)
 
+    # page categorie
     for element in menuListe:  # EVOL-page-categorie
         if element != inFooter:
             marss.aideLoggerFichier("générer une page par rubrique", element)
@@ -89,6 +91,7 @@ def main():
             # ci dessus, par True, forcer desactivation menu en accueil
             marss.creerFichierHtml(element + ".html", html, False)
 
+    # page accueil
     md_text = marss.lireLeMarkdown('home')
     title = conf['projet']  # BUG-042
     menuHtml = marss.afficherMenu(menuListe, "index.html")

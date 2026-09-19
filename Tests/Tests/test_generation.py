@@ -148,6 +148,11 @@ def test_afficher_liens_precedent_suivant():
 def test_afficher_posts_categorie():
     pass
 
+@scenario("generation.feature", "gérer les cas anormaux d'extrait")
+def test_extraits_posts_anormaux():
+    pass
+
+
 @scenario("generation.feature", "afficher les liens du footer")
 # pas de parser pour un scenario, dommage pour lisibilité du rapport
 # @scenario("generation.feature", parsers.parse("afficher les liens du footer pour {cas}"))

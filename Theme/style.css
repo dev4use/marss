@@ -1004,6 +1004,7 @@
 }
 .cache {
   visibility: hidden
+  /* display: none; BUG remove separator */
 }
 .postCategorie li::before {
   content: " - ";

@@ -103,12 +103,14 @@ Feature: Générer le site statique
         Then j'ai en post precedent <precedent>
         Then j'ai en post suivant <suivant>
 
+        @nominal
         Examples: assez de posts
         | nombre | index   | precedent | suivant |
         | 3      | milieu  | premier   | dernier |
         | 3      | dernier | milieu   | premier |
         | 3      | premier | dernier  | milieu |
 
+        @alternatif
         Examples: pas assez de posts
         | nombre | index   | precedent | suivant |
         | 2      | milieu  |  premier  |  aucun  |
@@ -120,11 +122,17 @@ Feature: Générer le site statique
         When j'affiche le post <index>
         Then j'ai ce résultat <affichage>
 
+        @nominal
         Examples: sortie html nominale
         | nombre | index   | affichage |
         | 3      | milieu  | < <a href="premier.html">premier</a> \| 1920-12-01 - 0 min (150 mots) \| <a href="dernier.html">dernier</a> >|
+
+        @alternatif
+        Examples: sortie html alternative
+        | nombre | index   | affichage |
         | 1      | premier  | aucun |
- 
+
+    @nominal
     Scenario: récupérer les infos du markdown
         Given mon fichier comporte 200 mots
         When je récupère les informations du fichier
@@ -132,6 +140,7 @@ Feature: Générer le site statique
         Then j'ai le nombre de mots du fichier
         Then j'ai le temps de lecture du fichier
 
+    @nominal
     Scenario: afficher les posts d'une catégorie
         Given ma liste comporte <nombre> posts
         When j'affiche les posts de la catégorie
@@ -141,6 +150,18 @@ Feature: Générer le site statique
         Examples:
         |nombre|
         |3|
+
+    @robustesse
+    Scenario: gérer les cas anormaux d'extrait
+        Given mon post a <type de post>
+        When je génère l'extrait du post
+        Then j'ai un résultat <type de résultat>
+
+        Examples:
+        |type de post| type de résultat |
+        | un contenu après h1 vide | vide |
+        | un contenu sans h2 | vide |
+        | un contenu avec balises | sans balises |
 
     Scenario: afficher les liens du footer
         Given le préfixe footer est <presence_configuration> en configuration
@@ -202,7 +223,6 @@ Feature: Générer le site statique
         Then on a le style css du site présent dans le dossier
         Then on a le dossier image présent dans le dossier
         Then on a chaque fichier html du contenu présent dans le dossier
-
 
     @nominal
     Scenario: visualiser le site statique

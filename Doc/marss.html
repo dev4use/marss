@@ -455,7 +455,7 @@ PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-po
 
     - prérequis : h1, h2, contenu sous h1
     - entrant : texte markdown
-    - sortant : texte avec [...] si tronque
+    - sortant : texte avec [...] si tronque, rien si pas de h2
     &#34;&#34;&#34;
 
     res = texte.splitlines()
@@ -466,16 +466,33 @@ PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-po
     debut = int(start[0])
     assert len(start) == 1
     stop = [i for i, s in enumerate(res) if s.startswith(&#39;## &#39;)]
-    fin = int(stop[0])
-    assert len(stop) &gt;= 1
-    debut += 1
-    res = res[debut:fin]
-    # print(&#34;Tableau cible:&#34;, res)
-    res = &#34; &#34;.join(res)
-    # print(&#34;Contenu cible:&#34;, res)
-    # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
-    res = textwrap.shorten(res, width=120, placeholder=&#34; [...]&#34;)
-    # print(&#34;Contenu ecourte:&#34;, res)
+    if len(stop) == 0:
+        print(&#34;--- pas de H2 dans le post&#34;)
+        res = &#34;&#34;
+    else:
+        print(&#34;------ cas passant --------&#34;)
+        fin = int(stop[0])
+        assert len(stop) &gt;= 1
+        debut += 1
+        res = res[debut:fin]
+        # print(&#34;Tableau cible:&#34;, res)
+        res = &#34; &#34;.join(res)
+        # print(&#34;Contenu cible:&#34;, res)
+        # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
+
+        # nettoyer (duplication de code avec compter mots)
+        # Remove images
+        res = re.sub(r&#39;!\[[^\]]*\]\([^)]*\)&#39;, &#39;&#39;, res)
+        # Remove HTML tags
+        res = re.sub(r&#39;&lt;/?[^&gt;]*&gt;&#39;, &#39;&#39;, res)
+        # Remove special characters
+        res = re.sub(r&#39;[#*`~\-–^=&lt;&gt;+|/:]&#39;, &#39;&#39;, res)
+        # Remove enumerations
+        res = re.sub(r&#39;[0-9#]*\.&#39;, &#39;&#39;, res)
+        # Remove HYPERLINK : missing
+        res = re.sub(r&#34;\[(.+)\]\(.+\)&#34;, &#39;&#39;, res)
+
+        res = textwrap.shorten(res, width=120, placeholder=&#34; [...]&#34;)
 
     return res</code></pre>
 </details>
@@ -483,7 +500,7 @@ PosixPath('/home/user/Documents/marss/Content/BUG-040-nom-categorie-dans-lien-po
 <ul>
 <li>prérequis : h1, h2, contenu sous h1</li>
 <li>entrant : texte markdown</li>
-<li>sortant : texte avec [&hellip;] si tronque</li>
+<li>sortant : texte avec [&hellip;] si tronque, rien si pas de h2</li>
 </ul></div>
 </dd>
 <dt id="marss.remplacerExtensionDansContenu"><code class="name flex">
@@ -532,7 +549,7 @@ nom la aussi aurait pu etre plus métier DDD</li>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def remplacerPathMedia(content, changer):
-    &#34;&#34;&#34;Remplacer le lien vers les medias images
+    &#34;&#34;&#34;remplacer le lien vers les medias images
 
     - Dans content, est &#34;../Media&#34;
     - Dans WebSite, est &#34;Media&#34;
@@ -541,7 +558,7 @@ nom la aussi aurait pu etre plus métier DDD</li>
 
     return resultat</code></pre>
 </details>
-<div class="desc"><p>Remplacer le lien vers les medias images</p>
+<div class="desc"><p>remplacer le lien vers les medias images</p>
 <ul>
 <li>Dans content, est "../Media"</li>
 <li>Dans WebSite, est "Media"</li>

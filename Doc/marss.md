@@ -89,7 +89,7 @@ Functions
     
     - prérequis : h1, h2, contenu sous h1
     - entrant : texte markdown
-    - sortant : texte avec [...] si tronque
+    - sortant : texte avec [...] si tronque, rien si pas de h2
 
 `remplacerExtensionDansContenu(content, pattern, changer)`
 :   remplacer une extension trouvee dans un pattern
@@ -99,7 +99,7 @@ Functions
     - le  nom la aussi aurait pu etre plus métier DDD
 
 `remplacerPathMedia(content, changer)`
-:   Remplacer le lien vers les medias images
+:   remplacer le lien vers les medias images
     
     - Dans content, est "../Media"
     - Dans WebSite, est "Media"

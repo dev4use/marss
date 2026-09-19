@@ -207,7 +207,7 @@ def afficherMenu(liens, vousEtesIci):  # FIX-023
 
     - liste au format ul/li de l'ensemble des pages
     - style : ul class = postCategorie / span title / li class active si post en cours
-    - EVOL : deportee dasn une fonction dediee un peu dupliquee
+    - EVOL : deportee dans une fonction dediee un peu dupliquee
     """
     inFooter = conf['footerLiens']
     menu = ''
@@ -280,9 +280,8 @@ def extraitDeMarkdown(texte):
 
     - prérequis : h1, h2, contenu sous h1
     - entrant : texte markdown
-    - sortant : texte avec [...] si tronque
+    - sortant : texte avec [...] si tronque, rien si pas de h2
     """
-
     res = texte.splitlines()
     # print("Tableau initial:", res)
     res = list(filter(None, res))
@@ -291,16 +290,40 @@ def extraitDeMarkdown(texte):
     debut = int(start[0])
     assert len(start) == 1
     stop = [i for i, s in enumerate(res) if s.startswith('## ')]
-    fin = int(stop[0])
-    assert len(stop) >= 1
-    debut += 1
-    res = res[debut:fin]
-    # print("Tableau cible:", res)
-    res = " ".join(res)
-    # print("Contenu cible:", res)
-    # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
-    res = textwrap.shorten(res, width=120, placeholder=" [...]")
-    # print("Contenu ecourte:", res)
+    if len(stop) == 0:
+        print("--- pas de H2 dans le post")
+        res = ""
+    else:
+        fin = int(stop[0])
+        assert len(stop) >= 1
+        debut += 1
+        res = res[debut:fin]
+        # print("Tableau cible:", res)
+        res = " ".join(res)
+        # print("Contenu cible:", res)
+        # res = textwrap.fill(res, width=120, max_lines=1, drop_whitespace=False)
+
+        # nettoyer (duplication de code avec compter mots)
+        # Remove images
+        res = re.sub(r'!\[[^\]]*\]\([^)]*\)', '', res)
+        # Remove HTML tags
+        res = re.sub(r'</?[^>]*>', '', res)
+        # Remove special characters
+        res = re.sub(r'[#*`~\-–^=<>+|/:]', '', res)
+        # Remove enumerations
+        res = re.sub(r'[0-9#]*\.', '', res)
+        # ADDITIONS
+        # Remove HYPERLINK
+        res = re.sub(r"\[(.+)\]\(.+\)", '', res)
+        # Remove BOLD
+        res = re.sub(r"/\*\*(.*?)\*\*/", '', res)
+        # Remove ITALIC
+        res = re.sub(r"/\*(.*?)\*/", '', res)
+        res = re.sub(r"/\_(.*?)\_/", '', res)
+        # Remove Strikethrough
+        res = re.sub(r"/\~\~(.*?)\~\~/", '', res)
+
+        res = textwrap.shorten(res, width=120, placeholder=" [...]")
 
     return res
 
@@ -328,7 +351,7 @@ def remplacerExtensionDansContenu(content, pattern, changer):
 
 
 def remplacerPathMedia(content, changer):
-    """Remplacer le lien vers les medias images
+    """remplacer le lien vers les medias images
 
     - Dans content, est "../Media"
     - Dans WebSite, est "Media"

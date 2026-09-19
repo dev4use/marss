@@ -165,12 +165,27 @@ def liens_md_en_contenu(echanges):
     ![dette technique](../Media/dette-technique.png "dette technique")
     """
 
+@given(parsers.parse("mon post a {type_de_post}"))
+def contenu_pour_extrait(echanges, type_de_post):
+    if  type_de_post == "un contenu après h1 vide":
+        echanges["contenu"] = "# titre\n## titre 2\ntexte"
+    elif  type_de_post == "un contenu sans h2":
+        echanges["contenu"] = "# titre\ntexte"
+    elif  type_de_post == "un contenu avec balises":
+        echanges["contenu"] = "# titre\ncontenu avec [README du projet MARSS](https://github.com/dev4use/marss) balises \n## titre 2"
+        # impossible avec """..."
+    else:
+        print("manque le contenu")
+    
+    print("DEMANDE:", echanges["contenu"])
+
+# CONTENU when
+
 @when("je souhaite récupérer le contenu de la page d'accueil")
 def recuperer_accueil(echanges):
     echanges["contenu"] = lireLeMarkdown('home')
 
-# CONTENU when
-
+    
 @when("je veux transformer ces liens md")
 def transformer_liens_md(echanges):
     dirname = os.path.dirname(__file__)
@@ -205,11 +220,16 @@ def dataset_doublons_recuperer(echanges):
         Path(f'{here}/Dataset/Content-mixte/doublon.md')
     ]
 
+@when("je génère l'extrait du post")
+def generer_extrait(echanges):
+    echanges["resultat"] = extraitDeMarkdown(echanges["contenu"])
+    print("OBTIENT:", echanges["resultat"])
+
+ # CONTENU then
+
 @then("le contenu correspond à celui du fichier indiqué en accueil")
 def controler_contenu_accueil(echanges):
     assert "Page d'accueil du site" in echanges["contenu"]
-
- # CONTENU then
 
 @then("je me retrouve avec des liens html")
 def visualiser_liens_transformes_en_html(echanges):
@@ -279,6 +299,16 @@ def doublons_incrementes(echanges):
                          Path('/home/user/Documents/marss/Tests/Dataset/Content-mixte/doublon.md')
     )
     assert listeComplete[1] == expected_doublon
+
+@then(parsers.parse("j'ai un résultat {type_de_resultat}"))
+def afficher_extrait_special(echanges, type_de_resultat):
+    if  type_de_resultat == "vide":
+        assert echanges["resultat"] == ""
+    elif  type_de_resultat == "sans balises":
+        assert echanges["resultat"] == "contenu avec balises"
+    else:
+        pass
+
 
 #------------------------------ HTML 
 
